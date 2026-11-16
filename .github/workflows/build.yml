@@ -1,0 +1,34 @@
+# The checks from the README (Build and test), on every pull request and every push to main.
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash # with pipefail, so a failure before `| tee` fails the step
+
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - run: echo "::notice::$(xcodebuild -version | tr '\n' ' ')"
+      # A failed check posts the end of its log as an annotation, so the run's summary shows why without a login.
+      # One test at a time, so a crash names its test (the last one started) instead of failing every test running beside it.
+      - name: Core tests
+        working-directory: GrailkaufCore
+        run: |
+          swift test --no-parallel 2>&1 | tee ../check.log || { ../.github/annotate.sh ../check.log; exit 1; }
+      - name: Build iPhone, watch and Lock Screen extension
+        run: |
+          xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build 2>&1 | tee check.log || { .github/annotate.sh check.log; exit 1; }
