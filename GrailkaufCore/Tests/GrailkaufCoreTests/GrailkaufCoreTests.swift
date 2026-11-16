@@ -17,7 +17,7 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
 @Suite struct ItemNameTests {
     @Test(arguments: [
         ("2 Milch", "milch"), ("Milch 3,5%", "milch"), ("1 l Milch", "milch"), ("Milch", "milch"),
-        ("500g Hackfleisch", "hackfleisch"), ("2x Coke Zero", "coke zero"), ("eine Dose Mais", "mais"),
+        ("500g Hackfleisch", "hackfleisch"), ("2x Cola Zero", "cola zero"), ("eine Dose Mais", "mais"),
         ("Bio Milch", "bio milch"), ("Äpfel", "äpfel"), ("  Eier  (6er) ", "eier"), ("2", "2"),
     ])
     func key(text: String, expected: String) {
@@ -25,7 +25,7 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
     }
 
     @Test func displayKeepsCapitalisation() {
-        #expect(ItemName.display("2 Coke Zero") == "Coke Zero")
+        #expect(ItemName.display("2 Cola Zero") == "Cola Zero")
     }
 
     @Test func splitsOnCommasAndLinesButNotInsideNumbers() {
@@ -77,6 +77,20 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         // Trips after the move teach the item again; the ones before it are forgotten.
         let later = (3...5).map { Trip(date: friday + Double($0) * week, keys: usual) }
         #expect(OrderLearning.order(trips: history + later, moves: [move]) == usual)
+    }
+
+    @Test func dragBecomesAMoveAfterTheNewNeighbour() {
+        let order = ["a", "b", "c", "d"]
+        #expect(OrderLearning.move(in: order, from: 3, to: 0, at: friday) == Move(date: friday, key: "d", after: nil))
+        #expect(OrderLearning.move(in: order, from: 0, to: 3, at: friday) == Move(date: friday, key: "a", after: "c"))
+        #expect(OrderLearning.move(in: order, from: 1, to: 4, at: friday) == Move(date: friday, key: "b", after: "d"))
+    }
+
+    @Test func dragToTheSamePlaceIsNoMove() {
+        let order = ["a", "b", "c"]
+        #expect(OrderLearning.move(in: order, from: 1, to: 1, at: friday) == nil)
+        #expect(OrderLearning.move(in: order, from: 1, to: 2, at: friday) == nil)
+        #expect(OrderLearning.move(in: order, from: 9, to: 0, at: friday) == nil)
     }
 
     @Test func ticksGroupIntoTripsByGap() {
@@ -164,6 +178,58 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(merged.rows.map { $0.tickedAt != nil } == [true, true])
         #expect(merged.rows[0].sort == phone.rows[0].sort)
         #expect(watch.updated(from: phone.rows).rows.map { $0.tickedAt != nil } == [true, true])
+    }
+}
+
+@Suite struct WatchListTests {
+    private let milk = Entry(text: "Milch", createdAt: friday - hour)
+    private let cola = Entry(text: "Cola", createdAt: friday - hour)
+
+    private func list(_ entries: [Entry], syncedAt: Date?) -> ListState {
+        ListState(entries: entries, moves: [], lastSync: syncedAt, now: friday)
+    }
+
+    @Test func phoneWithLaterSyncDecidesTheItemsAndKeepsNewerWatchTicks() {
+        let phone = list([milk, cola], syncedAt: friday)
+        var own = list([milk], syncedAt: friday - hour)
+        own.tick(milk.id, at: friday + 10)
+
+        let shown = ListState.onWatch(phone: phone, own: own, ownVersions: own.rows)
+        #expect(shown.rows.map(\.name) == ["Milch", "Cola"])
+        #expect(shown.rows.map { $0.tickedAt != nil } == [true, false])
+        #expect(shown.lastSync == friday)
+    }
+
+    @Test func watchWithLaterSyncDecidesTheItemsAndKeepsNewerPhoneTicks() {
+        var phone = list([milk, cola], syncedAt: friday - hour)
+        phone.tick(milk.id, at: friday + 10)
+        let own = list([milk], syncedAt: friday)
+
+        let shown = ListState.onWatch(phone: phone, own: own, ownVersions: [])
+        #expect(shown.rows.map(\.name) == ["Milch"])
+        #expect(shown.rows[0].tickedAt != nil)
+    }
+
+    @Test func emptyWatchStoreShowsThePhoneList() {
+        let phone = list([milk], syncedAt: nil)
+        #expect(ListState.onWatch(phone: phone, own: nil, ownVersions: []).rows.map(\.name) == ["Milch"])
+        #expect(ListState.onWatch(phone: nil, own: nil, ownVersions: []).rows.isEmpty)
+    }
+
+    @Test func untickAndUnknownItemLeaveTheRestAlone() {
+        var state = list([milk], syncedAt: nil)
+        state.tick(milk.id, at: friday)
+        state.untick(milk.id, at: friday + 1)
+        state.tick(UUID(), at: friday + 2)
+        #expect(state.rows.map(\.tickedAt) == [nil])
+        #expect(state.rows[0].modifiedAt == friday + 1)
+    }
+}
+
+@Suite struct CategoryTests {
+    @Test(arguments: [("spices", Category.spices), (" Dairy.\n", .dairy), ("softdrinks", .softDrinks), ("gewürze", .other), ("", .other)])
+    func modelAnswerBecomesACategory(answer: String, expected: GrailkaufCore.Category) {
+        #expect(Category(answer: answer) == expected)
     }
 }
 

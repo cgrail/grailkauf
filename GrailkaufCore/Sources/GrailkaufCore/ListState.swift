@@ -1,6 +1,6 @@
 import Foundation
 
-/// One line someone typed, current or long bought. Mirrors the stored item.
+/// One line that someone typed, open or bought. It mirrors the stored item.
 public struct Entry: Equatable, Sendable {
     public var id: UUID
     public var text: String
@@ -25,14 +25,14 @@ public struct Entry: Equatable, Sendable {
         self.key = ItemName.key(text)
     }
 
-    /// Pushed back with "later" and bought afterwards: its tick says nothing about the route.
+    /// True if the item was moved back with "later" and bought after that. Its tick then says nothing about the route.
     var wasDeferred: Bool {
         guard let deferredAt, let tickedAt else { return false }
         return tickedAt >= deferredAt && tickedAt.timeIntervalSince(deferredAt) < OrderLearning.tripGap
     }
 }
 
-/// One line of the current list as the screens show it. This is also what iPhone and Watch exchange.
+/// One line of the current list as the screens show it. The phone and the Watch exchange these rows.
 public struct Row: Identifiable, Codable, Equatable, Sendable {
     public var id: UUID
     /// As typed: "2 Milch".
@@ -121,7 +121,7 @@ public struct ListState: Codable, Equatable, Sendable {
             guard let at = entry.tickedAt, !entry.wasDeferred else { return nil }
             return (entry.key, at)
         }
-        // A trip in progress must not reshuffle the list under the shopper's thumb.
+        // A trip in progress must not change the order while the user shops.
         let finished = OrderLearning.trips(from: ticks).filter { now.timeIntervalSince($0.date) > OrderLearning.tripGap }
         return OrderLearning.order(trips: finished, moves: moves)
     }
@@ -184,7 +184,24 @@ public struct ListState: Codable, Equatable, Sendable {
         rows[index].modifiedAt = now
     }
 
-    /// Our rows, each taking the other side's content when that was changed more recently. Placement stays ours.
+    /// The list on the Watch. The Watch has two sources: its own cloud copy and the list from the phone.
+    /// The source with the later cloud sync decides which items are on the list.
+    /// For each item, the newer change wins.
+    /// - Parameters:
+    ///   - own: the list from the Watch's own store. Nil if that store is empty.
+    ///   - ownVersions: the Watch's own version of the phone's items, also of items it no longer lists.
+    public static func onWatch(phone: ListState?, own: ListState?, ownVersions: [Row]) -> ListState {
+        var merged: ListState
+        if let phone, own == nil || (phone.lastSync ?? .distantPast) >= (own?.lastSync ?? .distantPast) {
+            merged = phone.updated(from: ownVersions)
+        } else {
+            merged = (own ?? ListState()).updated(from: phone?.rows ?? [])
+        }
+        merged.lastSync = [phone?.lastSync, own?.lastSync].compactMap(\.self).max()
+        return merged
+    }
+
+    /// Our rows. Each row takes the content of the other side if that content is newer. The position stays ours.
     public func updated(from other: [Row]) -> ListState {
         let theirs = Dictionary(other.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         var result = self
@@ -198,8 +215,14 @@ public struct ListState: Codable, Equatable, Sendable {
     }
 }
 
-/// Hidden groups used only to place an item the learned order has not seen yet.
+/// Hidden groups. They only place an item that the learned order does not know yet.
 public enum Category: String, CaseIterable, Sendable {
     case produce, bakery, meat, fish, cheese, dairy, frozen, tins, pasta, baking, spices, breakfast, sweets
     case softDrinks, alcohol, toiletries, household, baby, pets, other
+
+    /// Reads the answer of the language model. An answer that is not on the list is `.other`.
+    public init(answer: String) {
+        let word = answer.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters)).lowercased()
+        self = Self.allCases.first { $0.rawValue.lowercased() == word } ?? .other
+    }
 }

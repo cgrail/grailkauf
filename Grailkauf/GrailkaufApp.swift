@@ -22,19 +22,19 @@ final class AppModel {
     static let shared = AppModel()
 
     let store = Store(ownsList: true)
-    /// Remembered so that a launch in the background (woken by the Watch) still knows a shop is in progress.
+    /// Stored, so that a launch in the background still knows that a shop is in progress.
     var mode = Mode(rawValue: UserDefaults.standard.string(forKey: "mode") ?? "") ?? .list {
         didSet {
             UserDefaults.standard.set(mode.rawValue, forKey: "mode")
             ShoppingActivity.sync(store.state, shopping: mode == .shop)
         }
     }
-    /// An invitation waiting for the user to confirm that it replaces their own list.
+    /// An invitation that waits for the user to confirm. The shared list replaces the own list.
     var invite: CKShare.Metadata?
 
     @ObservationIgnored private let link = Link()
     @ObservationIgnored private var classifying = false
-    /// Items the model was already asked about since launch, so a failing one is not asked on every change.
+    /// The items that the model got since launch. The app then asks only once for an item that fails.
     @ObservationIgnored private var asked: Set<UUID> = []
 
     private init() {
@@ -43,7 +43,6 @@ final class AppModel {
         link.current = { [unowned self] in store.state }
         link.start()
         store.refresh()
-        runScript() // TEMP
     }
 
     private func changed() {
@@ -52,7 +51,7 @@ final class AppModel {
         Task { await classify() }
     }
 
-    /// Gives every open item without a category one, so shop mode can place items it has never seen.
+    /// Gives each open item a category. Shop mode can then place an item that it does not know.
     private func classify() async {
         guard !classifying, Classifier.isAvailable else { return }
         classifying = true
@@ -85,7 +84,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        // Also on a background launch, so ticks from the Watch are taken over and sent to iCloud.
+        // Create the app model also on a background launch. The ticks from the Watch then reach iCloud.
         _ = AppModel.shared
         return true
     }

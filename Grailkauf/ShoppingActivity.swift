@@ -2,8 +2,8 @@ import ActivityKit
 import GrailkaufCore
 import UIKit
 
-/// Keeps the Lock Screen Live Activity in step with the list. It runs while the iPhone is in shop mode and
-/// something is left to buy, and is driven locally, so it needs no internet.
+/// Shows the list on the Lock Screen as a Live Activity.
+/// The activity runs while the phone is in shop mode and items are left. It needs no internet.
 @MainActor
 enum ShoppingActivity {
     private static var pending: Task<Void, Never>?
@@ -20,7 +20,7 @@ enum ShoppingActivity {
             && ActivityAuthorizationInfo().areActivitiesEnabled
         let stop = !shopping, finished = open.isEmpty
 
-        // One after the other, so an older update can never overtake a newer one.
+        // The updates run one after the other. An older update can then never replace a newer one.
         let previous = pending
         pending = Task {
             await previous?.value

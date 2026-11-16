@@ -1,7 +1,8 @@
 import Foundation
 
 public enum Suggestions {
-    /// Texts of items whose usual gap between purchases has mostly passed, most regular first.
+    /// The texts of the items that are due again, most regular first.
+    /// An item is due when most of its usual gap between purchases is over.
     /// The rhythm of an item is known after three purchases.
     public static func due(entries: [Entry], now: Date) -> [String] {
         let onList = Set(entries.filter { $0.tickedAt == nil }.map(\.key))
@@ -17,8 +18,9 @@ public enum Suggestions {
                   let rhythm = OrderLearning.median(zip(days.dropFirst(), days).map { $0.timeIntervalSince($1) })
             else { continue }
             let elapsed = now.timeIntervalSince(days.last!)
-            // 0.7, not 0.75: the list is written shortly before the shop, so a four-week item must be due just
-            // under three weeks after its last purchase. Past four rhythms the household has stopped buying it.
+            // 0.7, not 0.75: people write the list shortly before the shop. A four-week item must then be
+            // due a little less than three weeks after its last purchase.
+            // After four rhythms, the household no longer buys the item.
             if elapsed >= 0.7 * rhythm, elapsed <= 4 * rhythm { due.append((sorted.last!.text, days.count)) }
         }
         return due.sorted { ($1.count, $0.text) < ($0.count, $1.text) }.map(\.text)

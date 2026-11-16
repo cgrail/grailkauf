@@ -125,12 +125,12 @@
         }
       }
     },
-    "Grailkauf collects no data. Your list is stored in your iCloud and is visible only to the people you invite." : {
+    "Grailkauf collects no data. Your iCloud stores the list. Only the people you invite can see it." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Grailkauf erhebt keine Daten. Deine Liste liegt in deiner iCloud und ist nur für Personen sichtbar, die du einlädst."
+            "value" : "Grailkauf erhebt keine Daten. Deine iCloud speichert die Liste. Nur Personen, die du einlädst, können sie sehen."
           }
         }
       }
@@ -141,16 +141,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einladen"
-          }
-        }
-      }
-    },
-    "iPhone not reachable." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone nicht erreichbar."
           }
         }
       }
@@ -385,6 +375,16 @@
         }
       }
     },
+    "The shared list replaces your own list with %lld items." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die geteilte Liste ersetzt deine eigene Liste mit %lld Artikeln."
+          }
+        }
+      }
+    },
     "Type below to add the first item." : {
       "localizations" : {
         "de" : {
@@ -415,12 +415,12 @@
         }
       }
     },
-    "Your own list with %lld items will be replaced by the shared one." : {
+    "iPhone not reachable." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deine eigene Liste mit %lld Artikeln wird durch die geteilte ersetzt."
+            "value" : "iPhone nicht erreichbar."
           }
         }
       }

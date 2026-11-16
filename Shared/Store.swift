@@ -3,42 +3,7 @@ import CoreData
 import GrailkaufCore
 import Observation
 
-@objc(ShoppingList) final class ShoppingList: NSManagedObject {
-    @NSManaged var id: UUID?
-    @NSManaged var createdAt: Date?
-    @NSManaged var items: Set<Item>?
-    @NSManaged var moves: Set<OrderMove>?
-}
-
-/// A line of the list. Ticked items are never removed: they are the purchase history the order and the
-/// suggestions are learned from.
-@objc(Item) final class Item: NSManagedObject {
-    @NSManaged var id: UUID?
-    @NSManaged var text: String?
-    @NSManaged var category: String?
-    @NSManaged var createdAt: Date?
-    @NSManaged var modifiedAt: Date?
-    @NSManaged var tickedAt: Date?
-    @NSManaged var deferredAt: Date?
-    @NSManaged var list: ShoppingList?
-
-    var entry: Entry? {
-        guard let id, let text, let createdAt else { return nil }
-        return Entry(
-            id: id, text: text, category: category, createdAt: createdAt, modifiedAt: modifiedAt,
-            tickedAt: tickedAt, deferredAt: deferredAt)
-    }
-}
-
-/// A manual drag on the order screen.
-@objc(OrderMove) final class OrderMove: NSManagedObject {
-    @NSManaged var key: String?
-    @NSManaged var after: String?
-    @NSManaged var date: Date?
-    @NSManaged var list: ShoppingList?
-}
-
-/// The household's data: one list, kept in iCloud and shared through a CloudKit share.
+/// The data of the household: one list. iCloud stores the list and shares it with invited people.
 @MainActor @Observable
 final class Store {
     static let containerID = "iCloud.de.grails.grailkauf"
@@ -66,10 +31,10 @@ final class Store {
         container.persistentStoreCoordinator.persistentStores.first { $0.url?.lastPathComponent == name }
     }
 
-    /// - Parameter ownsList: the iPhone creates the household's list; the Watch only ever reads and ticks.
+    /// - Parameter ownsList: the phone creates the list of the household. The Watch only reads and ticks.
     init(ownsList: Bool) {
         self.ownsList = ownsList
-        container = NSPersistentCloudKitContainer(name: "Grailkauf", managedObjectModel: Self.makeModel())
+        container = NSPersistentCloudKitContainer(name: "Grailkauf", managedObjectModel: makeModel())
         let folder = NSPersistentContainer.defaultDirectoryURL()
         container.persistentStoreDescriptions = [CKDatabase.Scope.private, .shared].map { scope in
             let file = scope == .private ? "private.sqlite" : "shared.sqlite"
@@ -118,18 +83,15 @@ final class Store {
         }
     }
 
-    /// Rebuilds everything the screens show. Also call when time alone may have changed the picture
-    /// (a trip ends four hours after its last tick).
-    // shortcut: reads and folds the whole history on every change; cache the order once a household has
-    // tens of thousands of purchases.
+    /// Builds all that the screens show. Call it also when the app becomes active.
+    /// Time alone can change the list: a trip ends four hours after its last tick.
+    // shortcut: reads the full history on every change, cache the order when a household has tens of
+    // thousands of purchases.
     func refresh() {
         let now = Date.now
         let list = activeList()
         let entries = (list?.items ?? []).compactMap(\.entry)
-        let moves = (list?.moves ?? []).compactMap { move -> Move? in
-            guard let key = move.key, let date = move.date else { return nil }
-            return Move(date: date, key: key, after: move.after)
-        }
+        let moves = (list?.moves ?? []).compactMap(\.move)
         let order = ListState.order(entries: entries, moves: moves, now: now)
         let state = ListState(entries: entries, order: order, lastSync: lastSync, now: now)
         if entries != self.entries { self.entries = entries }
@@ -138,7 +100,7 @@ final class Store {
         onChange()
     }
 
-    /// The list this device works on: a list someone shared with us wins over our own.
+    /// The list that this device uses. A list that someone shared with us wins over our own list.
     func activeList() -> ShoppingList? {
         let lists = ((try? context.fetch(NSFetchRequest<ShoppingList>(entityName: "ShoppingList"))) ?? [])
             .sorted { ($0.createdAt ?? .distantPast) < ($1.createdAt ?? .distantPast) }
@@ -153,7 +115,7 @@ final class Store {
             save()
             return list
         }
-        // A device that started a list before its first sync brought the existing one: fold it into the oldest.
+        // A device can start a list before its first sync brings the existing list. Merge it into the oldest.
         for extra in lists.dropFirst() {
             extra.items?.forEach { $0.list = oldest }
             extra.moves?.forEach { $0.list = oldest }
@@ -204,19 +166,19 @@ final class Store {
         save()
     }
 
-    /// Records a manual drag: `key` now comes right after `after`, or first when nil.
-    func move(_ key: String, after: String?) {
+    /// Records a manual drag on the order screen.
+    func record(_ move: Move) {
         guard let list = activeList(), let store = list.objectID.persistentStore else { return }
-        let move = OrderMove(context: context)
-        context.assign(move, to: store)
-        move.key = key
-        move.after = after
-        move.date = .now
-        move.list = list
+        let stored = OrderMove(context: context)
+        context.assign(stored, to: store)
+        stored.key = move.key
+        stored.after = move.after
+        stored.date = move.date
+        stored.list = list
         save()
     }
 
-    /// Takes over ticks made on the other device. The newer change per item wins.
+    /// Applies the ticks from the other device. For each item, the newer change wins.
     func apply(_ rows: [Row]) {
         for row in rows {
             guard let item = item(row.id), row.modifiedAt > (item.modifiedAt ?? .distantPast) else { continue }
@@ -227,7 +189,7 @@ final class Store {
         if context.hasChanges { save() }
     }
 
-    /// This device's version of the given items, whether they are still on the current list or not.
+    /// The version of the given items on this device, also of items that left the current list.
     func rows(for ids: Set<UUID>) -> [Row] {
         entries.filter { ids.contains($0.id) }.map { Row($0) }
     }
@@ -258,53 +220,5 @@ final class Store {
             context.rollback()
             problem = error.localizedDescription
         }
-    }
-
-    // MARK: Model
-
-    /// Built in code so iPhone and Watch share one definition. CloudKit needs every attribute optional and
-    /// every relationship to have an inverse.
-    private static func makeModel() -> NSManagedObjectModel {
-        func entity(_ name: String, _ attributes: [(String, NSAttributeDescription.AttributeType)]) -> NSEntityDescription {
-            let entity = NSEntityDescription()
-            entity.name = name
-            entity.managedObjectClassName = name
-            entity.properties = attributes.map { name, type in
-                let attribute = NSAttributeDescription()
-                attribute.name = name
-                attribute.type = type
-                attribute.isOptional = true
-                return attribute
-            }
-            return entity
-        }
-        func own(_ list: NSEntityDescription, _ children: NSEntityDescription, as name: String) {
-            let toMany = NSRelationshipDescription()
-            toMany.name = name
-            toMany.destinationEntity = children
-            toMany.deleteRule = .cascadeDeleteRule
-            toMany.isOptional = true
-            let toOne = NSRelationshipDescription()
-            toOne.name = "list"
-            toOne.destinationEntity = list
-            toOne.maxCount = 1
-            toOne.deleteRule = .nullifyDeleteRule
-            toOne.isOptional = true
-            toMany.inverseRelationship = toOne
-            toOne.inverseRelationship = toMany
-            list.properties.append(toMany)
-            children.properties.append(toOne)
-        }
-        let list = entity("ShoppingList", [("id", .uuid), ("createdAt", .date)])
-        let item = entity("Item", [
-            ("id", .uuid), ("text", .string), ("category", .string), ("createdAt", .date), ("modifiedAt", .date),
-            ("tickedAt", .date), ("deferredAt", .date),
-        ])
-        let move = entity("OrderMove", [("key", .string), ("after", .string), ("date", .date)])
-        own(list, item, as: "items")
-        own(list, move, as: "moves")
-        let model = NSManagedObjectModel()
-        model.entities = [list, item, move]
-        return model
     }
 }

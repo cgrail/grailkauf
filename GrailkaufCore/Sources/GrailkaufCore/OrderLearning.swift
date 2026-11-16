@@ -11,7 +11,7 @@ public struct Trip: Equatable, Sendable {
     }
 }
 
-/// A manual drag on the order screen: `key` was placed right after `after` (nil = at the very top).
+/// A manual drag on the order screen. `key` now comes directly after `after`. Nil puts it first.
 public struct Move: Equatable, Sendable {
     public var date: Date
     public var key: String
@@ -44,10 +44,10 @@ public enum OrderLearning {
 
     /// The learned order of all known names.
     ///
-    /// Each trip says where its items belong by handing the positions they currently occupy back to them in
-    /// tick order. An item takes the median of what its last `window` trips say, so a single chaotic trip changes
-    /// nothing and a rearranged store wins after three trips. A manual move applies at once and makes the
-    /// item forget the trips before it.
+    /// Each trip gives the positions of its items back to them in tick order.
+    /// An item takes the median of what its last `window` trips say.
+    /// So one chaotic trip changes nothing, and a rearranged store wins after three trips.
+    /// A manual move applies at once. The item then forgets the trips before the move.
     public static func order(trips: [Trip], moves: [Move], window: Int = 5) -> [String] {
         enum Event { case trip(Trip), move(Move) }
         let events = (trips.map { ($0.date, Event.trip($0)) } + moves.map { ($0.date, Event.move($0)) })
@@ -72,7 +72,7 @@ public enum OrderLearning {
         return order
     }
 
-    /// A name seen for the first time goes right after the item ticked before it.
+    /// A new name goes directly after the item that was ticked before it.
     private static func insertNew(_ keys: [String], into order: inout [String]) {
         for (i, key) in keys.enumerated() where !order.contains(key) {
             if i > 0, let previous = order.firstIndex(of: keys[i - 1]) {
@@ -99,6 +99,15 @@ public enum OrderLearning {
         }
         let position = index.mapValues { $0 }.merging(said.compactMapValues(median)) { _, learned in learned }
         return order.sorted { (position[$0]!, index[$0]!) < (position[$1]!, index[$1]!) }
+    }
+
+    /// Translates a drag on the order screen into a move.
+    /// The item lands before index `destination` of `order`. Nil if the item stays where it is.
+    public static func move(in order: [String], from source: Int, to destination: Int, at date: Date) -> Move? {
+        guard order.indices.contains(source), destination != source, destination != source + 1 else { return nil }
+        let others = order.enumerated().filter { $0.offset != source }.map(\.element)
+        let landed = destination > source ? destination - 1 : destination
+        return Move(date: date, key: order[source], after: landed > 0 ? others[landed - 1] : nil)
     }
 
     static func median(_ values: [Double]) -> Double? {

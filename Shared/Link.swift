@@ -2,14 +2,14 @@ import Foundation
 import GrailkaufCore
 import WatchConnectivity
 
-/// The Bluetooth path between iPhone and Watch, which works with no internet.
+/// The Bluetooth path between the phone and the Watch. It needs no internet.
 ///
-/// Each side sends its whole current list and the receiver keeps the newer change per item, so a message that
-/// arrives twice, late or out of order does no harm.
+/// Each side sends its full current list. The receiver keeps the newer change for each item.
+/// So a message that arrives twice, late or in the wrong order does no harm.
 @MainActor
 final class Link: NSObject, WCSessionDelegate {
     var onReceive: (ListState) -> Void = { _ in }
-    /// What to send when the other side asks or the connection comes up.
+    /// The list to send when the other side asks or the connection starts.
     var current: () -> ListState? = { nil }
 
     func start() {
@@ -21,13 +21,13 @@ final class Link: NSObject, WCSessionDelegate {
     func send(_ state: ListState) {
         let session = WCSession.default
         guard session.activationState == .activated, let data = try? JSONEncoder().encode(state) else { return }
-        // Kept by the system until the other app next runs.
+        // The system keeps this until the other app runs again.
         try? session.updateApplicationContext(["state": data])
-        // Arrives within a second while both apps are open.
+        // This arrives in about a second while both apps are open.
         if session.isReachable { session.sendMessage(["state": data], replyHandler: nil) }
     }
 
-    /// Asks the other side for its list right now. False when it cannot be reached.
+    /// Asks the other side for its list now. False if the other side is not reachable.
     func pull() async -> Bool {
         guard WCSession.default.isReachable else { return false }
         return await withCheckedContinuation { continuation in

@@ -72,7 +72,7 @@ struct ShopView: View {
                 }
             }
         }
-        // Opening the app fetches the iPhone's list over Bluetooth, so it is current before the first tick.
+        // The app gets the list from the phone when it opens. The list is then current before the first tick.
         .onChange(of: scenePhase, initial: true) { if scenePhase == .active { pull() } }
     }
 

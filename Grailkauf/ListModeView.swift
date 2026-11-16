@@ -1,7 +1,8 @@
 import GrailkaufCore
 import SwiftUI
 
-/// Writing the list, chat style: type, Enter, next. Items stay in the order they were added.
+/// The screen to write the list, like a chat: type, press Enter, type the next item.
+/// The items stay in the order in which they were added.
 struct ListModeView: View {
     @Environment(AppModel.self) private var model
     @State private var draft = ""
@@ -51,7 +52,7 @@ struct ListModeView: View {
         VStack(spacing: 8) {
             suggestions
             HStack(alignment: .bottom) {
-                // Vertical, so pasted multi-line text survives; Enter arrives as a line break and adds the item.
+                // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
                 TextField("Add item", text: $draft, axis: .vertical)
                     .lineLimit(1...4)
                     .textFieldStyle(.roundedBorder)

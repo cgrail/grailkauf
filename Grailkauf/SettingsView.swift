@@ -46,7 +46,7 @@ struct SettingsView: View {
                 }
             }
             Section("Privacy") {
-                Text("Grailkauf collects no data. Your list is stored in your iCloud and is visible only to the people you invite.")
+                Text("Grailkauf collects no data. Your iCloud stores the list. Only the people you invite can see it.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -74,10 +74,10 @@ struct OrderView: View {
                     }
                 }
                 .onMove { from, to in
-                    var moved = order
-                    moved.move(fromOffsets: from, toOffset: to)
-                    guard let source = from.first, let landed = moved.firstIndex(of: order[source]) else { return }
-                    model.store.move(order[source], after: landed > 0 ? moved[landed - 1] : nil)
+                    guard let source = from.first,
+                          let move = OrderLearning.move(in: order, from: source, to: to, at: .now)
+                    else { return }
+                    model.store.record(move)
                 }
             } footer: {
                 Text("Drag an item to where you pick it up. The order keeps learning from your shopping.")

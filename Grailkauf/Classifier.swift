@@ -1,20 +1,19 @@
 import FoundationModels
 import GrailkaufCore
 
-/// Guesses the supermarket section of an item with Apple's on-device model. Nothing leaves the phone.
+/// Guesses the supermarket section of an item with the language model on the device. No data leaves the phone.
 enum Classifier {
     static var isAvailable: Bool {
         if case .available = SystemLanguageModel.default.availability { true } else { false }
     }
 
-    /// `.other` when the model is unsure; such items go to the "New" group. Nil when the model failed, so the
-    /// item can be asked about again later.
+    /// `.other` if the model is unsure. Such an item goes to the "New" group.
+    /// Nil if the model failed. The app then asks again later.
     static func category(of name: String) async -> GrailkaufCore.Category? {
         let session = LanguageModelSession(instructions: instructions)
         let options = GenerationOptions(samplingMode: .greedy)
         guard let answer = try? await session.respond(to: name, options: options).content else { return nil }
-        let word = answer.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters)).lowercased()
-        return GrailkaufCore.Category.allCases.first { $0.rawValue.lowercased() == word } ?? .other
+        return GrailkaufCore.Category(answer: answer)
     }
 
     private static let instructions = """

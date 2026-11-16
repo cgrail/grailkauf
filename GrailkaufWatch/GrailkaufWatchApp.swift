@@ -13,8 +13,8 @@ struct GrailkaufWatchApp: App {
     }
 }
 
-/// The Watch has two sources for the list: its own iCloud copy and what the iPhone tells it over Bluetooth.
-/// Whichever saw iCloud last decides which items are on the list; for each item the newer change wins.
+/// The Watch has two sources for the list: its own iCloud copy and the list from the phone.
+/// `ListState.onWatch` combines them.
 @MainActor @Observable
 final class WatchModel {
     private(set) var state = ListState()
@@ -23,7 +23,7 @@ final class WatchModel {
 
     @ObservationIgnored private let store = Store(ownsList: false)
     @ObservationIgnored private let link = Link()
-    /// The iPhone's list as last received, plus our own ticks since.
+    /// The last list from the phone, with the ticks made on the Watch since then.
     @ObservationIgnored private var phone = UserDefaults.standard.data(forKey: "phone")
         .flatMap({ try? JSONDecoder().decode(ListState.self, from: $0) })
     {
@@ -33,26 +33,21 @@ final class WatchModel {
     init() {
         store.onChange = { [unowned self] in recompute() }
         link.onReceive = { [unowned self] incoming in
-            // Keep ticks the iPhone has not heard of yet.
+            // Keep the ticks that the phone does not know yet.
             phone = incoming.updated(from: phone?.rows ?? [])
             recompute()
         }
         link.current = { [unowned self] in state }
         link.start()
         store.refresh()
-        runScript() // TEMP
     }
 
     private func recompute() {
-        var merged: ListState
-        if let phone, store.entries.isEmpty || (phone.lastSync ?? .distantPast) >= (store.lastSync ?? .distantPast) {
-            merged = phone.updated(from: store.rows(for: Set(phone.rows.map(\.id))))
-        } else {
-            merged = store.state.updated(from: phone?.rows ?? [])
-        }
-        merged.lastSync = [phone?.lastSync, store.lastSync].compactMap(\.self).max()
+        let own = store.entries.isEmpty ? nil : store.state
+        let merged = ListState.onWatch(
+            phone: phone, own: own, ownVersions: store.rows(for: Set(phone?.rows.map(\.id) ?? [])))
         if merged != state { state = merged }
-        hasData = phone != nil || !store.entries.isEmpty
+        hasData = phone != nil || own != nil
     }
 
     func tick(_ id: UUID) {
@@ -67,14 +62,14 @@ final class WatchModel {
     private func edit(_ change: (inout ListState) -> Void) {
         var edited = state
         change(&edited)
-        // Into both sources, wherever the item exists: the iPhone copy for Bluetooth, our store for iCloud.
+        // Write the change into both sources: the phone copy goes over Bluetooth, the store goes to iCloud.
         phone = phone?.updated(from: edited.rows)
         store.apply(edited.rows)
         store.refresh()
         link.send(state)
     }
 
-    /// Re-reads the store and asks the iPhone for its list. False when the iPhone cannot be reached.
+    /// Reads the store again and asks the phone for its list. False if the phone is not reachable.
     func refresh() async -> Bool {
         store.refresh()
         return await link.pull()

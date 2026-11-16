@@ -46,7 +46,7 @@ struct RootView: View {
             }
             Button("Cancel", role: .cancel) { model.invite = nil }
         } message: { _ in
-            Text("Your own list with \(model.store.state.todo.count) items will be replaced by the shared one.")
+            Text("The shared list replaces your own list with \(model.store.state.todo.count) items.")
         }
         .alert("Something went wrong", isPresented: .constant(model.store.problem != nil)) {
             Button("OK") { model.store.problem = nil }

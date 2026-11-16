@@ -4,7 +4,7 @@ import SwiftUI
 /// Walking the store: the list in learned order, one tap per item.
 struct ShopModeView: View {
     @Environment(AppModel.self) private var model
-    /// Just ticked: these stay in place, faded, for a moment so a slip of the thumb can be undone on the spot.
+    /// The rows that were ticked a moment ago. They stay in place, faded, so the user can undo a wrong tap.
     @State private var lingering: Set<UUID> = []
 
     private var store: Store { model.store }
