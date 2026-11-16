@@ -54,6 +54,8 @@ xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf \
 
 If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` before the command.
 
+GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull request and every push to `main`. It builds with no code signing and does not measure coverage.
+
 ## Project layout
 
 | Folder | Content |
