@@ -1,4 +1,6 @@
 # grailkauf
+<img src="Shared/Assets.xcassets/AppIcon.appiconset/AppIcon.png" width="128" alt="App icon: a white shopping cart with bottles, an apple and a baguette on a blue background">
+
 Smarte Einkaufsliste
 
 A shared shopping list for one household, for iPhone and Apple Watch.
@@ -57,7 +59,7 @@ If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xc
 | Folder | Content |
 | --- | --- |
 | `GrailkaufCore/` | Swift package with all logic and its unit tests: item names, order learning, list placement, suggestions |
-| `Shared/` | Code for both apps: the store (Core Data with iCloud sync) and the Bluetooth link |
+| `Shared/` | Code for both apps: the store (Core Data with iCloud sync) and the Bluetooth link. Also the asset catalog with the app icon |
 | `Grailkauf/` | The iPhone app |
 | `GrailkaufWatch/` | The Watch app |
 | `GrailkaufWidgets/`, `Activity/` | The Lock Screen Live Activity |
@@ -69,7 +71,6 @@ If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xc
 - If Xcode reports that the container is missing, add it under Signing & Capabilities.
 - You cannot rename or delete this container later.
 - Before a public release, deploy the iCloud schema to production in the CloudKit Console.
-- The app has no app icon yet. The store needs one.
 
 ## Limits
 - The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the Watch gets the list from the iPhone.
