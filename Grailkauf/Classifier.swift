@@ -11,7 +11,7 @@ enum Classifier {
     /// Nil if the model failed. The app then asks again later.
     static func category(of name: String) async -> GrailkaufCore.Category? {
         let session = LanguageModelSession(instructions: instructions)
-        let options = GenerationOptions(sampling: .greedy)
+        let options = GenerationOptions(samplingMode: .greedy)
         guard let answer = try? await session.respond(to: name, options: options).content else { return nil }
         return GrailkaufCore.Category(answer: answer)
     }
