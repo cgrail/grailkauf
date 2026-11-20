@@ -13,7 +13,10 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A comma or a pasted text with many lines adds many items at once.
 - While you type, the app suggests items that you added before.
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
-- Swipe an item to delete it. Tap an item to change its text.
+- Tap the trash button of an item, or swipe the item, to delete it. Tap an item to change its text.
+- Touch and hold an item, then drag it to a new place.
+- Tap the bin at the top right to delete all items. The history keeps the items that you bought.
+- Tap the microphone and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Tap again to stop. Each item goes to the list.
 
 ### History (iPhone)
 - Tap the clock at the top left. The history shows each shopping trip, newest first, with its date.
@@ -90,4 +93,5 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the Watch gets the list from the iPhone.
 - The position guess for new items needs an iPhone with Apple Intelligence. On other iPhones, new items go to the "New" group.
 - The position guess does not work in the simulator.
+- To split a dictated list, the app also needs Apple Intelligence. On other iPhones, only "und", "and" and the punctuation split it.
 - The share extension cannot write to the list, because the list is in the app's own folder. It keeps the text, and the app adds the items when it runs next.

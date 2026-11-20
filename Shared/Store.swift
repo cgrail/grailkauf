@@ -138,7 +138,8 @@ final class Store {
             item.id = UUID()
             item.text = text
             item.category = knownCategory(of: text)
-            item.createdAt = now.addingTimeInterval(Double(offset) / 1000)
+            // A second apart, so a drag in list mode has room between two items. See `ListState.reordered`.
+            item.createdAt = now.addingTimeInterval(Double(offset))
             item.modifiedAt = now
             item.list = list
         }
@@ -161,6 +162,15 @@ final class Store {
         context.delete(item)
         save()
     }
+
+    /// List mode: empties the list. Ticked items stay, so the history and the order keep them.
+    func deleteAll() {
+        for row in state.todo { item(row.id).map(context.delete) }
+        save()
+    }
+
+    /// List mode: a drag gives the item a new place. See `ListState.reordered`.
+    func move(_ id: UUID, toCreatedAt date: Date) { change(id) { $0.createdAt = date } }
 
     func setCategory(_ id: UUID, _ category: String) {
         item(id)?.category = category
