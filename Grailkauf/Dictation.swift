@@ -11,45 +11,36 @@ final class Dictation {
     /// What the phone understood so far.
     private(set) var text = ""
 
-    @ObservationIgnored private let engine = AVAudioEngine()
-    @ObservationIgnored private var request: SFSpeechAudioBufferRecognitionRequest?
-    @ObservationIgnored private var task: SFSpeechRecognitionTask?
+    @ObservationIgnored private let recorder = Recorder()
+    @ObservationIgnored private var stopping = false
     @ObservationIgnored private var finished = false
     @ObservationIgnored private var waiting: CheckedContinuation<Void, Never>?
 
     func start() async throws {
         guard !isRecording else { return }
-        guard await Self.allowed() else { throw Failure.notAllowed }
-        guard let recognizer = SFSpeechRecognizer(), recognizer.isAvailable else { throw Failure.unavailable }
-        let request = SFSpeechAudioBufferRecognitionRequest()
-        request.addsPunctuation = true
-        if recognizer.supportsOnDeviceRecognition { request.requiresOnDeviceRecognition = true }
-
-        let session = AVAudioSession.sharedInstance()
-        try session.setCategory(.record, mode: .measurement, options: .duckOthers)
-        try session.setActive(true)
-        try Self.startMicrophone(engine, feeding: request)
-
+        // Set at once, so a second tap during the permission prompt starts nothing.
+        isRecording = true
         text = ""
         finished = false
-        isRecording = true
-        self.request = request
-        task = Self.recognize(request, with: recognizer) { [weak self] text, done in
-            Task { @MainActor in self?.update(text, done: done) }
+        do {
+            guard await Self.allowed() else { throw Failure.notAllowed }
+            try await recorder.start { [weak self] text, done in
+                Task { @MainActor in self?.update(text, done: done) }
+            }
+        } catch {
+            isRecording = false
+            throw error
         }
     }
 
     /// Stops the recording and returns the items. Empty if the phone understood nothing.
     func stop() async -> [String] {
-        guard isRecording, let request else { return [] }
-        self.request = nil
-        engine.stop()
-        engine.inputNode.removeTap(onBus: 0)
-        request.endAudio()
+        guard isRecording, !stopping else { return [] }
+        stopping = true
+        await recorder.stop()
         if !finished { await withCheckedContinuation { waiting = $0 } }
-        task = nil
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         let items = await Self.items(in: text)
+        stopping = false
         isRecording = false
         return items
     }
@@ -62,40 +53,12 @@ final class Dictation {
         waiting = nil
     }
 
-    // The closures below run on audio and speech threads. They are formed outside the main actor,
-    // so Swift does not insert a main-actor check that stops the app.
-
     nonisolated private static func allowed() async -> Bool {
         let speech = await withCheckedContinuation { done in
             SFSpeechRecognizer.requestAuthorization { done.resume(returning: $0) }
         }
         guard speech == .authorized else { return false }
         return await AVAudioApplication.requestRecordPermission()
-    }
-
-    nonisolated private static func startMicrophone(
-        _ engine: AVAudioEngine, feeding request: SFSpeechAudioBufferRecognitionRequest
-    ) throws {
-        let input = engine.inputNode
-        input.installTap(onBus: 0, bufferSize: 1024, format: input.outputFormat(forBus: 0)) { buffer, _ in
-            request.append(buffer)
-        }
-        engine.prepare()
-        do {
-            try engine.start()
-        } catch {
-            input.removeTap(onBus: 0)
-            throw error
-        }
-    }
-
-    nonisolated private static func recognize(
-        _ request: SFSpeechAudioBufferRecognitionRequest, with recognizer: SFSpeechRecognizer,
-        update: @escaping @Sendable (String?, Bool) -> Void
-    ) -> SFSpeechRecognitionTask {
-        recognizer.recognitionTask(with: request) { result, error in
-            update(result?.bestTranscription.formattedString, error != nil || result?.isFinal == true)
-        }
     }
 
     /// Spoken lists rarely have commas: "zwei Liter Milch Eier Butter". The language model finds the items.
@@ -131,4 +94,68 @@ final class Dictation {
 struct SpokenList {
     @Guide(description: "The items in the order spoken")
     var items: [String]
+}
+
+/// The audio part of `Dictation`. It runs off the main thread, because the audio session can block for a while.
+private actor Recorder {
+    private let engine = AVAudioEngine()
+    private var request: SFSpeechAudioBufferRecognitionRequest?
+    private var task: SFSpeechRecognitionTask?
+
+    /// `update` gets the text so far, and true when the recognition is over.
+    func start(update: @escaping @Sendable (String?, Bool) -> Void) throws {
+        guard let recognizer = SFSpeechRecognizer(), recognizer.isAvailable else { throw Dictation.Failure.unavailable }
+        let request = SFSpeechAudioBufferRecognitionRequest()
+        request.addsPunctuation = true
+        if recognizer.supportsOnDeviceRecognition { request.requiresOnDeviceRecognition = true }
+
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(.record, mode: .measurement, options: .duckOthers)
+        try session.setActive(true)
+        do {
+            try Self.startMicrophone(engine, feeding: request)
+        } catch {
+            try? session.setActive(false, options: .notifyOthersOnDeactivation)
+            throw error
+        }
+        self.request = request
+        task = Self.recognize(request, with: recognizer, update: update)
+    }
+
+    func stop() {
+        engine.stop()
+        engine.inputNode.removeTap(onBus: 0)
+        request?.endAudio()
+        request = nil
+        task = nil
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+    }
+
+    // The closures below run on audio and speech threads. They are formed outside the actor,
+    // so Swift does not insert an isolation check that stops the app.
+
+    nonisolated private static func startMicrophone(
+        _ engine: AVAudioEngine, feeding request: SFSpeechAudioBufferRecognitionRequest
+    ) throws {
+        let input = engine.inputNode
+        input.installTap(onBus: 0, bufferSize: 1024, format: input.outputFormat(forBus: 0)) { buffer, _ in
+            request.append(buffer)
+        }
+        engine.prepare()
+        do {
+            try engine.start()
+        } catch {
+            input.removeTap(onBus: 0)
+            throw error
+        }
+    }
+
+    nonisolated private static func recognize(
+        _ request: SFSpeechAudioBufferRecognitionRequest, with recognizer: SFSpeechRecognizer,
+        update: @escaping @Sendable (String?, Bool) -> Void
+    ) -> SFSpeechRecognitionTask {
+        recognizer.recognitionTask(with: request) { result, error in
+            update(result?.bestTranscription.formattedString, error != nil || result?.isFinal == true)
+        }
+    }
 }
