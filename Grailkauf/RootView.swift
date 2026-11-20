@@ -23,6 +23,13 @@ struct RootView: View {
                     .pickerStyle(.segmented)
                     .frame(maxWidth: 240)
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink {
+                        HistoryView()
+                    } label: {
+                        Label("History", systemImage: "clock")
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         SettingsView()

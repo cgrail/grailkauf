@@ -15,6 +15,11 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
 - Swipe an item to delete it. Tap an item to change its text.
 
+### History (iPhone)
+- Tap the clock at the top left. The history shows each shopping trip, newest first, with its date.
+- The history shows only the items that are not on the list now. Tap + to add an item again.
+- Below each trip, a line counts the items of that trip that are already on the list. Tap the line to show them.
+
 ### Add from another app (iPhone)
 - Share a text, for example a note, and tap "Grailkauf" in the share sheet. Each line becomes one item. List marks such as "✓" or "•" at the start of a line go away.
 - If a note in Notes is shared with other people, select "Send Copy" at the top of the share sheet first.
