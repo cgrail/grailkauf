@@ -15,6 +15,11 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
 - Swipe an item to delete it. Tap an item to change its text.
 
+### Add from another app (iPhone)
+- Share a text, for example a note, and tap "Grailkauf" in the share sheet. Each line becomes one item. List marks such as "✓" or "•" at the start of a line go away.
+- If a note in Notes is shared with other people, select "Send Copy" at the top of the share sheet first.
+- The items reach the list when Grailkauf opens on this iPhone, or when the app syncs in the background.
+
 ### Shop mode (iPhone)
 - The list is in the learned order. Tap an item to tick it.
 - A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
@@ -47,7 +52,7 @@ You need Xcode 27 or later.
 # Unit tests of the logic package, with coverage
 cd GrailkaufCore && swift test --enable-code-coverage
 
-# Compile the iPhone app, the Watch app and the Lock Screen extension
+# Compile the iPhone app, the Watch app, the Lock Screen extension and the share extension
 xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf \
   -destination 'generic/platform=iOS Simulator' build
 ```
@@ -65,6 +70,7 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 | `Grailkauf/` | The iPhone app |
 | `GrailkaufWatch/` | The Watch app |
 | `GrailkaufWidgets/`, `Activity/` | The Lock Screen Live Activity |
+| `GrailkaufShare/` | The share extension: "Grailkauf" in the share sheet |
 | `Strings/` | The texts in English and German |
 | `Config/` | Info.plist files and entitlements |
 
@@ -72,9 +78,11 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - Open the project in Xcode and select your team. Xcode then registers the app and the iCloud container `iCloud.de.grails.grailkauf`.
 - If Xcode reports that the container is missing, add it under Signing & Capabilities.
 - You cannot rename or delete this container later.
+- Xcode also registers the App Group `group.de.grails.grailkauf`. The share extension gives the shared text to the app through this group.
 - Before a public release, deploy the iCloud schema to production in the CloudKit Console.
 
 ## Limits
 - The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the Watch gets the list from the iPhone.
 - The position guess for new items needs an iPhone with Apple Intelligence. On other iPhones, new items go to the "New" group.
 - The position guess does not work in the simulator.
+- The share extension cannot write to the list, because the list is in the app's own folder. It keeps the text, and the app adds the items when it runs next.

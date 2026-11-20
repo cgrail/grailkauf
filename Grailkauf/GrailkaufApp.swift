@@ -46,9 +46,19 @@ final class AppModel {
     }
 
     private func changed() {
+        takeShared()
         link.send(store.state)
         ShoppingActivity.sync(store.state, shopping: mode == .shop)
         Task { await classify() }
+    }
+
+    /// Adds the text from the share extension. Each refresh checks: on launch, on open and after an iCloud sync.
+    private func takeShared() {
+        // While an error shows, no retry: a failed save refreshes again.
+        guard store.problem == nil, let inbox = UserDefaults(suiteName: Inbox.group), let text = Inbox.text(in: inbox)
+        else { return }
+        // The text stays in the inbox until the items are saved.
+        if store.add(text) { Inbox.remove(text, from: inbox) }
     }
 
     /// Gives each open item a category. Shop mode can then place an item that it does not know.
