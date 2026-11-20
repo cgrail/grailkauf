@@ -31,6 +31,11 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
     @Test func splitsOnCommasAndLinesButNotInsideNumbers() {
         #expect(ItemName.split("Milch 3,5%, Eier,Butter\nBrot\n\n") == ["Milch 3,5%", "Eier", "Butter", "Brot"])
     }
+
+    @Test func splitRemovesListMarks() {
+        #expect(ItemName.split("✓ Punsch (Kinder)\n✓  Fanta\n◦ Eier\n- Brot\n-20% Rabatt") ==
+            ["Punsch (Kinder)", "Fanta", "Eier", "Brot", "-20% Rabatt"])
+    }
 }
 
 @Suite struct OrderLearningTests {
@@ -253,5 +258,21 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         let entries = trip(3, ["Milch", "Mehl"]) + trip(2, ["2 Milch"]) + [Entry(text: "Mais", createdAt: friday)]
         #expect(Suggestions.completions(for: "m", entries: entries) == ["2 Milch", "Mehl"])
         #expect(Suggestions.completions(for: " ", entries: entries) == [])
+    }
+}
+
+@Suite struct InboxTests {
+    @Test func keepsTextThatArrivesWhileTheAppAddsTheFirstText() throws {
+        let defaults = try #require(UserDefaults(suiteName: "InboxTests"))
+        defaults.removePersistentDomain(forName: "InboxTests")
+        Inbox.put("Milch\nEier", in: defaults)
+        Inbox.put("Brot", in: defaults)
+        let taken = try #require(Inbox.text(in: defaults))
+        Inbox.put("Butter", in: defaults)
+        Inbox.remove(taken, from: defaults)
+        #expect(taken == "Milch\nEier\nBrot")
+        #expect(Inbox.text(in: defaults) == "Butter")
+        Inbox.remove("Butter", from: defaults)
+        #expect(Inbox.text(in: defaults) == nil)
     }
 }

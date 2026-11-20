@@ -13,12 +13,19 @@ public enum ItemName {
     public static func key(_ text: String) -> String { display(text).lowercased() }
 
     /// "Milch, Eier\nButter" is three items. A comma between digits ("3,5%") does not split.
+    /// A list mark at the start of a line goes away: Notes shares a ticked checklist line as "✓ Milch".
     public static func split(_ input: String) -> [String] {
         input.replacingOccurrences(of: #"(?<!\d),|,(?!\d)"#, with: "\n", options: .regularExpression)
             .split(whereSeparator: \.isNewline)
-            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .map {
+                $0.replacingOccurrences(of: listMark, with: "", options: .regularExpression)
+                    .trimmingCharacters(in: .whitespaces)
+            }
             .filter { !$0.isEmpty }
     }
+
+    /// "✓ ", "◦ ", "• ", "- ", "* ". A "-" or "*" counts only with a space after it, so "-20%" stays.
+    private static let listMark = #"^\s*(?:[✓✔☑☐◦○•▪]|[-*](?=\s))"#
 
     private static func isFiller(_ token: String) -> Bool {
         let word = token.lowercased().trimmingCharacters(in: .punctuationCharacters.union(.symbols))

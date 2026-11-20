@@ -127,9 +127,10 @@ final class Store {
 
     // MARK: Changes
 
-    /// Adds one item per line or comma-separated part, in the order typed.
-    func add(_ input: String) {
-        guard let list = activeList(), let store = list.objectID.persistentStore else { return }
+    /// Adds one item per line or comma-separated part, in the order typed. False if nothing was saved.
+    @discardableResult
+    func add(_ input: String) -> Bool {
+        guard let list = activeList(), let store = list.objectID.persistentStore else { return false }
         let now = Date.now
         for (offset, text) in ItemName.split(input).enumerated() {
             let item = Item(context: context)
@@ -141,7 +142,7 @@ final class Store {
             item.modifiedAt = now
             item.list = list
         }
-        save()
+        return save()
     }
 
     func rename(_ id: UUID, to text: String) {
@@ -213,12 +214,15 @@ final class Store {
         return try? context.fetch(request).first
     }
 
-    private func save() {
+    @discardableResult
+    private func save() -> Bool {
         do {
             try context.save()
+            return true
         } catch {
             context.rollback()
             problem = error.localizedDescription
+            return false
         }
     }
 }

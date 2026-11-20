@@ -29,6 +29,6 @@ jobs:
         working-directory: GrailkaufCore
         run: |
           swift test --no-parallel 2>&1 | tee ../check.log || { ../.github/annotate.sh ../check.log; exit 1; }
-      - name: Build iPhone, watch and Lock Screen extension
+      - name: Build iPhone, watch, Lock Screen and share extensions
         run: |
           xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build 2>&1 | tee check.log || { .github/annotate.sh check.log; exit 1; }
