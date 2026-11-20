@@ -5,6 +5,7 @@
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
+- The history shows your past shopping trips. Tap + to add an item from a past trip to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or to a guessed position.
 - The order screen shows the learned order. You can drag an item to correct it.

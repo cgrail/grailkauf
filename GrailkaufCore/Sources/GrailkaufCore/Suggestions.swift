@@ -1,6 +1,25 @@
 import Foundation
 
+/// One past shopping trip as the history shows it.
+public struct PastTrip: Sendable {
+    /// The last tick of the trip.
+    public var date: Date
+    /// The texts of the bought items in tick order, each with its latest text. True if it is on the list now.
+    public var items: [(text: String, onList: Bool)]
+}
+
 public enum Suggestions {
+    /// All trips, newest first.
+    public static func history(entries: [Entry]) -> [PastTrip] {
+        let onList = Set(entries.filter { $0.tickedAt == nil }.map(\.key))
+        let latest = Dictionary(
+            entries.sorted { $0.createdAt < $1.createdAt }.map { ($0.key, $0.text) }, uniquingKeysWith: { $1 })
+        let ticks = entries.compactMap { entry in entry.tickedAt.map { (key: entry.key, at: $0) } }
+        return OrderLearning.trips(from: ticks).reversed().map { trip in
+            PastTrip(date: trip.date, items: trip.keys.map { (latest[$0]!, onList.contains($0)) })
+        }
+    }
+
     /// The texts of the items that are due again, most regular first.
     /// An item is due when most of its usual gap between purchases is over.
     /// The rhythm of an item is known after three purchases.

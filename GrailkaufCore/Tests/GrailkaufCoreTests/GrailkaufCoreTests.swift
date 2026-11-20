@@ -259,6 +259,14 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(Suggestions.completions(for: "m", entries: entries) == ["2 Milch", "Mehl"])
         #expect(Suggestions.completions(for: " ", entries: entries) == [])
     }
+
+    @Test func historyListsTripsNewestFirstAndMarksWhatIsOnTheList() {
+        let entries = trip(2, ["Milch", "Brot"]) + trip(1, ["2 Milch", "Eier"]) + [Entry(text: "Brot", createdAt: friday)]
+        let history = Suggestions.history(entries: entries)
+        #expect(history.map(\.date) == [friday - week + 60, friday - 2 * week + 60])
+        #expect(history.map { $0.items.map(\.text) } == [["2 Milch", "Eier"], ["2 Milch", "Brot"]])
+        #expect(history.map { $0.items.map(\.onList) } == [[false, false], [false, true]])
+    }
 }
 
 @Suite struct InboxTests {
