@@ -61,7 +61,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Tap the current item, or use the Double Tap gesture, to tick it.
 - Swipe an item and tap "Later" to move it to the end of the trip.
 - Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items.
-- Tap the (i) button in the top right corner for the info screen. It shows the time of the last sync, the version and the commit of the app. "Refresh" there gets the list from the iPhone.
+- Tap "Info" at the end of the list for the info screen. It shows the time of the last sync, the version and the commit of the app. "Refresh" there gets the list from the iPhone.
 - When you tick the last item, the Watch shows a big 🎉 and "All done.".
 - The Watch and the iPhone sync over Bluetooth. This works with no internet.
 

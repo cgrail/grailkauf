@@ -54,6 +54,10 @@ struct ShopView: View {
                         }
                     }
                 }
+                // At the end, so the top shows only the time, the progress and the current item.
+                Section {
+                    NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
+                }
             }
             .toolbar {
                 if total > 0 {
@@ -65,9 +69,6 @@ struct ShopView: View {
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(Text("\(done.count)/\(total)"))
                     }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
                 }
             }
         }
