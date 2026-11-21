@@ -55,6 +55,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
 - **Invite** sends a link. The person who opens the link joins your list.
+- **Privacy Policy** opens the privacy policy on the web.
 
 ## How the order learns
 - A trip is a run of ticks with no gap longer than four hours. Four hours after the last tick, the ticked items leave the list.
@@ -91,6 +92,8 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 | `GrailkaufShare/` | The share extension: "Grailkauf" in the share sheet |
 | `Strings/` | The texts in English and German |
 | `Config/` | Info.plist files and entitlements |
+| `docs/` | The privacy policy, served by GitHub Pages |
+| `scripts/` | `check-listing.py` checks the App Store texts in `APP-STORE.md` |
 
 ## Before the first run on a device
 - Open the project in Xcode and select your team. Xcode then registers the app and the iCloud container `iCloud.de.grails.grailkauf`.

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0 (current)
 
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
@@ -15,7 +15,6 @@
 - You can drag the items in list mode into a new order.
 - "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly. "Select all" selects the full list. While you select, the other buttons at the top go away.
 - The grid button in list mode shows the items as small tiles with a picture, five in a row, grouped by supermarket section such as "Fruit & vegetables". Each section has its own color, as on a store map. The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above. Touch and hold a tile to move the item to another section. Items that the app has not sorted yet go to "Other". The grid has no text field and no suggestions: you add items with dictation. Shop mode has the grid too: tap a tile to tick the item.
-- The menu at the top left opens the settings and lists your past shopping trips. Each trip shows its first items and how many are not on the list. Open a trip and tap + to add an item to the list again.
 - The menu at the top left opens the settings and lists your past shopping trips. Each trip shows the items that are not on the list now, so you see what your list can miss. A line below counts them and the items that are already on the list. Open a trip and tap + to add an item to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or next to items of the same kind.

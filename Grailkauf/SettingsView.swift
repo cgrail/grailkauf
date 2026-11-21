@@ -49,6 +49,8 @@ struct SettingsView: View {
                 Text("Grailkauf collects no data. Your iCloud stores the list. Only the people you invite can see it.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                // App Review requires the policy inside the app too (guideline 5.1.1).
+                SwiftUI.Link("Privacy Policy", destination: URL(string: "https://grails.de/grailkauf/privacy-policy.html")!)
             }
         }
         .navigationTitle("Settings")
