@@ -106,12 +106,12 @@
         }
       }
     },
-    "%lld not on the list" : {
+    "%lld not on the list, %lld already on it" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%lld nicht auf der Liste"
+            "value" : "%1$lld nicht auf der Liste, %2$lld schon drauf"
           }
         }
       }
