@@ -24,6 +24,12 @@ public enum ItemName {
             .filter { !$0.isEmpty }
     }
 
+    /// Spoken text has no line breaks: "Milch und Eier. Butter" is three items. A dot between digits does not split.
+    public static func splitSpoken(_ input: String) -> [String] {
+        split(input.replacingOccurrences(
+            of: #"(?<!\d)\.|\.(?!\d)|\s+(?:und|and)\s+"#, with: "\n", options: [.regularExpression, .caseInsensitive]))
+    }
+
     /// "✓ ", "◦ ", "• ", "- ", "* ". A "-" or "*" counts only with a space after it, so "-20%" stays.
     private static let listMark = #"^\s*(?:[✓✔☑☐◦○•▪]|[-*](?=\s))"#
 

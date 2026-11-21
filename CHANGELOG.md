@@ -5,6 +5,9 @@
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
+- You can dictate many items at once. Tap the microphone, say the items, tap again. The app splits them into single items.
+- Each item in list mode has a trash button. "Delete all" empties the list.
+- You can drag the items in list mode into a new order.
 - The history shows your past shopping trips. Tap + to add an item from a past trip to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or to a guessed position.

@@ -2,12 +2,14 @@ import GrailkaufCore
 import SwiftUI
 
 /// The screen to write the list, like a chat: type, press Enter, type the next item.
-/// The items stay in the order in which they were added.
+/// The items stay in the order in which they were added, until someone drags them.
 struct ListModeView: View {
     @Environment(AppModel.self) private var model
     @State private var draft = ""
     @State private var editing: Row?
     @State private var editedText = ""
+    @State private var confirmingDeleteAll = false
+    @State private var dictation = Dictation()
     @FocusState private var typing: Bool
 
     private var store: Store { model.store }
@@ -15,14 +17,30 @@ struct ListModeView: View {
     var body: some View {
         let items = store.state.todo
         ScrollViewReader { scroll in
-            List(items) { row in
-                Button(row.text) {
-                    editedText = row.text
-                    editing = row
+            List {
+                ForEach(items) { row in
+                    HStack {
+                        Button {
+                            editedText = row.text
+                            editing = row
+                        } label: {
+                            Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
+                        }
+                        .foregroundStyle(.primary)
+                        Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
+                            .labelStyle(.iconOnly)
+                            .foregroundStyle(.red)
+                    }
+                    // Each button gets its own tap, not the whole row.
+                    .buttonStyle(.borderless)
+                    .swipeActions {
+                        Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
+                    }
                 }
-                .foregroundStyle(.primary)
-                .swipeActions {
-                    Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
+                .onMove { from, to in
+                    if let source = from.first, let change = store.state.reordered(from: source, to: to) {
+                        store.move(change.id, toCreatedAt: change.createdAt)
+                    }
                 }
             }
             .overlay {
@@ -37,6 +55,17 @@ struct ListModeView: View {
             }
         }
         .safeAreaInset(edge: .bottom) { composer }
+        .toolbar {
+            if !items.isEmpty {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Delete all", systemImage: "xmark.bin") { confirmingDeleteAll = true }
+                }
+            }
+        }
+        .confirmationDialog("Delete all items?", isPresented: $confirmingDeleteAll, titleVisibility: .visible) {
+            Button("Delete all", role: .destructive) { store.deleteAll() }
+        }
+        .onDisappear { if dictation.isRecording { finishDictation() } }
         .alert("Edit item", isPresented: .constant(editing != nil), presenting: editing) { row in
             TextField("Add item", text: $editedText)
             Button("Save") {
@@ -50,7 +79,13 @@ struct ListModeView: View {
 
     private var composer: some View {
         VStack(spacing: 8) {
-            suggestions
+            if dictation.isRecording {
+                Text(dictation.text.isEmpty ? String(localized: "Say your items…") : dictation.text)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                suggestions
+            }
             HStack(alignment: .bottom) {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
                 TextField("Add item", text: $draft, axis: .vertical)
@@ -62,6 +97,15 @@ struct ListModeView: View {
                     .labelStyle(.iconOnly)
                     .font(.title)
                     .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
+                Button(
+                    dictation.isRecording ? "Stop" : "Dictate",
+                    systemImage: dictation.isRecording ? "stop.circle.fill" : "mic.circle.fill"
+                ) {
+                    if dictation.isRecording { finishDictation() } else { startDictation() }
+                }
+                .labelStyle(.iconOnly)
+                .font(.title)
+                .tint(dictation.isRecording ? .red : nil)
             }
         }
         .padding()
@@ -92,6 +136,20 @@ struct ListModeView: View {
             }
             .scrollIndicators(.hidden)
             .buttonBorderShape(.capsule)
+        }
+    }
+
+    private func startDictation() {
+        typing = false
+        Task {
+            do { try await dictation.start() } catch { store.problem = error.localizedDescription }
+        }
+    }
+
+    private func finishDictation() {
+        Task {
+            let items = await dictation.stop()
+            if !items.isEmpty { store.add(items.joined(separator: "\n")) }
         }
     }
 

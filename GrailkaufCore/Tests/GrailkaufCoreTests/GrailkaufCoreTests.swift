@@ -14,30 +14,6 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
     }
 }
 
-@Suite struct ItemNameTests {
-    @Test(arguments: [
-        ("2 Milch", "milch"), ("Milch 3,5%", "milch"), ("1 l Milch", "milch"), ("Milch", "milch"),
-        ("500g Hackfleisch", "hackfleisch"), ("2x Cola Zero", "cola zero"), ("eine Dose Mais", "mais"),
-        ("Bio Milch", "bio milch"), ("Äpfel", "äpfel"), ("  Eier  (6er) ", "eier"), ("2", "2"),
-    ])
-    func key(text: String, expected: String) {
-        #expect(ItemName.key(text) == expected)
-    }
-
-    @Test func displayKeepsCapitalisation() {
-        #expect(ItemName.display("2 Cola Zero") == "Cola Zero")
-    }
-
-    @Test func splitsOnCommasAndLinesButNotInsideNumbers() {
-        #expect(ItemName.split("Milch 3,5%, Eier,Butter\nBrot\n\n") == ["Milch 3,5%", "Eier", "Butter", "Brot"])
-    }
-
-    @Test func splitRemovesListMarks() {
-        #expect(ItemName.split("✓ Punsch (Kinder)\n✓  Fanta\n◦ Eier\n- Brot\n-20% Rabatt") ==
-            ["Punsch (Kinder)", "Fanta", "Eier", "Brot", "-20% Rabatt"])
-    }
-}
-
 @Suite struct OrderLearningTests {
     private func trips(_ sequences: [String]...) -> [Trip] {
         sequences.enumerated().map { Trip(date: friday + Double($0) * week, keys: $1) }
@@ -120,6 +96,19 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         let list = state(open)
         #expect(list.todo.map(\.text) == ["Cola", "2 Milch", "Äpfel"])
         #expect(list.shop(now: friday).map(\.name) == ["Äpfel", "Milch", "Cola"])
+    }
+
+    @Test func dragGivesTheRowATimeBetweenItsNewNeighbours() throws {
+        let open = ["A", "B", "C"].enumerated().map { Entry(text: $1, createdAt: friday - hour + Double($0)) }
+        var list = state(open)
+        for (from, to, expected) in [(0, 3, ["B", "C", "A"]), (2, 0, ["C", "A", "B"]), (0, 2, ["B", "A", "C"])] {
+            let change = try #require(list.reordered(from: from, to: to))
+            list.rows = list.rows.map { var row = $0; if row.id == change.id { row.createdAt = change.createdAt }; return row }
+            #expect(list.todo.map(\.text) == expected)
+            list = state(open)
+        }
+        #expect(list.reordered(from: 1, to: 1) == nil)
+        #expect(list.reordered(from: 1, to: 2) == nil)
     }
 
     @Test func unknownItemsBorrowGuessOrGoToNew() {

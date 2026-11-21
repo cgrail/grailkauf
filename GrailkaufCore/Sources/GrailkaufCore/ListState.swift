@@ -155,6 +155,25 @@ public struct ListState: Codable, Equatable, Sendable {
         rows.filter { $0.tickedAt == nil }.sorted { $0.createdAt < $1.createdAt }
     }
 
+    /// List mode: a drag moves the row at `source` to `destination`, counted as SwiftUI's `onMove` counts.
+    /// The row gets a `createdAt` between its new neighbours, so `todo` keeps the new order. Nil if nothing moves.
+    // shortcut: iCloud keeps dates to the millisecond, so many drags into one gap can tie two rows. Add a stored
+    // position if users report that.
+    public func reordered(from source: Int, to destination: Int) -> (id: UUID, createdAt: Date)? {
+        var rows = todo
+        guard rows.indices.contains(source), destination != source, destination != source + 1 else { return nil }
+        let row = rows.remove(at: source)
+        let index = min(destination > source ? destination - 1 : destination, rows.count)
+        let before = index > 0 ? rows[index - 1].createdAt : nil
+        let after = index < rows.count ? rows[index].createdAt : nil
+        switch (before, after) {
+        case let (before?, after?): return (row.id, before + after.timeIntervalSince(before) / 2)
+        case let (before?, nil): return (row.id, before + 1)
+        case let (nil, after?): return (row.id, after - 1)
+        case (nil, nil): return nil
+        }
+    }
+
     /// Shop mode: "New" items first, then the learned order, items pushed back with "later" last.
     /// `lingering` keeps just-ticked rows in place while they fade out.
     public func shop(now: Date, lingering: Set<UUID> = []) -> [Row] {
