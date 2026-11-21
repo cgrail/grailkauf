@@ -19,7 +19,7 @@ struct ListModeView: View {
         let items = store.state.todo
         Group {
             if grid {
-                CategoryGrid(store: store)
+                CategoryGrid(store: store, sections: Grid.sections(items))
             } else {
                 ScrollViewReader { scroll in
                     // In select mode, slide a finger down the circles to select many items, as in Photos.
@@ -84,12 +84,7 @@ struct ListModeView: View {
                 }
             } else if !items.isEmpty {
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(
-                        grid ? "Show as list" : "Show by section",
-                        systemImage: grid ? "list.bullet" : "square.grid.2x2"
-                    ) {
-                        withAnimation { grid.toggle() }
-                    }
+                    GridToggle()
                     if !grid {
                         Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
                     }

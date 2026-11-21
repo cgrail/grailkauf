@@ -13,12 +13,13 @@ import Testing
             Entry(text: "Joghurt", category: "dairy", createdAt: now - 100, tickedAt: now - 99),
             Entry(text: "Joghurt", createdAt: now - 1),
         ], order: [], now: now)
-        #expect(state.sections.map(\.category) == [.produce, .dairy, .other])
-        #expect(state.sections[1].rows.map(\.text) == ["Milch", "Joghurt"])
+        let sections = Grid.sections(state.todo)
+        #expect(sections.map(\.category) == [.produce, .dairy, .other])
+        #expect(sections[1].rows.map(\.text) == ["Milch", "Joghurt"])
     }
 
-    @Test func smallSectionsShareARowInTheirOrder() {
-        #expect(Grid.rows(sizes: [4, 1, 2, 2, 7, 1, 3], columns: 5) == [[0, 1], [2, 3], [4], [5, 6]])
+    @Test func smallSectionsFillTheGapsFurtherUp() {
+        #expect(Grid.rows(sizes: [4, 1, 2, 2, 7, 1, 3], columns: 5) == [[0, 1], [2, 3, 5], [4], [6]])
     }
 
     @Test func emojiTakesTheEndOfACompoundWord() {

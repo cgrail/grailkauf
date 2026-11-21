@@ -6,6 +6,7 @@ struct ShopModeView: View {
     @Environment(AppModel.self) private var model
     /// The rows that were ticked a moment ago. They stay in place, faded, so the user can undo a wrong tap.
     @State private var lingering: Set<UUID> = []
+    @AppStorage("grid") private var grid = false
 
     private var store: Store { model.store }
 
@@ -15,6 +16,26 @@ struct ShopModeView: View {
         let done = store.state.done(now: now).filter { !lingering.contains($0.id) }
         let left = open.count { $0.tickedAt == nil }
         let total = open.count + done.count
+        Group {
+            if grid {
+                // Each section keeps the learned order. A ticked tile fades out as a ticked row does.
+                CategoryGrid(store: store, sections: Grid.sections(open), onTap: toggle)
+            } else {
+                list(open: open, done: done, left: left, total: total)
+            }
+        }
+        .animation(.default, value: open.map(\.id))
+        .overlay {
+            if total == 0 { ContentUnavailableView("The list is empty", systemImage: "cart") }
+        }
+        .toolbar {
+            if total > 0 {
+                ToolbarItem(placement: .topBarTrailing) { GridToggle() }
+            }
+        }
+    }
+
+    private func list(open: [Row], done: [Row], left: Int, total: Int) -> some View {
         List {
             Section {
                 ProgressView(value: Double(total - left), total: Double(max(total, 1))) {
@@ -32,10 +53,6 @@ struct ShopModeView: View {
                     DisclosureGroup("Done (\(done.count))") { rows(done) }
                 }
             }
-        }
-        .animation(.default, value: open.map(\.id))
-        .overlay {
-            if total == 0 { ContentUnavailableView("The list is empty", systemImage: "cart") }
         }
     }
 

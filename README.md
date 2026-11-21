@@ -17,7 +17,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Tap the trash button of an item, or swipe the item, to delete it. Tap the text of an item to change it in place, as in a notes app. Press Enter or tap elsewhere to save. If you empty the text, the item goes away. A comma makes more items.
 - Touch and hold an item, then drag it to a new place.
 - Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
-- Tap the grid button at the top to show the items as tiles, grouped by supermarket section such as "Fruit & vegetables". The sections follow the route through a typical supermarket. The grid has no text field: hold "Hold to dictate" to add items. Small sections share a row. Touch and hold a tile to move the item to another section or to delete it. Later items of the same name go to the new section. Tap the list button to go back.
+- Tap the grid button at the top to show the items as tiles, grouped by supermarket section such as "Fruit & vegetables". The sections follow the route through a typical supermarket. The grid has no text field: hold "Hold to dictate" to add items. Small sections fill the gaps in the rows above. Touch and hold a tile to move the item to another section or to delete it. Later items of the same name go to the new section. Tap the list button to go back.
 - The history keeps the items that you bought, also after you delete them from the list.
 - Hold "Hold to dictate" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Let go to add the items to the list. With VoiceOver, double tap and hold.
 - After each short pause, the screen shows the items of what you said. A spinner shows while the app splits them into single products. Filler words such as "ähm", "dann" or "noch" go away.
@@ -42,6 +42,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
+- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Within a section, the tiles are in the learned order. The list view and the grid view share one setting for both modes.
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch

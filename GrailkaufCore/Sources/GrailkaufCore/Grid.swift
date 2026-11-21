@@ -1,19 +1,27 @@
 /// The grid view: tiles in rows of a fixed width, grouped by section.
 public enum Grid {
-    /// Puts sections next to each other while they fit in one row, in their order.
+    /// The rows by section, in the order of `Category`. Each section keeps the order of `rows`.
+    /// Unsorted items go to `.other`.
+    public static func sections(_ rows: [Row]) -> [(category: Category, rows: [Row])] {
+        let groups = Dictionary(grouping: rows) { Category(rawValue: $0.category ?? "") ?? .other }
+        return Category.allCases.compactMap { category in groups[category].map { (category, $0) } }
+    }
+
+    /// Puts each section in the first row with room for it, so small sections fill the gaps further up.
     /// A section takes one column for each item, and a full row if it has more items than the row has columns.
     /// - Returns: the indices of `sizes` for each row.
     public static func rows(sizes: [Int], columns: Int) -> [[Int]] {
         var rows: [[Int]] = []
-        var used = columns
+        var used: [Int] = []
         for (index, size) in sizes.enumerated() {
             let width = min(size, columns)
-            if used + width > columns {
-                rows.append([])
-                used = 0
+            if let row = used.firstIndex(where: { $0 + width <= columns }) {
+                rows[row].append(index)
+                used[row] += width
+            } else {
+                rows.append([index])
+                used.append(width)
             }
-            rows[rows.count - 1].append(index)
-            used += width
         }
         return rows
     }

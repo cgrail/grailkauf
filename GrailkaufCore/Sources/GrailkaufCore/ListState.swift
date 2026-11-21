@@ -160,12 +160,6 @@ public struct ListState: Codable, Equatable, Sendable {
         rows.filter { $0.tickedAt == nil }.sorted { $0.createdAt < $1.createdAt }
     }
 
-    /// The grid view: open items by section, in the order of `Category`. Unsorted items go to `.other`.
-    public var sections: [(category: Category, rows: [Row])] {
-        let groups = Dictionary(grouping: todo) { Category(rawValue: $0.category ?? "") ?? .other }
-        return Category.allCases.compactMap { category in groups[category].map { (category, $0) } }
-    }
-
     /// The open rows that `texts` would add a second time. "2 Milch" repeats "Milch".
     public func repeated(by texts: [String]) -> [Row] {
         let keys = Set(texts.map(ItemName.key))

@@ -4,6 +4,9 @@ import SwiftUI
 /// The list as tiles, grouped by supermarket section and colored like the map at a store entrance.
 struct CategoryGrid: View {
     let store: Store
+    let sections: [(category: GrailkaufCore.Category, rows: [Row])]
+    /// Shop mode ticks an item with a tap. List mode has no tap.
+    var onTap: ((Row) -> Void)?
     @Environment(\.dynamicTypeSize) private var typeSize
     private let gap: CGFloat = 4
 
@@ -11,7 +14,6 @@ struct CategoryGrid: View {
     private var columns: Int { typeSize.isAccessibilitySize ? 3 : 5 }
 
     var body: some View {
-        let sections = store.state.sections
         ScrollView {
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(Grid.rows(sizes: sections.map(\.rows.count), columns: columns), id: \.self) { row in
@@ -36,7 +38,7 @@ struct CategoryGrid: View {
                 Text(category.emoji)
             }
             .font(.caption.weight(.semibold))
-            .lineLimit(2)
+            .lineLimit(1)
             .minimumScaleFactor(0.8)
             .accessibilityAddTraits(.isHeader)
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: span), spacing: gap) {
@@ -50,7 +52,17 @@ struct CategoryGrid: View {
         .background(category.color.opacity(0.25), in: .rect(cornerRadius: 12))
     }
 
-    private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
+    @ViewBuilder private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
+        if let onTap {
+            Button { onTap(row) } label: { picture(row, in: category) }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(row.tickedAt != nil ? .isSelected : [])
+        } else {
+            picture(row, in: category)
+        }
+    }
+
+    private func picture(_ row: Row, in category: GrailkaufCore.Category) -> some View {
         VStack(spacing: 0) {
             Text(ItemName.emoji(row.text) ?? category.emoji)
                 .font(.title3)
@@ -63,6 +75,13 @@ struct CategoryGrid: View {
         .padding(.vertical, 4)
         .padding(.horizontal, 2)
         .background(.background, in: .rect(cornerRadius: 8))
+        .overlay(alignment: .topTrailing) {
+            if row.tickedAt != nil {
+                Image(systemName: "checkmark.circle.fill").foregroundStyle(.tint).padding(2)
+            }
+        }
+        .opacity(row.tickedAt != nil ? 0.4 : 1)
+        .contentShape(.rect)
         .contextMenu {
             // The language model can pick the wrong section. Later items of the same name keep the correction.
             Menu("Move to section", systemImage: "arrow.right.square") {
@@ -71,6 +90,17 @@ struct CategoryGrid: View {
                 }
             }
             Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+        }
+    }
+}
+
+/// Switches between the list and the grid. One setting for list mode and shop mode.
+struct GridToggle: View {
+    @AppStorage("grid") private var grid = false
+
+    var body: some View {
+        Button(grid ? "Show as list" : "Show by section", systemImage: grid ? "list.bullet" : "square.grid.2x2") {
+            withAnimation { grid.toggle() }
         }
     }
 }
