@@ -29,6 +29,7 @@
 - "Info" at the end of the list on the Watch opens an info screen with the time of the last sync, the version and the commit of the app. "Refresh" is there now, not at the end of the list.
 - When you tick the last item in shop mode, the iPhone and the Watch show a big 🎉 and "All done.".
 - The Lock Screen shows the progress of your shop.
+- The Smart Stack on the Apple Watch shows the progress and the current item of your shop, also when the Watch app is closed.
 - You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.
 - "New list" at the top of the menu starts an empty list. The old list goes to the history as an archived list, and you can add its items again from there. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.

@@ -53,7 +53,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The top shows the progress and the time of the last sync.
 - Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" below a line at the bottom, grouped by faded sections. Tap "Done" to show or hide them. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. Shop mode keeps the view that you chose last.
 - When you tick the last item, a big 🎉 and "All done." show above the list.
-- While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
+- While shop mode is open, the Lock Screen shows the progress, the current item and the next three items. The Smart Stack on the Apple Watch shows the progress and the current item.
 
 ### Apple Watch
 - The Watch shows the current item at the top, below the name of its supermarket section. A ring with a count in the top left corner, in the size of the time and level with it, shows the progress.
