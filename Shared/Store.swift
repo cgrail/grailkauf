@@ -135,7 +135,7 @@ final class Store {
     func add(_ input: String) -> Bool {
         guard let list = activeList(), let store = list.objectID.persistentStore else { return false }
         let now = Date.now
-        let texts = ItemName.split(input)
+        let texts = ItemName.withoutRepeats(ItemName.split(input))
         removeRepeats(of: texts)
         for (offset, text) in texts.enumerated() {
             let item = Item(context: context)
@@ -153,6 +153,7 @@ final class Store {
 
     /// The item takes the first part. The other parts become new items right after it.
     func split(_ id: UUID, into parts: [String]) {
+        let parts = ItemName.withoutRepeats(parts)
         guard let item = item(id), let first = parts.first, let list = item.list,
             let store = item.objectID.persistentStore
         else { return }

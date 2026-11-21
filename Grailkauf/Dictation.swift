@@ -96,8 +96,8 @@ final class Dictation {
     }
 
     private func update(_ newText: String?, paused: Bool, done: Bool) {
-        // The final result can repeat the part that the last pause ended.
-        if let newText, !(paused && newText == lastPart) {
+        // The final result repeats the part that the last pause ended, with or without the pause mark.
+        if let newText, newText != lastPart {
             if paused {
                 confirm(newText)
                 lastPart = newText

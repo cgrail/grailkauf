@@ -24,13 +24,19 @@ public enum ItemName {
             .filter { !$0.isEmpty }
     }
 
-    /// Spoken text has no line breaks: "Milch und Eier. Butter" is three items. A dot between digits does not split.
+    /// Spoken text has no line breaks: "Milch und Eier. Butter? Salz" is four items. A dot between digits does not split.
     /// Filler words go away: "ähm, dann noch Eier" is "Eier".
     public static func splitSpoken(_ input: String) -> [String] {
         split(input.replacingOccurrences(
-            of: #"(?<!\d)\.|\.(?!\d)|\s+(?:und|and)\s+"#, with: "\n", options: [.regularExpression, .caseInsensitive]))
+            of: #"(?<!\d)\.|\.(?!\d)|[?!…]|\s+(?:und|and)\s+"#, with: "\n", options: [.regularExpression, .caseInsensitive]))
             .map(withoutFillers)
             .filter { !$0.isEmpty }
+    }
+
+    /// The texts without repeats of an item, by `key`. The last one stays: it is the newer one.
+    public static func withoutRepeats(_ texts: [String]) -> [String] {
+        let lastIndex = Dictionary(texts.enumerated().map { (key($1), $0) }, uniquingKeysWith: max)
+        return texts.enumerated().filter { lastIndex[key($1)] == $0 }.map(\.element)
     }
 
     /// "ähm" and "uh" go away anywhere. "dann", "noch", "also" or "bitte" go away at the start of an item.
