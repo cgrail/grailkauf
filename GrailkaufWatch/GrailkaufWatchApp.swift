@@ -77,13 +77,15 @@ final class WatchModel {
     /// A trip in progress: two items ticked, five open in the learned order.
     private static func sample() -> ListState {
         let now = Date.now
-        let texts = [
-            String(localized: "Apples"), String(localized: "Bananas"), String(localized: "Bread"),
-            String(localized: "Coffee"), String(localized: "Cheese"), String(localized: "Milk"),
-            String(localized: "Eggs"),
+        let items: [(String, GrailkaufCore.Category)] = [
+            (String(localized: "Apples"), .produce), (String(localized: "Bananas"), .produce),
+            (String(localized: "Bread"), .bakery), (String(localized: "Coffee"), .breakfast),
+            (String(localized: "Cheese"), .cheese), (String(localized: "Milk"), .dairy),
+            (String(localized: "Eggs"), .dairy),
         ]
-        let rows = texts.enumerated().map { index, text in
-            Row(Entry(text: text, createdAt: now, tickedAt: index < 2 ? now - Double(60 * (2 - index)) : nil),
+        let rows = items.enumerated().map { index, item in
+            Row(Entry(text: item.0, category: item.1.rawValue, createdAt: now,
+                      tickedAt: index < 2 ? now - Double(60 * (2 - index)) : nil),
                 sort: Double(index))
         }
         return ListState(rows: rows, lastSync: now)
