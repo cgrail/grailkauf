@@ -26,3 +26,4 @@
 - You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.
 - "New list" at the top of the menu starts an empty list. The old list goes to the history as an archived list, and you can add its items again from there.
+- Below the items in list mode, "Suggestions" shows the items of your past trips and lists that are not on the list now. Tap one to add it.

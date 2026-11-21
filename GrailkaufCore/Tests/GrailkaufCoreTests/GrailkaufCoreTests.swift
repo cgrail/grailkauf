@@ -271,6 +271,14 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(history.map { $0.items.map(\.onList) } == [[false, false], [false, true]])
     }
 
+    @Test func pastListsSuggestTheItemsInTheMostListsFirst() {
+        let archived = Entry(text: "Salz", createdAt: friday - hour, archivedAt: friday - 60)
+        let entries = trip(3, ["Brot", "Milch"]) + trip(2, ["Brot", "Eier"]) + trip(1, ["2 Milch", "Brot"])
+            + [archived, Entry(text: "Brot", createdAt: friday)]
+        #expect(Suggestions.fromPastLists(entries: entries) == ["2 Milch", "Salz", "Eier"])
+        #expect(Suggestions.fromPastLists(entries: entries, limit: 1) == ["2 Milch"])
+    }
+
     @Test func newListArchivesTheOpenItemsIntoTheHistory() {
         let archived = ["Brot", "Eier"].enumerated().map {
             Entry(text: $1, createdAt: friday - hour + Double($0), archivedAt: friday - 60)

@@ -17,6 +17,7 @@ struct ListModeView: View {
 
     var body: some View {
         let items = store.state.todo
+        let past = pastSuggestions
         Group {
             if grid {
                 // The learned order, as in shop mode: the grid is a map of the store, not a history of the list.
@@ -37,6 +38,15 @@ struct ListModeView: View {
                                 store.move(change.id, toCreatedAt: change.createdAt)
                             }
                         }
+                        if !model.selecting, !past.isEmpty {
+                            Section("Suggestions") {
+                                ForEach(past, id: \.self) { text in
+                                    Button { store.add(text) } label: {
+                                        Label(text, systemImage: "plus.circle").foregroundStyle(.secondary)
+                                    }
+                                }
+                            }
+                        }
                     }
                     .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
                     .onChange(of: items.last?.id) { _, newest in
@@ -46,7 +56,7 @@ struct ListModeView: View {
             }
         }
         .overlay {
-            if items.isEmpty {
+            if items.isEmpty, grid || past.isEmpty {
                 ContentUnavailableView(
                     "The list is empty", systemImage: "cart",
                     description: grid
@@ -191,6 +201,12 @@ struct ListModeView: View {
         }
     }
 
+    /// Below the items: what the past lists had, without the due items that the bar above the text field shows.
+    private var pastSuggestions: [String] {
+        let due = Set(Suggestions.due(entries: store.entries, now: .now))
+        return Suggestions.fromPastLists(entries: store.entries).filter { !due.contains($0) }
+    }
+
     private func stopSelecting() {
         model.selecting = false
         selection = []
@@ -237,54 +253,5 @@ struct ListModeView: View {
         store.add(text)
         draft = ""
         typing = true
-    }
-}
-
-/// An item that edits in place, as in a notes app. Tap the text to change it. Enter or a tap elsewhere saves.
-/// An emptied item goes away, and commas make more items. Touch and hold still drags the item.
-private struct ItemRow: View {
-    let row: Row
-    let store: Store
-    @State private var editing = false
-    @State private var text = ""
-    @FocusState private var focused: Bool
-
-    var body: some View {
-        HStack {
-            if editing {
-                TextField("Item", text: $text)
-                    .focused($focused)
-                    .submitLabel(.done)
-                    .onSubmit { focused = false }
-                    .onAppear { focused = true }
-                    .onChange(of: focused) { if !focused { save() } }
-            } else {
-                Button {
-                    text = row.text
-                    editing = true
-                } label: {
-                    Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
-                }
-                .foregroundStyle(.primary)
-            }
-            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
-                .labelStyle(.iconOnly)
-                .foregroundStyle(.red)
-        }
-        // Each button gets its own tap, not the whole row.
-        .buttonStyle(.borderless)
-        .swipeActions {
-            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
-        }
-    }
-
-    private func save() {
-        editing = false
-        let parts = ItemName.split(text)
-        if parts.isEmpty {
-            store.delete([row.id])
-        } else if parts != [row.text] {
-            store.split(row.id, into: parts)
-        }
     }
 }

@@ -28,6 +28,21 @@ public enum Suggestions {
         return (trips + archived).sorted { $0.date > $1.date }
     }
 
+    /// Items of past trips and archived lists that are not on the list now. The item in the most lists comes first.
+    /// Each item has the text of its newest list. If two items are in as many lists, the more recent one comes first.
+    public static func fromPastLists(entries: [Entry], limit: Int = 10) -> [String] {
+        var seen: [String: (text: String, count: Int, rank: Int)] = [:]
+        for list in history(entries: entries) {
+            var counted = Set<String>()
+            for item in list.items where !item.onList && counted.insert(ItemName.key(item.text)).inserted {
+                let key = ItemName.key(item.text)
+                let old = seen[key]
+                seen[key] = (old?.text ?? item.text, (old?.count ?? 0) + 1, old?.rank ?? seen.count)
+            }
+        }
+        return seen.values.sorted { ($1.count, $0.rank) < ($0.count, $1.rank) }.prefix(limit).map(\.text)
+    }
+
     /// The texts of the items that are due again, most regular first.
     /// An item is due when most of its usual gap between purchases is over.
     /// The rhythm of an item is known after three purchases.
