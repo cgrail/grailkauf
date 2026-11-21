@@ -28,9 +28,9 @@ struct MenuView: View {
         .foregroundStyle(.primary)
     }
 
-    /// The date, the first items, and how many items are not on the list now.
+    /// The date and the items that are not on the list now: those are the ones the list can miss.
     private func row(_ trip: PastTrip) -> some View {
-        let missing = trip.items.count { !$0.onList }
+        let missing = trip.items.filter { !$0.onList }.map(\.text)
         return VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(trip.date, format: .dateTime.day().month(.wide)).font(.headline)
@@ -39,12 +39,14 @@ struct MenuView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            Text(trip.items.map(\.text).joined(separator: ", "))
-                .lineLimit(1)
-                .foregroundStyle(.secondary)
-            (missing == 0 ? Text("All on the list") : Text("\(missing) not on the list"))
-                .font(.caption)
-                .foregroundStyle(missing == 0 ? AnyShapeStyle(.secondary) : AnyShapeStyle(.tint))
+            if missing.isEmpty {
+                Text("All on the list").font(.caption).foregroundStyle(.secondary)
+            } else {
+                Text(missing.joined(separator: ", ")).lineLimit(3)
+                Text("\(missing.count) not on the list, \(trip.items.count - missing.count) already on it")
+                    .font(.caption)
+                    .foregroundStyle(.tint)
+            }
         }
     }
 }
