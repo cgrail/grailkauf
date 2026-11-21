@@ -465,6 +465,16 @@
         }
       }
     },
+    "Select" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auswählen"
+          }
+        }
+      }
+    },
     "Settings" : {
       "localizations" : {
         "de" : {

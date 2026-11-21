@@ -157,17 +157,13 @@ final class Store {
 
     func later(_ id: UUID) { change(id) { $0.deferredAt = .now } }
 
-    func delete(_ id: UUID) {
-        guard let item = item(id) else { return }
-        context.delete(item)
+    func delete(_ ids: some Sequence<UUID>) {
+        for id in ids { item(id).map(context.delete) }
         save()
     }
 
     /// List mode: empties the list. Ticked items stay, so the history and the order keep them.
-    func deleteAll() {
-        for row in state.todo { item(row.id).map(context.delete) }
-        save()
-    }
+    func deleteAll() { delete(state.todo.map(\.id)) }
 
     /// List mode: a drag gives the item a new place. See `ListState.reordered`.
     func move(_ id: UUID, toCreatedAt date: Date) { change(id) { $0.createdAt = date } }

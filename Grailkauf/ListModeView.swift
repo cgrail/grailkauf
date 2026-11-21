@@ -9,6 +9,8 @@ struct ListModeView: View {
     @State private var editing: Row?
     @State private var editedText = ""
     @State private var confirmingDeleteAll = false
+    @State private var editMode = EditMode.inactive
+    @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @FocusState private var typing: Bool
 
@@ -17,24 +19,29 @@ struct ListModeView: View {
     var body: some View {
         let items = store.state.todo
         ScrollViewReader { scroll in
-            List {
+            // In select mode, slide a finger down the circles to select many items, as in Photos.
+            List(selection: $selection) {
                 ForEach(items) { row in
-                    HStack {
-                        Button {
-                            editedText = row.text
-                            editing = row
-                        } label: {
-                            Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
+                    if editMode.isEditing {
+                        Text(row.text)
+                    } else {
+                        HStack {
+                            Button {
+                                editedText = row.text
+                                editing = row
+                            } label: {
+                                Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
+                            }
+                            .foregroundStyle(.primary)
+                            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+                                .labelStyle(.iconOnly)
+                                .foregroundStyle(.red)
                         }
-                        .foregroundStyle(.primary)
-                        Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
-                            .labelStyle(.iconOnly)
-                            .foregroundStyle(.red)
-                    }
-                    // Each button gets its own tap, not the whole row.
-                    .buttonStyle(.borderless)
-                    .swipeActions {
-                        Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
+                        // Each button gets its own tap, not the whole row.
+                        .buttonStyle(.borderless)
+                        .swipeActions {
+                            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+                        }
                     }
                 }
                 .onMove { from, to in
@@ -43,6 +50,7 @@ struct ListModeView: View {
                     }
                 }
             }
+            .environment(\.editMode, $editMode)
             .overlay {
                 if items.isEmpty {
                     ContentUnavailableView(
@@ -56,7 +64,24 @@ struct ListModeView: View {
         }
         .safeAreaInset(edge: .bottom) { composer }
         .toolbar {
-            if !items.isEmpty {
+            if editMode.isEditing {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Delete", systemImage: "trash", role: .destructive) {
+                        store.delete(selection)
+                        selection = []
+                    }
+                    .disabled(selection.isEmpty)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") {
+                        editMode = .inactive
+                        selection = []
+                    }
+                }
+            } else if !items.isEmpty {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Select", systemImage: "checkmark.circle") { editMode = .active }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Delete all", systemImage: "xmark.bin") { confirmingDeleteAll = true }
                 }

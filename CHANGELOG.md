@@ -8,6 +8,7 @@
 - You can dictate many items at once. Tap the microphone, say the items, tap again. The app splits them into single items.
 - Each item in list mode has a trash button. "Delete all" empties the list.
 - You can drag the items in list mode into a new order.
+- "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly.
 - The history shows your past shopping trips. Tap + to add an item from a past trip to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or to a guessed position.
