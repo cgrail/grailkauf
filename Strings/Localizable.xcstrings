@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "%@ (%@)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -67,24 +68,6 @@
     },
     "%lld items already on the list" : {
       "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld item already on the list"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld items already on the list"
-                }
-              }
-            }
-          }
-        },
         "de" : {
           "variations" : {
             "plural" : {
@@ -98,6 +81,24 @@
                 "stringUnit" : {
                   "state" : "translated",
                   "value" : "%lld Artikel schon auf der Liste"
+                }
+              }
+            }
+          }
+        },
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld item already on the list"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld items already on the list"
                 }
               }
             }
@@ -305,6 +306,16 @@
         }
       }
     },
+    "iPhone not reachable." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone nicht erreichbar."
+          }
+        }
+      }
+    },
     "Join" : {
       "localizations" : {
         "de" : {
@@ -485,22 +496,22 @@
         }
       }
     },
-    "Say your items…" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprich deine Artikel…"
-          }
-        }
-      }
-    },
     "Say “fertig” or “done” to finish." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sag „fertig“ oder „done“, um zu beenden."
+          }
+        }
+      }
+    },
+    "Say your items…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprich deine Artikel…"
           }
         }
       }
@@ -671,16 +682,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deine Einkäufe erscheinen hier nach deinem ersten Einkauf."
-          }
-        }
-      }
-    },
-    "iPhone not reachable." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone nicht erreichbar."
           }
         }
       }
