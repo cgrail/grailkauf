@@ -176,6 +176,16 @@ final class Store {
         save()
     }
 
+    /// Changes the text of an item in place. An empty text deletes the item, and commas make more items.
+    func edit(_ row: Row, to text: String) {
+        let parts = ItemName.split(text)
+        if parts.isEmpty {
+            delete([row.id])
+        } else if parts != [row.text] {
+            split(row.id, into: parts)
+        }
+    }
+
     /// Deletes the open items that `texts` repeat, and says which ones. See `repeated`.
     private func removeRepeats(of texts: [String], except kept: UUID? = nil) {
         let older = state.repeated(by: texts).filter { $0.id != kept }
@@ -186,6 +196,16 @@ final class Store {
     func setTicked(_ id: UUID, _ ticked: Bool) { change(id) { $0.tickedAt = ticked ? .now : nil } }
 
     func later(_ id: UUID) { change(id) { $0.deferredAt = .now } }
+
+    /// "New list": the open items leave the list together and show in the history as one archived list.
+    /// The ticked items of the trip in progress leave too. They stay in the history as that trip.
+    func archiveList() {
+        let now = Date.now
+        for row in state.rows {
+            item(row.id).map { $0.archivedAt = now; $0.modifiedAt = now }
+        }
+        save()
+    }
 
     func delete(_ ids: some Sequence<UUID>) {
         for id in ids { item(id).map(context.delete) }

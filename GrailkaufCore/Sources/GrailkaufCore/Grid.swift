@@ -30,9 +30,13 @@ public enum Grid {
 /// The pictures of the grid view. A fixed table with no model involved.
 extension ItemName {
     /// "Apfelsaft" is 🧃: a German compound word ends with what the thing is.
+    /// The last word that fits wins: in "Zahnseide Papa" or "H-Milch (5€)" the note comes after the item.
     /// Nil if no word of the table fits. The grid view then shows the emoji of the section.
     public static func emoji(_ text: String) -> String? {
-        guard let word = key(text).split(separator: " ").last.map(String.init) else { return nil }
+        key(text).split(separator: " ").reversed().lazy.compactMap { emoji(word: String($0)) }.first
+    }
+
+    private static func emoji(word: String) -> String? {
         // An ending wins over a start, and a longer word wins over a shorter one: "zahnpasta" is not "pasta".
         let byLength = emojiOf.keys.sorted { $0.count > $1.count }
         let stem = byLength.first { word.hasSuffix($0) }
@@ -54,19 +58,22 @@ extension ItemName {
             ("🧀", ["käse", "cheese", "mozzarella", "parmesan"]), ("🧈", ["butter"]),
             ("🥣", ["joghurt", "jogurt", "yoghurt", "yogurt", "quark", "müsli", "cereal"]),
             ("🍞", ["brot", "bread", "toast"]), ("🥖", ["brötchen", "semmel", "baguette"]), ("🥐", ["croissant"]),
-            ("🍗", ["hähnchen", "huhn", "geflügel", "chicken"]), ("🥩", ["fleisch", "steak", "rinder", "beef", "meat"]),
-            ("🥓", ["speck", "schinken", "bacon"]), ("🌭", ["wurst", "würstchen", "sausage"]),
-            ("🐟", ["fisch", "lachs", "fish", "salmon", "tuna"]), ("🍝", ["nudeln", "pasta", "spaghetti"]),
-            ("🍚", ["reis", "rice"]), ("🌾", ["mehl", "flour"]), ("🍬", ["zucker", "sugar", "bonbon"]),
-            ("🧂", ["salz", "salt"]), ("🫒", ["öl", "oil", "olive"]), ("🍫", ["schokolade", "chocolate"]),
+            ("🥨", ["brezel", "breze", "laugen", "pretzel"]),
+            ("🍗", ["hähnchen", "huhn", "geflügel", "chicken"]), ("🦃", ["pute", "truthahn", "turkey"]), ("🥩", ["fleisch", "steak", "rinder", "beef", "meat"]),
+            ("🥓", ["speck", "schinken", "bacon"]), ("🌭", ["wurst", "würstchen", "wiener", "frankfurter", "salami", "sausage"]),
+            ("🐟", ["fisch", "lachs", "fish", "salmon", "tuna"]), ("🍝", ["nudel", "nudeln", "pasta", "spaghetti"]),
+            ("🍜", ["chinanudel", "mienudel", "glasnudel", "reisnudel", "ramen", "noodle"]),
+            ("🍚", ["reis", "rice"]), ("🍘", ["reiswaffel", "reiscracker"]), ("🌾", ["mehl", "flour"]), ("🍬", ["zucker", "sugar", "bonbon"]),
+            ("🧂", ["salz", "salt"]), ("🫒", ["öl", "oil", "olive"]), ("🍫", ["schokolade", "chocolate", "nutella", "nougatcreme"]),
             ("🍪", ["keks", "kekse", "cookie"]), ("🥜", ["nuss", "nüsse", "nuts", "peanut"]), ("🍕", ["pizza"]),
             ("🍲", ["suppe", "soup"]), ("🍟", ["chips", "pommes", "crisps"]), ("🍦", ["eis", "eiscreme"]),
-            ("☕", ["kaffee", "coffee"]), ("🍵", ["tee", "tea"]), ("💧", ["wasser", "sprudel", "water"]),
-            ("🧃", ["saft", "juice"]), ("🥤", ["cola", "limo", "limonade", "soda"]), ("🍺", ["bier", "beer"]),
+            ("☕", ["kaffee", "coffee"]), ("🍵", ["tee", "tea"]), ("🫖", ["punsch"]), ("💧", ["wasser", "sprudel", "water"]),
+            ("🧃", ["saft", "juice"]), ("🥤", ["cola", "limo", "limonade", "fanta", "sprite", "eistee", "soda"]), ("🍺", ["bier", "beer"]),
             ("🍷", ["wein", "wine"]), ("🍯", ["honig", "honey"]), ("🫙", ["marmelade", "essig", "vinegar"]),
             ("🧻", ["papier", "paper", "taschentücher", "tissues"]),
             ("🧼", ["seife", "spülmittel", "duschgel", "soap"]), ("🪥", ["zahnpasta", "zahnbürste", "toothpaste"]),
-            ("🧽", ["schwamm", "sponge"]),
+            ("🧽", ["schwamm", "sponge"]), ("🦷", ["zahnseide", "floss"]),
+            ("🧤", ["handwärmer", "handschuh", "glove"]), ("🐈", ["katze", "cat"]),
         ]
         return Dictionary(uniqueKeysWithValues: table.flatMap { emoji, stems in stems.map { ($0, emoji) } })
     }()

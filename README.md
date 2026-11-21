@@ -13,11 +13,11 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A comma or a pasted text with many lines adds many items at once.
 - While you type, the app suggests items that you added before.
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
+- Below the items, "Suggestions" shows items from your past trips and lists that are not on the list. The items that were in the most lists come first. Tap an item to add it. The list stays where it is. Swipe an item to remove it, for example a thing that you bought once. It comes back if a later trip or list has it. Removed suggestions stay on this iPhone only.
 - If you add an item that is on the list already, the app removes the older copy and keeps the new one. A notice shows the name for a few seconds. An item that you say or type twice at once goes on the list once.
 - Tap the trash button of an item, or swipe the item, to delete it. Tap the text of an item to change it in place, as in a notes app. Press Enter or tap elsewhere to save. If you empty the text, the item goes away. A comma makes more items.
 - Touch and hold an item, then drag it to a new place.
 - Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
-- Tap the grid button at the top to show the items as tiles, grouped by supermarket section such as "Fruit & vegetables". The sections follow the route through a typical supermarket. The grid has no text field: hold "Hold to dictate" to add items. Small sections fill the gaps in the rows above. Within a section, the tiles are in the learned order, as in shop mode. Touch and hold a tile to move the item to another section or to delete it. Later items of the same name go to the new section. Tap the list button to go back.
 - The history keeps the items that you bought, also after you delete them from the list.
 - Hold "Hold to dictate" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Let go to add the items to the list. With VoiceOver, double tap and hold.
 - After each short pause, the screen shows the items of what you said. A spinner shows while the app splits them into single products. Filler words such as "ähm", "dann" or "noch" go away.
@@ -25,11 +25,20 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - While you hold, a bar above the button shows what the app does ("Listening", "Splitting", "Adding"), a red waveform of your voice and the time. Rings around the button grow when you speak.
 - A spinner line above the button shows while the app checks new items. A new item can still split into more items then.
 
+### Sections (iPhone)
+- Tap "Sections" at the top to show the list as tiles, grouped by supermarket section such as "Fruit & vegetables".
+- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above.
+- Within a section, the tiles are in the learned order, as in shop mode.
+- Tap a tile to change its name, move the item to another section or delete it. Touch and hold a tile does the same from a menu. Later items of the same name go to the new section.
+- If you type an item below the tiles and press Enter, the app adds it and goes to the list. You can then add more items.
+
 ### Menu and history (iPhone)
 - Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.
-- The menu opens the settings and shows each past shopping trip, newest first.
+- Tap "New list" at the top of the menu to start an empty list. The current list moves to the history as an archived list. It does not count as a purchase.
+- "New list" also ends the shop in progress. The ticked items leave the list at once, and the app goes to list mode.
+- The menu shows each past shopping trip and archived list, newest first. "Settings" is at the bottom of the menu.
 - Each trip shows its date and the items that are not on the list now. These are the items that your list can miss. A line below counts the items that are not on the list and the items that are already on it.
-- Tap a trip to open it. Tap + to add an item to the list again.
+- Tap a trip or an archived list to open it. Tap + to add an item to the list again.
 - Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
 ### Add from another app (iPhone)
@@ -42,7 +51,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
-- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Within a section, the tiles are in the learned order. The list view and the grid view share one setting for both modes.
+- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" below a line at the bottom, grouped by faded sections. Tap "Done" to show or hide them. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. Shop mode keeps the view that you chose last.
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch
@@ -55,6 +64,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
 - **Invite** sends a link. The person who opens the link joins your list.
+- **Privacy Policy** opens the privacy policy on the web.
 
 ## How the order learns
 - A trip is a run of ticks with no gap longer than four hours. Four hours after the last tick, the ticked items leave the list.
@@ -91,6 +101,8 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 | `GrailkaufShare/` | The share extension: "Grailkauf" in the share sheet |
 | `Strings/` | The texts in English and German |
 | `Config/` | Info.plist files and entitlements |
+| `docs/` | The privacy policy, served by GitHub Pages |
+| `scripts/` | `check-listing.py` checks the App Store texts in `APP-STORE.md` |
 
 ## Before the first run on a device
 - Open the project in Xcode and select your team. Xcode then registers the app and the iCloud container `iCloud.de.grails.grailkauf`.

@@ -19,7 +19,7 @@ struct ShopModeView: View {
         Group {
             if grid {
                 // Each section keeps the learned order. A ticked tile fades out as a ticked row does.
-                CategoryGrid(store: store, sections: Grid.sections(open), onTap: toggle)
+                CategoryGrid(store: store, sections: Grid.sections(open), done: Grid.sections(done), onTap: toggle)
             } else {
                 list(open: open, done: done, left: left, total: total)
             }

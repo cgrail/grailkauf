@@ -17,13 +17,14 @@ import GrailkaufCore
     @NSManaged var modifiedAt: Date?
     @NSManaged var tickedAt: Date?
     @NSManaged var deferredAt: Date?
+    @NSManaged var archivedAt: Date?
     @NSManaged var list: ShoppingList?
 
     var entry: Entry? {
         guard let id, let text, let createdAt else { return nil }
         return Entry(
             id: id, text: text, category: category, createdAt: createdAt, modifiedAt: modifiedAt,
-            tickedAt: tickedAt, deferredAt: deferredAt)
+            tickedAt: tickedAt, deferredAt: deferredAt, archivedAt: archivedAt)
     }
 }
 
@@ -76,7 +77,7 @@ func makeModel() -> NSManagedObjectModel {
     let list = entity("ShoppingList", [("id", .uuid), ("createdAt", .date)])
     let item = entity("Item", [
         ("id", .uuid), ("text", .string), ("category", .string), ("createdAt", .date), ("modifiedAt", .date),
-        ("tickedAt", .date), ("deferredAt", .date),
+        ("tickedAt", .date), ("deferredAt", .date), ("archivedAt", .date),
     ])
     let move = entity("OrderMove", [("key", .string), ("after", .string), ("date", .date)])
     own(list, item, as: "items")

@@ -13,8 +13,9 @@ struct GrailkaufApp: App {
     }
 }
 
+/// Stored under `mode`. An older build reads "sections" as list mode.
 enum Mode: String {
-    case list, shop
+    case list, sections, shop
 }
 
 @MainActor @Observable
@@ -33,6 +34,10 @@ final class AppModel {
     var invite: CKShare.Metadata?
     /// True while the user selects items in list mode. The other buttons at the top then go away.
     var selecting = false
+    /// The suggestions below the list that the user removed, by item key, with the date. On this iPhone only.
+    var removedSuggestions = UserDefaults.standard.dictionary(forKey: "removedSuggestions") as? [String: Date] ?? [:] {
+        didSet { UserDefaults.standard.set(removedSuggestions, forKey: "removedSuggestions") }
+    }
 
     @ObservationIgnored private let link = Link()
     /// True while the language model splits and sorts new items.
@@ -74,7 +79,7 @@ final class AppModel {
         guard !classifying, Classifier.isAvailable else { return }
         classifying = true
         defer { classifying = false }
-        func isNew(_ entry: Entry) -> Bool { entry.tickedAt == nil && entry.category == nil && !asked.contains(entry.id) }
+        func isNew(_ entry: Entry) -> Bool { entry.isOpen && entry.category == nil && !asked.contains(entry.id) }
         // Items that arrive while the model works get their turn in the next round.
         while case let new = store.entries.filter(isNew), !new.isEmpty {
             for entry in new {

@@ -270,6 +270,44 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(history.map { $0.items.map(\.text) } == [["2 Milch", "Eier"], ["2 Milch", "Brot"]])
         #expect(history.map { $0.items.map(\.onList) } == [[false, false], [false, true]])
     }
+
+    @Test func pastListsSuggestTheItemsInTheMostListsFirst() {
+        let archived = Entry(text: "Salz", createdAt: friday - hour, archivedAt: friday - 60)
+        let entries = trip(3, ["Brot", "Milch"]) + trip(2, ["Brot", "Eier"]) + trip(1, ["2 Milch", "Brot"])
+            + [archived, Entry(text: "Brot", createdAt: friday)]
+        #expect(Suggestions.fromPastLists(entries: entries) == ["2 Milch", "Salz", "Eier"])
+        #expect(Suggestions.fromPastLists(entries: entries, limit: 1) == ["2 Milch"])
+    }
+
+    @Test func aRemovedSuggestionComesBackWithALaterList() {
+        let entries = trip(2, ["Grill", "Brot"]) + trip(1, ["Brot"])
+        let removed = [ItemName.key("Grill"): friday - week]
+        #expect(Suggestions.fromPastLists(entries: entries, removed: removed) == ["Brot"])
+        let again = entries + trip(0.5, ["Grill"])
+        #expect(Suggestions.fromPastLists(entries: again, removed: removed) == ["Grill", "Brot"])
+    }
+
+    @Test func newListArchivesTheOpenItemsIntoTheHistory() {
+        let archived = ["Brot", "Eier"].enumerated().map {
+            Entry(text: $1, createdAt: friday - hour + Double($0), archivedAt: friday - 60)
+        }
+        let entries = trip(1, ["Milch", "Brot"]) + archived + [Entry(text: "Eier", createdAt: friday)]
+        #expect(ListState(entries: entries, moves: [], now: friday).todo.map(\.text) == ["Eier"])
+        let history = Suggestions.history(entries: entries)
+        #expect(history.map(\.archived) == [true, false])
+        #expect(history[0].items.map(\.text) == ["Brot", "Eier"])
+        #expect(history[0].items.map(\.onList) == [false, true])
+        #expect(history[1].items.map(\.onList) == [false, false])
+    }
+
+    @Test func newListEndsTheShopInProgress() {
+        let ticked = Entry(text: "Milch", createdAt: friday - hour, tickedAt: friday - 60, archivedAt: friday)
+        let open = Entry(text: "Brot", createdAt: friday - hour, archivedAt: friday)
+        #expect(ListState(entries: [ticked, open], moves: [], now: friday).rows.isEmpty)
+        let history = Suggestions.history(entries: [ticked, open])
+        #expect(history.map(\.archived) == [true, false])
+        #expect(history.map { $0.items.map(\.text) } == [["Brot"], ["Milch"]])
+    }
 }
 
 @Suite struct InboxTests {

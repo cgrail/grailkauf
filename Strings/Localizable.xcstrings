@@ -206,6 +206,16 @@
         }
       }
     },
+    "Archived list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivierte Liste"
+          }
+        }
+      }
+    },
     "Baby" : {
       "localizations" : {
         "de" : {
@@ -366,6 +376,16 @@
         }
       }
     },
+    "Edit item" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artikel bearbeiten"
+          }
+        }
+      }
+    },
     "Fill with the usual" : {
       "localizations" : {
         "de" : {
@@ -422,16 +442,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Verlauf"
-          }
-        }
-      }
-    },
-    "Hold the button below and say the items." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Halte den Knopf unten und sag die Artikel."
           }
         }
       }
@@ -606,6 +616,16 @@
         }
       }
     },
+    "New list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Liste"
+          }
+        }
+      }
+    },
     "Not synced with iCloud yet" : {
       "localizations" : {
         "de" : {
@@ -696,6 +716,16 @@
         }
       }
     },
+    "Privacy Policy" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datenschutzerklärung"
+          }
+        }
+      }
+    },
     "Refresh" : {
       "localizations" : {
         "de" : {
@@ -706,12 +736,42 @@
         }
       }
     },
+    "Remove" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entfernen"
+          }
+        }
+      }
+    },
     "Say your items…" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sprich deine Artikel…"
+          }
+        }
+      }
+    },
+    "Section" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abteilung"
+          }
+        }
+      }
+    },
+    "Sections" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abteilungen"
           }
         }
       }
@@ -826,6 +886,16 @@
         }
       }
     },
+    "Start a new list?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Liste beginnen?"
+          }
+        }
+      }
+    },
     "Starting…" : {
       "localizations" : {
         "de" : {
@@ -836,12 +906,32 @@
         }
       }
     },
+    "Suggestions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschläge"
+          }
+        }
+      }
+    },
     "Sweets & snacks" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Süßwaren & Snacks"
+          }
+        }
+      }
+    },
+    "The current list with %lld items moves to the history." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die aktuelle Liste mit %lld Artikeln kommt in den Verlauf."
           }
         }
       }
@@ -882,6 +972,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die geteilte Liste ersetzt deine eigene Liste mit %lld Artikeln."
+          }
+        }
+      }
+    },
+    "The ticked items leave the list." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die abgehakten Artikel verlassen die Liste."
           }
         }
       }

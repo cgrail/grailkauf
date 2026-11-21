@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0 (current)
 
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
@@ -14,9 +14,9 @@
 - Each item in list mode has a trash button.
 - You can drag the items in list mode into a new order.
 - "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly. "Select all" selects the full list. While you select, the other buttons at the top go away.
-- The grid button in list mode shows the items as small tiles with a picture, five in a row, grouped by supermarket section such as "Fruit & vegetables". Each section has its own color, as on a store map. The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above. Touch and hold a tile to move the item to another section. Items that the app has not sorted yet go to "Other". The grid has no text field and no suggestions: you add items with dictation. Shop mode has the grid too: tap a tile to tick the item.
-- The menu at the top left opens the settings and lists your past shopping trips. Each trip shows its first items and how many are not on the list. Open a trip and tap + to add an item to the list again.
-- The menu at the top left opens the settings and lists your past shopping trips. Each trip shows the items that are not on the list now, so you see what your list can miss. A line below counts them and the items that are already on the list. Open a trip and tap + to add an item to the list again.
+- The "Sections" tab at the top shows the items as small tiles with a picture, five in a row, grouped by supermarket section such as "Fruit & vegetables". Each section has its own color, as on a store map. The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above. Touch and hold a tile to move the item to another section. Items that the app has not sorted yet go to "Other". Type an item below the tiles and press Enter: the app adds it and goes to the list for the next item. The tiles show no suggestions. Shop mode has the grid too, with a button to switch between list and grid: tap a tile to tick the item. Ticked items go to "Done" below a line at the bottom of the grid, grouped by faded sections. Tap "Done" to show or hide them. A tap on a tile there brings the item back.
+- The tiles show a picture of the kind of item: a hot dog for sausages such as "Wiener" or "Salami", a turkey for "Putengeschnetzeltes", noodle soup for "Chinanudeln", a pretzel for "Laugenstangen". A note after the item, as in "Zahnseide Papa" or "H-Milch (5€)", does not change the picture.
+- The menu at the top left lists your past shopping trips and has the settings at the bottom. Each trip shows the items that are not on the list now, so you see what your list can miss. A line below counts them and the items that are already on the list. Open a trip and tap + to add an item to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or next to items of the same kind.
 - The order screen shows the learned order. You can drag an item to correct it.
@@ -26,3 +26,6 @@
 - The Lock Screen shows the progress of your shop.
 - You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.
+- "New list" at the top of the menu starts an empty list. The old list goes to the history as an archived list, and you can add its items again from there. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.
+- Below the items in list mode, "Suggestions" shows the items of your past trips and lists that are not on the list now. Tap one to add it. The list stays where it is. Swipe one to remove it, for example a thing that you bought once. It comes back if you buy it again.
+- In the "Sections" tab, tap a tile to change the name of the item, move it to another section or delete it.

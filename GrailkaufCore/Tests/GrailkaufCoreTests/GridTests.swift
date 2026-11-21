@@ -30,4 +30,22 @@ import Testing
         #expect(ItemName.emoji("Batterien") == nil)
         #expect(Set(Category.allCases.map(\.emoji)).count == Category.allCases.count)
     }
+
+    @Test func emojiSkipsANoteAfterTheItem() {
+        #expect(ItemName.emoji("Zahnseide Papa") == "🦷")
+        #expect(ItemName.emoji("H- Milch (5€)") == "🥛")
+        #expect(ItemName.emoji("Punsch (Kinder)") == "🫖")
+    }
+
+    @Test func emojiShowsTheKindOfItem() {
+        #expect(ItemName.emoji("Wiener") == "🌭")
+        #expect(ItemName.emoji("Salami") == "🌭")
+        #expect(ItemName.emoji("Putengeschnetzeltes") == "🦃")
+        #expect(ItemName.emoji("2x Chinanudel") == "🍜")
+        #expect(ItemName.emoji("Reiswaffel") == "🍘")
+        #expect(ItemName.emoji("Laugenstangen") == "🥨")
+        #expect(ItemName.emoji("Katzenstreu") == "🐈")
+        #expect(ItemName.emoji("Eistee") == "🥤")
+        #expect(ItemName.emoji("Handwärmer") == "🧤")
+    }
 }

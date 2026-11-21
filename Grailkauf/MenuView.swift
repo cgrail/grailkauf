@@ -7,15 +7,34 @@ enum Route: Hashable {
     case settings
 }
 
-/// The side menu, as in a mail app: the settings and the past trips, newest first.
+/// The side menu, as in a mail app: a new list, the past trips and lists, newest first, and the settings at the bottom.
 struct MenuView: View {
     @Environment(AppModel.self) private var model
     let open: (Route) -> Void
+    @State private var confirmNewList = false
 
     var body: some View {
         let trips = Suggestions.history(entries: model.store.entries)
+        let count = model.store.state.todo.count
+        let ticked = model.store.state.rows.count - count
         List {
-            Button { open(.settings) } label: { Label("Settings", systemImage: "gearshape") }
+            Button { confirmNewList = true } label: { Label("New list", systemImage: "square.and.pencil") }
+                .disabled(count + ticked == 0)
+                .confirmationDialog("Start a new list?", isPresented: $confirmNewList, titleVisibility: .visible) {
+                    Button("New list") {
+                        withAnimation {
+                            model.store.archiveList()
+                            // The shop ends with the old list. The Live Activity then goes away.
+                            model.mode = .list
+                        }
+                    }
+                } message: {
+                    if count > 0 {
+                        Text("The current list with \(count) items moves to the history.")
+                    } else {
+                        Text("The ticked items leave the list.")
+                    }
+                }
             Section("History") {
                 ForEach(trips, id: \.date) { trip in
                     Button { open(.trip(trip.date)) } label: { row(trip) }
@@ -24,6 +43,13 @@ struct MenuView: View {
                     Text("Your shopping trips appear here after your first shop.").foregroundStyle(.secondary)
                 }
             }
+        }
+        // Pinned to the bottom, as in a mail app: a long history does not push it out of reach.
+        .safeAreaInset(edge: .bottom) {
+            Button { open(.settings) } label: { Label("Settings", systemImage: "gearshape") }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(.bar)
         }
         .foregroundStyle(.primary)
     }
@@ -34,6 +60,9 @@ struct MenuView: View {
         return VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(trip.date, format: .dateTime.day().month(.wide)).font(.headline)
+                if trip.archived {
+                    Label("Archived list", systemImage: "archivebox").font(.caption).foregroundStyle(.secondary)
+                }
                 Spacer()
                 Text(trip.date, format: .relative(presentation: .named))
                     .font(.caption)

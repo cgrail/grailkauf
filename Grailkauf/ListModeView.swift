@@ -9,14 +9,17 @@ struct ListModeView: View {
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @State private var holding = false
-    /// Shows the items as tiles by supermarket section. Kept for the next launch.
-    @AppStorage("grid") private var grid = false
+    /// The "Sections" tab: the items as tiles by supermarket section.
+    let grid: Bool
     @FocusState private var typing: Bool
+    /// A tap on a suggestion below the list adds an item without the scroll to it, so the next suggestion stays under the finger.
+    @State private var stayPut = false
 
     private var store: Store { model.store }
 
     var body: some View {
         let items = store.state.todo
+        let past = pastSuggestions
         Group {
             if grid {
                 // The learned order, as in shop mode: the grid is a map of the store, not a history of the list.
@@ -37,21 +40,37 @@ struct ListModeView: View {
                                 store.move(change.id, toCreatedAt: change.createdAt)
                             }
                         }
+                        if !model.selecting, !past.isEmpty {
+                            Section("Suggestions") {
+                                ForEach(past, id: \.self) { text in
+                                    Button { stayPut = store.add(text) } label: {
+                                        Label(text, systemImage: "plus.circle").foregroundStyle(.secondary)
+                                    }
+                                    // For a thing bought once. It comes back if a later trip or list has it.
+                                    .swipeActions {
+                                        Button("Remove", systemImage: "xmark", role: .destructive) {
+                                            model.removedSuggestions[ItemName.key(text)] = .now
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
                     .onChange(of: items.last?.id) { _, newest in
-                        if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
+                        if stayPut {
+                            stayPut = false
+                        } else if let newest {
+                            withAnimation { scroll.scrollTo(newest, anchor: .bottom) }
+                        }
                     }
                 }
             }
         }
         .overlay {
-            if items.isEmpty {
+            if items.isEmpty, grid || past.isEmpty {
                 ContentUnavailableView(
-                    "The list is empty", systemImage: "cart",
-                    description: grid
-                        ? Text("Hold the button below and say the items.")
-                        : Text("Type below to add the first item."))
+                    "The list is empty", systemImage: "cart", description: Text("Type below to add the first item."))
             }
         }
         .overlay(alignment: .bottom) { repeatedNotice }
@@ -83,12 +102,9 @@ struct ListModeView: View {
                     }
                     .disabled(selection.isEmpty)
                 }
-            } else if !items.isEmpty {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    GridToggle()
-                    if !grid {
-                        Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
-                    }
+            } else if !items.isEmpty, !grid {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
                 }
             }
         }
@@ -119,8 +135,7 @@ struct ListModeView: View {
                 .foregroundStyle(.secondary)
             }
             holdToDictate
-            // The grid has no keyboard: the space goes to the tiles.
-            if !grid { textField }
+            textField
         }
         // Without the text field, the bar would shrink to the width of the dictation button.
         .frame(maxWidth: .infinity)
@@ -191,6 +206,13 @@ struct ListModeView: View {
         }
     }
 
+    /// Below the items: what the past lists had, without the due items that the bar above the text field shows.
+    private var pastSuggestions: [String] {
+        let due = Set(Suggestions.due(entries: store.entries, now: .now))
+        return Suggestions.fromPastLists(entries: store.entries, removed: model.removedSuggestions)
+            .filter { !due.contains($0) }
+    }
+
     private func stopSelecting() {
         model.selecting = false
         selection = []
@@ -233,58 +255,11 @@ struct ListModeView: View {
         }
     }
 
+    /// The "Sections" tab goes to the list: the new item shows at the end, and the keyboard stays for the next one.
     private func add(_ text: String) {
         store.add(text)
         draft = ""
         typing = true
-    }
-}
-
-/// An item that edits in place, as in a notes app. Tap the text to change it. Enter or a tap elsewhere saves.
-/// An emptied item goes away, and commas make more items. Touch and hold still drags the item.
-private struct ItemRow: View {
-    let row: Row
-    let store: Store
-    @State private var editing = false
-    @State private var text = ""
-    @FocusState private var focused: Bool
-
-    var body: some View {
-        HStack {
-            if editing {
-                TextField("Item", text: $text)
-                    .focused($focused)
-                    .submitLabel(.done)
-                    .onSubmit { focused = false }
-                    .onAppear { focused = true }
-                    .onChange(of: focused) { if !focused { save() } }
-            } else {
-                Button {
-                    text = row.text
-                    editing = true
-                } label: {
-                    Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
-                }
-                .foregroundStyle(.primary)
-            }
-            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
-                .labelStyle(.iconOnly)
-                .foregroundStyle(.red)
-        }
-        // Each button gets its own tap, not the whole row.
-        .buttonStyle(.borderless)
-        .swipeActions {
-            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
-        }
-    }
-
-    private func save() {
-        editing = false
-        let parts = ItemName.split(text)
-        if parts.isEmpty {
-            store.delete([row.id])
-        } else if parts != [row.text] {
-            store.split(row.id, into: parts)
-        }
+        if grid { withAnimation { model.mode = .list } }
     }
 }
