@@ -426,6 +426,16 @@
         }
       }
     },
+    "Hold the button below and say the items." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halte den Knopf unten und sag die Artikel."
+          }
+        }
+      }
+    },
     "Hold to dictate" : {
       "localizations" : {
         "de" : {

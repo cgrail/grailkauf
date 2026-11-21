@@ -48,7 +48,9 @@ struct ListModeView: View {
             if items.isEmpty {
                 ContentUnavailableView(
                     "The list is empty", systemImage: "cart",
-                    description: Text("Type below to add the first item."))
+                    description: grid
+                        ? Text("Hold the button below and say the items.")
+                        : Text("Type below to add the first item."))
             }
         }
         .overlay(alignment: .bottom) { repeatedNotice }
@@ -107,7 +109,7 @@ struct ListModeView: View {
         VStack(spacing: 8) {
             if dictation.isRecording {
                 RecordingBar(dictation: dictation)
-            } else {
+            } else if !grid {
                 suggestions
             }
             if model.classifying, !dictation.isRecording {
@@ -121,26 +123,31 @@ struct ListModeView: View {
                 .foregroundStyle(.secondary)
             }
             holdToDictate
-            HStack(alignment: .bottom) {
-                // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
-                TextField("Add item", text: $draft, axis: .vertical)
-                    .lineLimit(1...4)
-                    .font(.title3)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(.background, in: .rect(cornerRadius: 24))
-                    .focused($typing)
-                    .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
-                Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
-                    .labelStyle(.iconOnly)
-                    .font(.system(size: 44))
-                    .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
-            .opacity(dictation.isRecording ? 0 : 1)
-            .disabled(dictation.isRecording)
+            // The grid has no keyboard: the space goes to the tiles.
+            if !grid { textField }
         }
         .padding()
         .background(.bar)
+    }
+
+    private var textField: some View {
+        HStack(alignment: .bottom) {
+            // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
+            TextField("Add item", text: $draft, axis: .vertical)
+                .lineLimit(1...4)
+                .font(.title3)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(.background, in: .rect(cornerRadius: 24))
+                .focused($typing)
+                .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
+            Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
+                .labelStyle(.iconOnly)
+                .font(.system(size: 44))
+                .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
+        }
+        .opacity(dictation.isRecording ? 0 : 1)
+        .disabled(dictation.isRecording)
     }
 
     /// Shows for a few seconds after an add replaced items that were on the list already.

@@ -4,45 +4,50 @@ import SwiftUI
 /// The list as tiles, grouped by supermarket section and colored like the map at a store entrance.
 struct CategoryGrid: View {
     let store: Store
-    @ScaledMetric private var tileWidth = 64.0
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    /// Five tiles a row fit about 40 items on one screen. Large text gets fewer, wider tiles.
+    private var columns: [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: 4), count: typeSize.isAccessibilitySize ? 3 : 5)
+    }
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 12) {
+            VStack(spacing: 6) {
                 ForEach(store.state.sections, id: \.category) { section in
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 4) {
                         Label {
                             Text(section.category.title)
                         } icon: {
                             Text(section.category.emoji)
                         }
-                        .font(.headline)
+                        .font(.caption.weight(.semibold))
                         .accessibilityAddTraits(.isHeader)
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: tileWidth), spacing: 8)], spacing: 8) {
+                        LazyVGrid(columns: columns, spacing: 4) {
                             ForEach(section.rows) { row in tile(row, in: section.category) }
                         }
                     }
-                    .padding(12)
-                    .background(section.category.color.opacity(0.25), in: .rect(cornerRadius: 16))
+                    .padding(6)
+                    .background(section.category.color.opacity(0.25), in: .rect(cornerRadius: 12))
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 8)
         }
     }
 
     private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 0) {
             Text(ItemName.emoji(row.text) ?? category.emoji)
-                .font(.title)
+                .font(.title3)
                 .accessibilityHidden(true)
             Text(row.text)
-                .font(.footnote)
+                .font(.caption2)
                 .lineLimit(1)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
-        .padding(.horizontal, 4)
-        .background(.background, in: .rect(cornerRadius: 12))
+        .padding(.vertical, 4)
+        .padding(.horizontal, 2)
+        .background(.background, in: .rect(cornerRadius: 8))
         .contextMenu {
             Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
         }
