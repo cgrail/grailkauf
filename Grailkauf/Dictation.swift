@@ -11,8 +11,10 @@ final class Dictation {
     private(set) var text = ""
     /// True once the speaker ends with "fertig" or "done".
     private(set) var heardDone = false
-    /// The items so far, split by "und", "and" and punctuation. The language model splits them better at the end.
-    var items: [String] { ItemName.splitSpoken(spoken) }
+    /// The items up to the last pause, split by "und", "and" and punctuation. The phone is sure of these.
+    var items: [String] { ItemName.splitSpoken(ItemName.beforeDoneWord(earlier) ?? earlier) }
+    /// What the phone hears since the last pause. It can still change the words.
+    private(set) var hearing = ""
     private var spoken: String { ItemName.beforeDoneWord(text) ?? text }
 
     @ObservationIgnored private let recorder = Recorder()
@@ -20,7 +22,7 @@ final class Dictation {
     @ObservationIgnored private var finished = false
     @ObservationIgnored private var waiting: CheckedContinuation<Void, Never>?
     /// The parts before the last pause. On-device recognition starts a new text after each pause.
-    @ObservationIgnored private var earlier = ""
+    private var earlier = ""
     @ObservationIgnored private var lastPart = ""
 
     func start() async throws {
@@ -29,6 +31,7 @@ final class Dictation {
         isRecording = true
         text = ""
         earlier = ""
+        hearing = ""
         lastPart = ""
         heardDone = false
         finished = false
@@ -61,6 +64,7 @@ final class Dictation {
             // A line break per pause: a pause usually ends an item.
             text = earlier.isEmpty ? newText : earlier + "\n" + newText
             if paused { earlier = text; lastPart = newText }
+            hearing = paused ? "" : ItemName.beforeDoneWord(newText) ?? newText
             if ItemName.beforeDoneWord(newText) != nil { heardDone = true }
         }
         guard done else { return }
