@@ -5,7 +5,6 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        @Bindable var model = model
         NavigationStack {
             Group {
                 switch model.mode {
@@ -15,28 +14,7 @@ struct RootView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Picker("Mode", selection: $model.mode) {
-                        Text("List").tag(Mode.list)
-                        Text("Shop").tag(Mode.shop)
-                    }
-                    .pickerStyle(.segmented)
-                    .frame(maxWidth: 240)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    NavigationLink {
-                        HistoryView()
-                    } label: {
-                        Label("History", systemImage: "clock")
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        SettingsView()
-                    } label: {
-                        Label("Settings", systemImage: "gearshape")
-                    }
-                }
+                if !model.selecting { modeAndScreens }
             }
         }
         // Time alone changes the picture: a trip ends four hours after its last tick.
@@ -59,6 +37,32 @@ struct RootView: View {
             Button("OK") { model.store.problem = nil }
         } message: {
             Text(model.store.problem ?? "")
+        }
+    }
+
+    @ToolbarContentBuilder private var modeAndScreens: some ToolbarContent {
+        @Bindable var model = model
+        ToolbarItem(placement: .principal) {
+            Picker("Mode", selection: $model.mode) {
+                Text("List").tag(Mode.list)
+                Text("Shop").tag(Mode.shop)
+            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 240)
+        }
+        ToolbarItem(placement: .topBarLeading) {
+            NavigationLink {
+                HistoryView()
+            } label: {
+                Label("History", systemImage: "clock")
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            NavigationLink {
+                SettingsView()
+            } label: {
+                Label("Settings", systemImage: "gearshape")
+            }
         }
     }
 }

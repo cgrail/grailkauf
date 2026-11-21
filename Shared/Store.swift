@@ -163,7 +163,6 @@ final class Store {
     }
 
     /// List mode: empties the list. Ticked items stay, so the history and the order keep them.
-    func deleteAll() { delete(state.todo.map(\.id)) }
 
     /// List mode: a drag gives the item a new place. See `ListState.reordered`.
     func move(_ id: UUID, toCreatedAt date: Date) { change(id) { $0.createdAt = date } }

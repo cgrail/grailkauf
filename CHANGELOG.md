@@ -6,9 +6,9 @@
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
 - You can dictate many items at once. Tap "Start dictation" above the text field and say the items. All items stay on the screen, also after a pause. The screen shows each item on its own line. Say "fertig" or "done", or tap the big stop button, to finish.
-- Each item in list mode has a trash button. "Delete all" empties the list.
+- Each item in list mode has a trash button.
 - You can drag the items in list mode into a new order.
-- "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly.
+- "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly. "Select all" selects the full list. While you select, the other buttons at the top go away.
 - The history shows your past shopping trips. Tap + to add an item from a past trip to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or to a guessed position.

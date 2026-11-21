@@ -8,8 +8,6 @@ struct ListModeView: View {
     @State private var draft = ""
     @State private var editing: Row?
     @State private var editedText = ""
-    @State private var confirmingDeleteAll = false
-    @State private var editMode = EditMode.inactive
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @FocusState private var typing: Bool
@@ -22,7 +20,7 @@ struct ListModeView: View {
             // In select mode, slide a finger down the circles to select many items, as in Photos.
             List(selection: $selection) {
                 ForEach(items) { row in
-                    if editMode.isEditing {
+                    if model.selecting {
                         Text(row.text)
                     } else {
                         HStack {
@@ -50,7 +48,7 @@ struct ListModeView: View {
                     }
                 }
             }
-            .environment(\.editMode, $editMode)
+            .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
             .overlay {
                 if items.isEmpty {
                     ContentUnavailableView(
@@ -62,35 +60,37 @@ struct ListModeView: View {
                 if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
             }
         }
-        .safeAreaInset(edge: .bottom) { composer }
+        .safeAreaInset(edge: .bottom) { if !model.selecting { composer } }
+        // While selecting, only the buttons for the selection stay, as in a mail app.
+        .navigationTitle(model.selecting ? Text("\(selection.count) selected") : Text(verbatim: ""))
         .toolbar {
-            if editMode.isEditing {
+            if model.selecting {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel", systemImage: "xmark", action: stopSelecting)
+                }
                 ToolbarItem(placement: .topBarTrailing) {
+                    let all = Set(items.map(\.id))
+                    Button(selection == all ? "Deselect all" : "Select all") {
+                        selection = selection == all ? [] : all
+                    }
+                }
+                ToolbarItem(placement: .bottomBar) {
                     Button("Delete", systemImage: "trash", role: .destructive) {
                         store.delete(selection)
-                        selection = []
+                        stopSelecting()
                     }
                     .disabled(selection.isEmpty)
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Cancel") {
-                        editMode = .inactive
-                        selection = []
-                    }
-                }
             } else if !items.isEmpty {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Select", systemImage: "checkmark.circle") { editMode = .active }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Delete all", systemImage: "xmark.bin") { confirmingDeleteAll = true }
+                    Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
                 }
             }
         }
-        .confirmationDialog("Delete all items?", isPresented: $confirmingDeleteAll, titleVisibility: .visible) {
-            Button("Delete all", role: .destructive) { store.deleteAll() }
+        .onDisappear {
+            if dictation.isRecording { finishDictation() }
+            stopSelecting()
         }
-        .onDisappear { if dictation.isRecording { finishDictation() } }
         .fullScreenCover(isPresented: .constant(dictation.isRecording)) {
             DictationScreen(dictation: dictation, stop: finishDictation)
         }
@@ -157,6 +157,11 @@ struct ListModeView: View {
             .scrollIndicators(.hidden)
             .buttonBorderShape(.capsule)
         }
+    }
+
+    private func stopSelecting() {
+        model.selecting = false
+        selection = []
     }
 
     private func startDictation() {

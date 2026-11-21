@@ -105,6 +105,16 @@
         }
       }
     },
+    "%lld selected" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ausgewählt"
+          }
+        }
+      }
+    },
     "%lld/%lld" : {
       "localizations" : {
         "de" : {
@@ -175,22 +185,12 @@
         }
       }
     },
-    "Delete all" : {
+    "Deselect all" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle löschen"
-          }
-        }
-      }
-    },
-    "Delete all items?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle Artikel löschen?"
+            "value" : "Alle abwählen"
           }
         }
       }
@@ -471,6 +471,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Auswählen"
+          }
+        }
+      }
+    },
+    "Select all" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle auswählen"
           }
         }
       }

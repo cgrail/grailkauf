@@ -15,8 +15,8 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
 - Tap the trash button of an item, or swipe the item, to delete it. Tap an item to change its text.
 - Touch and hold an item, then drag it to a new place.
-- Tap "Select" to select items. Slide a finger down the circles to select many items quickly. Tap the trash button to delete the selected items.
-- Tap the bin at the top right to delete all items. The history keeps the items that you bought.
+- Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
+- The history keeps the items that you bought, also after you delete them from the list.
 - Tap "Start dictation" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". The screen shows each item on its own line. To finish, say "fertig" or "done", or tap the stop button. Each item goes to the list.
 
 ### History (iPhone)

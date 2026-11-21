@@ -31,6 +31,8 @@ final class AppModel {
     }
     /// An invitation that waits for the user to confirm. The shared list replaces the own list.
     var invite: CKShare.Metadata?
+    /// True while the user selects items in list mode. The other buttons at the top then go away.
+    var selecting = false
 
     @ObservationIgnored private let link = Link()
     @ObservationIgnored private var classifying = false
