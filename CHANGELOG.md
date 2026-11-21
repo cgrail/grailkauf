@@ -10,7 +10,7 @@
 - A spinner line in list mode shows while the app checks new items.
 - If you add an item that is on the list already, the older copy goes away. A short notice tells you so. If you say or type an item twice at once, it goes on the list once.
 - Tap an item in list mode to change its text in place, as in a notes app. An emptied item goes away.
-- With Apple Intelligence, the app splits an entry such as "Milch Sprudel" into single items. "saure Sahne" stays one item.
+- With Apple Intelligence, the app splits an entry such as "Milch Sprudel" into single items. "saure Sahne" stays one item. A new "Paprika" always goes to "Fruit & vegetables".
 - Each item in list mode has a trash button.
 - You can drag the items in list mode into a new order.
 - "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly. "Select all" selects the full list. While you select, the other buttons at the top go away.
@@ -23,5 +23,5 @@
 - The Apple Watch app shows the current item and the next three items. You tick an item with a tap or with Double Tap.
 - The iPhone and the Watch sync over Bluetooth, also with no internet.
 - The Lock Screen shows the progress of your shop.
-- You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks.
+- You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item.
 - The app is in English and German.

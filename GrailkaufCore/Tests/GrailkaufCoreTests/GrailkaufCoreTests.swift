@@ -233,6 +233,12 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
     func modelAnswerBecomesACategory(answer: String, expected: GrailkaufCore.Category) {
         #expect(Category(answer: answer) == expected)
     }
+
+    @Test(arguments: [("Paprika", Category.produce as GrailkaufCore.Category?), ("2 rote Paprika", .produce), ("Paprika edelsüß", nil),
+                      ("Paprika Pulver", nil), ("Paprikapulver", nil), ("Milch", nil)])
+    func paprikaIsAVegetable(name: String, expected: GrailkaufCore.Category?) {
+        #expect(Category.fixed(name) == expected)
+    }
 }
 
 @Suite struct SuggestionsTests {

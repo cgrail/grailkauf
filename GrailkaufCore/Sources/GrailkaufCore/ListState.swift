@@ -256,4 +256,11 @@ public enum Category: String, CaseIterable, Sendable {
         let word = answer.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters)).lowercased()
         self = Self.allCases.first { $0.rawValue.lowercased() == word } ?? .other
     }
+
+    /// The section of an item that the model sorts wrong, or nil. The model puts the vegetable "Paprika" in spices.
+    public static func fixed(_ name: String) -> Category? {
+        let words = ItemName.key(name).split(separator: " ")
+        let spice: Set<Substring> = ["pulver", "powder", "gewürz", "edelsüß", "rosenscharf", "geräuchert"]
+        return words.contains("paprika") && spice.isDisjoint(with: words) ? .produce : nil
+    }
 }

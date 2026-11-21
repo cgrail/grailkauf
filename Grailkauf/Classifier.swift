@@ -10,6 +10,7 @@ enum Classifier {
     /// `.other` if the model is unsure. Such an item goes to the "New" group.
     /// Nil if the model failed. The app then asks again later.
     static func category(of name: String) async -> GrailkaufCore.Category? {
+        if let fixed = GrailkaufCore.Category.fixed(name) { return fixed }
         let session = LanguageModelSession(instructions: instructions)
         let options = GenerationOptions(samplingMode: .greedy)
         guard let answer = try? await session.respond(to: name, options: options).content else { return nil }
