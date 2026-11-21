@@ -13,7 +13,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A comma or a pasted text with many lines adds many items at once.
 - While you type, the app suggests items that you added before.
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
-- Below the items, "Suggestions" shows items from your past trips and lists that are not on the list. The items that were in the most lists come first. Tap an item to add it.
+- Below the items, "Suggestions" shows items from your past trips and lists that are not on the list. The items that were in the most lists come first. Tap an item to add it. The list stays where it is.
 - If you add an item that is on the list already, the app removes the older copy and keeps the new one. A notice shows the name for a few seconds. An item that you say or type twice at once goes on the list once.
 - Tap the trash button of an item, or swipe the item, to delete it. Tap the text of an item to change it in place, as in a notes app. Press Enter or tap elsewhere to save. If you empty the text, the item goes away. A comma makes more items.
 - Touch and hold an item, then drag it to a new place.

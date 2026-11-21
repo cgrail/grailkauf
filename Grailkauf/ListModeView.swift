@@ -12,6 +12,8 @@ struct ListModeView: View {
     /// Shows the items as tiles by supermarket section. Kept for the next launch.
     @AppStorage("grid") private var grid = false
     @FocusState private var typing: Bool
+    /// A tap on a suggestion below the list adds an item without the scroll to it, so the next suggestion stays under the finger.
+    @State private var stayPut = false
 
     private var store: Store { model.store }
 
@@ -41,7 +43,7 @@ struct ListModeView: View {
                         if !model.selecting, !past.isEmpty {
                             Section("Suggestions") {
                                 ForEach(past, id: \.self) { text in
-                                    Button { store.add(text) } label: {
+                                    Button { stayPut = store.add(text) } label: {
                                         Label(text, systemImage: "plus.circle").foregroundStyle(.secondary)
                                     }
                                 }
@@ -50,7 +52,11 @@ struct ListModeView: View {
                     }
                     .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
                     .onChange(of: items.last?.id) { _, newest in
-                        if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
+                        if stayPut {
+                            stayPut = false
+                        } else if let newest {
+                            withAnimation { scroll.scrollTo(newest, anchor: .bottom) }
+                        }
                     }
                 }
             }
