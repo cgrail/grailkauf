@@ -10,7 +10,7 @@
 - You can drag the items in list mode into a new order.
 - The history shows your past shopping trips. Tap + to add an item from a past trip to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
-- An item that the app does not know yet goes to the "New" group, or to a guessed position.
+- An item that the app does not know yet goes to the "New" group, or next to items of the same kind.
 - The order screen shows the learned order. You can drag an item to correct it.
 - You can invite another person to your list. The list syncs through iCloud.
 - The Apple Watch app shows the current item and the next three items. You tick an item with a tap or with Double Tap.
