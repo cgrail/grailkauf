@@ -58,10 +58,7 @@ struct ListModeView: View {
         .overlay {
             if items.isEmpty, grid || past.isEmpty {
                 ContentUnavailableView(
-                    "The list is empty", systemImage: "cart",
-                    description: grid
-                        ? Text("Hold the button below and say the items.")
-                        : Text("Type below to add the first item."))
+                    "The list is empty", systemImage: "cart", description: Text("Type below to add the first item."))
             }
         }
         .overlay(alignment: .bottom) { repeatedNotice }
@@ -129,8 +126,7 @@ struct ListModeView: View {
                 .foregroundStyle(.secondary)
             }
             holdToDictate
-            // The grid has no keyboard: the space goes to the tiles.
-            if !grid { textField }
+            textField
         }
         // Without the text field, the bar would shrink to the width of the dictation button.
         .frame(maxWidth: .infinity)
@@ -249,9 +245,11 @@ struct ListModeView: View {
         }
     }
 
+    /// The grid goes back to the list: the new item shows at the end, and the keyboard stays for the next one.
     private func add(_ text: String) {
         store.add(text)
         draft = ""
         typing = true
+        if grid { withAnimation { grid = false } }
     }
 }
