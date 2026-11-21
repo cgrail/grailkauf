@@ -29,6 +29,11 @@ import Testing
             ["Milch 1.5%", "Eier", "Butter", "Brot", "Salt"])
     }
 
+    @Test func spokenListLosesFillerWords() {
+        #expect(ItemName.splitSpoken("Ähm Milch, äh, dann noch zwei Liter Saft. Also bitte Brot uh") ==
+            ["Milch", "zwei Liter Saft", "Brot"])
+    }
+
     @Test func splitMustKeepEverySpokenWord() {
         #expect(ItemName.isSplit(["Milch 3,5%", "Eier"], of: "milch 3,5% Eier."))
         #expect(!ItemName.isSplit(["zwei Eier", "Speck"], of: "Eier Speck"))

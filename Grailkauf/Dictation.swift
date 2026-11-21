@@ -6,13 +6,17 @@ import Speech
 /// Records one spoken list and turns it into items. Speech recognition stays on the phone if the phone can do it.
 @MainActor @Observable
 final class Dictation {
+    /// One stretch of speech up to a pause, and the items in it. `items` is nil while the language model splits it.
+    struct Part {
+        let text: String
+        var items: [String]?
+    }
+
     private(set) var isRecording = false
     /// True once the microphone runs: after the permission prompts.
     private(set) var isListening = false
-    /// What the phone understood so far.
-    private(set) var text = ""
-    /// The items up to the last pause, split by "und", "and" and punctuation. The phone is sure of these.
-    var items: [String] { ItemName.splitSpoken(earlier) }
+    /// The parts up to the last pause. The phone is sure of their words.
+    private(set) var parts: [Part] = []
     /// What the phone hears since the last pause. It can still change the words.
     private(set) var hearing = ""
 
@@ -20,24 +24,26 @@ final class Dictation {
     @ObservationIgnored private var stopping = false
     @ObservationIgnored private var finished = false
     @ObservationIgnored private var waiting: CheckedContinuation<Void, Never>?
-    /// The parts before the last pause. On-device recognition starts a new text after each pause.
-    private var earlier = ""
+    @ObservationIgnored private var splitting: [Task<Void, Never>] = []
     @ObservationIgnored private var lastPart = ""
 
     func start() async throws {
         guard !isRecording else { return }
-        // Set at once, so a second tap during the permission prompt starts nothing.
+        // Set at once, so a second press during the permission prompt starts nothing.
         isRecording = true
-        text = ""
-        earlier = ""
+        parts = []
+        splitting = []
         hearing = ""
         lastPart = ""
         finished = false
         do {
             guard await Self.allowed() else { throw Failure.notAllowed }
+            // The finger let go during the permission prompt.
+            guard isRecording else { return }
             try await recorder.start { [weak self] text, paused, done in
                 Task { @MainActor in self?.update(text, paused: paused, done: done) }
             }
+            guard isRecording else { return await recorder.stop() }
             isListening = true
         } catch {
             isRecording = false
@@ -45,13 +51,21 @@ final class Dictation {
         }
     }
 
-    /// Stops the recording and returns the items. Empty if the phone understood nothing.
+    /// Stops the recording and returns the items, once the language model split the last parts.
+    /// Empty if the phone understood nothing, or if the microphone did not run yet.
     func stop() async -> [String] {
         guard isRecording, !stopping else { return [] }
+        guard isListening else {
+            isRecording = false
+            return []
+        }
         stopping = true
         await recorder.stop()
         if !finished { await withCheckedContinuation { waiting = $0 } }
-        let items = ItemName.splitSpoken(text)
+        if !hearing.isEmpty { confirm(hearing) }
+        hearing = ""
+        for task in splitting { await task.value }
+        let items = parts.flatMap { $0.items ?? [] }
         stopping = false
         isListening = false
         isRecording = false
@@ -61,15 +75,34 @@ final class Dictation {
     private func update(_ newText: String?, paused: Bool, done: Bool) {
         // The final result can repeat the part that the last pause ended.
         if let newText, !(paused && newText == lastPart) {
-            // A line break per pause: a pause usually ends an item.
-            text = earlier.isEmpty ? newText : earlier + "\n" + newText
-            if paused { earlier = text; lastPart = newText }
+            if paused {
+                confirm(newText)
+                lastPart = newText
+            }
             hearing = paused ? "" : newText
         }
         guard done else { return }
         finished = true
         waiting?.resume()
         waiting = nil
+    }
+
+    /// The words of a part are final. The language model splits it now, while the speaker goes on.
+    private func confirm(_ text: String) {
+        let index = parts.count
+        parts.append(Part(text: text))
+        splitting.append(Task { parts[index].items = await Self.items(in: text) })
+    }
+
+    /// "und", "and" and punctuation split the part, and filler words go away.
+    /// With Apple Intelligence, the language model then splits "Milch Sprudel" into two items.
+    private static func items(in text: String) async -> [String] {
+        var items: [String] = []
+        for piece in ItemName.splitSpoken(text) {
+            let many = Classifier.isAvailable && piece.split(separator: " ").count > 1
+            items += many ? await Classifier.items(in: piece) ?? [piece] : [piece]
+        }
+        return items
     }
 
     nonisolated private static func allowed() async -> Bool {

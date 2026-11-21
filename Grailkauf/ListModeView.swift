@@ -9,7 +9,6 @@ struct ListModeView: View {
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @State private var holding = false
-    @State private var holdStart = Date.now
     @FocusState private var typing: Bool
 
     private var store: Store { model.store }
@@ -79,7 +78,7 @@ struct ListModeView: View {
         // An overlay, not a full screen cover: a cover would cancel the finger that holds the dictation button.
         .overlay {
             if dictation.isRecording {
-                DictationScreen(dictation: dictation, holding: holding, stop: finishDictation)
+                DictationScreen(dictation: dictation, holding: holding)
             }
         }
         .toolbarVisibility(dictation.isRecording ? .hidden : .automatic, for: .navigationBar)
@@ -89,6 +88,16 @@ struct ListModeView: View {
     private var composer: some View {
         VStack(spacing: 8) {
             suggestions
+            if model.classifying {
+                // The model splits and sorts new items in the background. They can still change.
+                Label {
+                    Text("Checking the new items…")
+                } icon: {
+                    ProgressView()
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
             holdToDictate
             HStack(alignment: .bottom) {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
@@ -158,7 +167,7 @@ struct ListModeView: View {
         selection = []
     }
 
-    /// Hold to dictate, let go to add the items. A short tap dictates hands-free, with a stop button.
+    /// Hold to dictate, let go to add the items.
     private var holdToDictate: some View {
         Label("Hold to dictate", systemImage: "mic.fill")
             .font(.title3.weight(.semibold))
@@ -170,20 +179,14 @@ struct ListModeView: View {
             .animation(.snappy, value: holding)
             // Reports the finger going down and up, also when the system cancels the touch. `perform` never runs.
             .onLongPressGesture(minimumDuration: 3600, maximumDistance: 10_000, perform: {}, onPressingChanged: hold)
-            // VoiceOver cannot hold. A double tap starts hands-free dictation.
+            // With VoiceOver, a double tap and hold passes the press through.
             .accessibilityAddTraits(.isButton)
-            .accessibilityAction { startDictation() }
+            .accessibilityHint("Double tap and hold, then speak.")
     }
 
     private func hold(_ down: Bool) {
         holding = down
-        if down {
-            holdStart = .now
-            startDictation()
-        } else if dictation.isListening, Date.now.timeIntervalSince(holdStart) > 0.5 {
-            finishDictation()
-        }
-        // A short tap, or a hold that ended in the permission prompt, keeps listening hands-free.
+        if down { startDictation() } else { finishDictation() }
     }
 
     private func startDictation() {

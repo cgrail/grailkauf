@@ -25,10 +25,31 @@ public enum ItemName {
     }
 
     /// Spoken text has no line breaks: "Milch und Eier. Butter" is three items. A dot between digits does not split.
+    /// Filler words go away: "ähm, dann noch Eier" is "Eier".
     public static func splitSpoken(_ input: String) -> [String] {
         split(input.replacingOccurrences(
             of: #"(?<!\d)\.|\.(?!\d)|\s+(?:und|and)\s+"#, with: "\n", options: [.regularExpression, .caseInsensitive]))
+            .map(withoutFillers)
+            .filter { !$0.isEmpty }
     }
+
+    /// "ähm" and "uh" go away anywhere. "dann", "noch", "also" or "bitte" go away at the start of an item.
+    private static func withoutFillers(_ item: String) -> String {
+        var words = item.split(separator: " ").filter { !hesitations.contains(bare($0)) }
+        while let first = words.first, leadingFillers.contains(bare(first)) { words.removeFirst() }
+        return words.joined(separator: " ")
+    }
+
+    private static func bare(_ word: Substring) -> String {
+        word.lowercased().trimmingCharacters(in: .punctuationCharacters)
+    }
+
+    private static let hesitations: Set<String> = [
+        "äh", "ähm", "öh", "öhm", "eh", "hm", "hmm", "mh", "uh", "uhm", "um", "umm", "erm",
+    ]
+    private static let leadingFillers: Set<String> = [
+        "dann", "noch", "also", "außerdem", "auch", "bitte", "und", "then", "and", "plus", "please",
+    ]
 
     /// True if `items` hold exactly the spoken words in their order. A language model may add or drop words.
     public static func isSplit(_ items: [String], of spoken: String) -> Bool {

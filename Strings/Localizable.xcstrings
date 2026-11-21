@@ -156,6 +156,16 @@
         }
       }
     },
+    "Adding the items…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge die Artikel hinzu…"
+          }
+        }
+      }
+    },
     "All done." : {
       "localizations" : {
         "de" : {
@@ -206,6 +216,16 @@
         }
       }
     },
+    "Checking the new items…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfe neue Artikel…"
+          }
+        }
+      }
+    },
     "Delete" : {
       "localizations" : {
         "de" : {
@@ -242,6 +262,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erledigt (%lld)"
+          }
+        }
+      }
+    },
+    "Double tap and hold, then speak." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doppeltippen und halten, dann sprechen."
           }
         }
       }
@@ -572,16 +602,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Spracherkennung ist gerade nicht verfügbar. Versuche es später noch einmal."
-          }
-        }
-      }
-    },
-    "Stop" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stopp"
           }
         }
       }

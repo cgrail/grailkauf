@@ -5,7 +5,8 @@
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
-- You can dictate many items at once. Hold "Hold to dictate" above the text field, say the items and let go. All items stay on the screen, also after a pause. The screen shows each item on its own line when the phone is sure of it. Until then, a moving waveform shows the words that the phone hears. The list gets the items as the screen shows them. A short tap dictates hands-free until you tap the big stop button.
+- You can dictate many items at once. Hold "Hold to dictate" above the text field, say the items and let go. After each pause, the screen shows the items of what you said, split into single products and without filler words such as "ähm" or "dann noch". A spinner shows while the app splits. A moving waveform shows the words that the phone hears now, a microphone shows while it waits.
+- A spinner line in list mode shows while the app checks new items.
 - If you add an item that is on the list already, the older copy goes away. A short notice tells you so.
 - Tap an item in list mode to change its text in place, as in a notes app. An emptied item goes away.
 - With Apple Intelligence, the app splits an entry such as "Milch Sprudel" into single items. "saure Sahne" stays one item.

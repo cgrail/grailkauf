@@ -35,7 +35,8 @@ final class AppModel {
     var selecting = false
 
     @ObservationIgnored private let link = Link()
-    @ObservationIgnored private var classifying = false
+    /// True while the language model splits and sorts new items.
+    private(set) var classifying = false
     /// The items that the model got since launch. The app then asks only once for an item that fails.
     @ObservationIgnored private var asked: Set<UUID> = []
 
