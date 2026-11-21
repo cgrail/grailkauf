@@ -20,18 +20,23 @@ final class Dictation {
     @ObservationIgnored private var stopping = false
     @ObservationIgnored private var finished = false
     @ObservationIgnored private var waiting: CheckedContinuation<Void, Never>?
+    /// The parts before the last pause. On-device recognition starts a new text after each pause.
+    @ObservationIgnored private var earlier = ""
+    @ObservationIgnored private var lastPart = ""
 
     func start() async throws {
         guard !isRecording else { return }
         // Set at once, so a second tap during the permission prompt starts nothing.
         isRecording = true
         text = ""
+        earlier = ""
+        lastPart = ""
         heardDone = false
         finished = false
         do {
             guard await Self.allowed() else { throw Failure.notAllowed }
-            try await recorder.start { [weak self] text, done in
-                Task { @MainActor in self?.update(text, done: done) }
+            try await recorder.start { [weak self] text, paused, done in
+                Task { @MainActor in self?.update(text, paused: paused, done: done) }
             }
         } catch {
             isRecording = false
@@ -51,9 +56,12 @@ final class Dictation {
         return items
     }
 
-    private func update(_ newText: String?, done: Bool) {
-        if let newText {
-            text = newText
+    private func update(_ newText: String?, paused: Bool, done: Bool) {
+        // The final result can repeat the part that the last pause ended.
+        if let newText, !(paused && newText == lastPart) {
+            // A line break per pause: a pause usually ends an item.
+            text = earlier.isEmpty ? newText : earlier + "\n" + newText
+            if paused { earlier = text; lastPart = newText }
             if ItemName.beforeDoneWord(newText) != nil { heardDone = true }
         }
         guard done else { return }
@@ -111,8 +119,8 @@ private actor Recorder {
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
 
-    /// `update` gets the text so far, and true when the recognition is over.
-    func start(update: @escaping @Sendable (String?, Bool) -> Void) throws {
+    /// `update` gets the text of the part since the last pause, true at a pause, and true when the recognition is over.
+    func start(update: @escaping @Sendable (String?, Bool, Bool) -> Void) throws {
         guard let recognizer = SFSpeechRecognizer(), recognizer.isAvailable else { throw Dictation.Failure.unavailable }
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.addsPunctuation = true
@@ -161,10 +169,13 @@ private actor Recorder {
 
     nonisolated private static func recognize(
         _ request: SFSpeechAudioBufferRecognitionRequest, with recognizer: SFSpeechRecognizer,
-        update: @escaping @Sendable (String?, Bool) -> Void
+        update: @escaping @Sendable (String?, Bool, Bool) -> Void
     ) -> SFSpeechRecognitionTask {
         recognizer.recognitionTask(with: request) { result, error in
-            update(result?.bestTranscription.formattedString, error != nil || result?.isFinal == true)
+            // The recognizer adds metadata only to the result that ends a part.
+            update(
+                result?.bestTranscription.formattedString, result?.speechRecognitionMetadata != nil,
+                error != nil || result?.isFinal == true)
         }
     }
 }

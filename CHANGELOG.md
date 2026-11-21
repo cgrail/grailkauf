@@ -5,7 +5,7 @@
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
-- You can dictate many items at once. Tap the microphone above the text field and say the items. The screen shows each item on its own line. Say "fertig" or "done", or tap the big stop button, to finish.
+- You can dictate many items at once. Tap "Start dictation" above the text field and say the items. All items stay on the screen, also after a pause. The screen shows each item on its own line. Say "fertig" or "done", or tap the big stop button, to finish.
 - Each item in list mode has a trash button. "Delete all" empties the list.
 - You can drag the items in list mode into a new order.
 - "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly.

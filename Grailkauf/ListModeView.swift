@@ -108,13 +108,10 @@ struct ListModeView: View {
 
     private var composer: some View {
         VStack(spacing: 8) {
-            HStack {
-                suggestions
-                Spacer(minLength: 0)
-                Button("Dictate", systemImage: "mic.circle.fill", action: startDictation)
-                    .labelStyle(.iconOnly)
-                    .font(.largeTitle)
-            }
+            suggestions
+            Button("Start dictation", systemImage: "mic.fill", action: startDictation)
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
             HStack(alignment: .bottom) {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
                 TextField("Add item", text: $draft, axis: .vertical)

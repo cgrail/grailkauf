@@ -195,16 +195,6 @@
         }
       }
     },
-    "Dictate" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diktieren"
-          }
-        }
-      }
-    },
     "Done" : {
       "localizations" : {
         "de" : {
@@ -531,6 +521,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Spracherkennung ist gerade nicht verfügbar. Versuche es später noch einmal."
+          }
+        }
+      }
+    },
+    "Start dictation" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starte Diktiermodus"
           }
         }
       }
