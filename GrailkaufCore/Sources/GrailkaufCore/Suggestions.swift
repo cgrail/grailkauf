@@ -20,7 +20,7 @@ public enum Suggestions {
         let trips = OrderLearning.trips(from: ticks).map { trip in
             PastTrip(date: trip.date, items: trip.keys.map { (latest[$0]!, onList.contains($0)) })
         }
-        let archived = Dictionary(grouping: entries.filter { $0.archivedAt != nil }, by: \.archivedAt!).map { date, list in
+        let archived = Dictionary(grouping: entries.filter { $0.archivedAt != nil && $0.tickedAt == nil }, by: \.archivedAt!).map { date, list in
             PastTrip(
                 date: date, archived: true,
                 items: list.sorted { $0.createdAt < $1.createdAt }.map { ($0.text, onList.contains($0.key)) })

@@ -16,13 +16,24 @@ struct MenuView: View {
     var body: some View {
         let trips = Suggestions.history(entries: model.store.entries)
         let count = model.store.state.todo.count
+        let ticked = model.store.state.rows.count - count
         List {
             Button { confirmNewList = true } label: { Label("New list", systemImage: "square.and.pencil") }
-                .disabled(count == 0)
+                .disabled(count + ticked == 0)
                 .confirmationDialog("Start a new list?", isPresented: $confirmNewList, titleVisibility: .visible) {
-                    Button("New list") { withAnimation { model.store.archiveList() } }
+                    Button("New list") {
+                        withAnimation {
+                            model.store.archiveList()
+                            // The shop ends with the old list. The Live Activity then goes away.
+                            model.mode = .list
+                        }
+                    }
                 } message: {
-                    Text("The current list with \(count) items moves to the history.")
+                    if count > 0 {
+                        Text("The current list with \(count) items moves to the history.")
+                    } else {
+                        Text("The ticked items leave the list.")
+                    }
                 }
             Section("History") {
                 ForEach(trips, id: \.date) { trip in

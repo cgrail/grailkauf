@@ -299,6 +299,15 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(history[0].items.map(\.onList) == [false, true])
         #expect(history[1].items.map(\.onList) == [false, false])
     }
+
+    @Test func newListEndsTheShopInProgress() {
+        let ticked = Entry(text: "Milch", createdAt: friday - hour, tickedAt: friday - 60, archivedAt: friday)
+        let open = Entry(text: "Brot", createdAt: friday - hour, archivedAt: friday)
+        #expect(ListState(entries: [ticked, open], moves: [], now: friday).rows.isEmpty)
+        let history = Suggestions.history(entries: [ticked, open])
+        #expect(history.map(\.archived) == [true, false])
+        #expect(history.map { $0.items.map(\.text) } == [["Brot"], ["Milch"]])
+    }
 }
 
 @Suite struct InboxTests {

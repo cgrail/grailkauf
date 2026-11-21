@@ -976,6 +976,16 @@
         }
       }
     },
+    "The ticked items leave the list." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die abgehakten Artikel verlassen die Liste."
+          }
+        }
+      }
+    },
     "Tins & ready meals" : {
       "localizations" : {
         "de" : {

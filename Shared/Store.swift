@@ -198,9 +198,10 @@ final class Store {
     func later(_ id: UUID) { change(id) { $0.deferredAt = .now } }
 
     /// "New list": the open items leave the list together and show in the history as one archived list.
+    /// The ticked items of the trip in progress leave too. They stay in the history as that trip.
     func archiveList() {
         let now = Date.now
-        for row in state.todo {
+        for row in state.rows {
             item(row.id).map { $0.archivedAt = now; $0.modifiedAt = now }
         }
         save()

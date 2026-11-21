@@ -9,7 +9,8 @@ public struct Entry: Equatable, Sendable {
     public var modifiedAt: Date
     public var tickedAt: Date?
     public var deferredAt: Date?
-    /// Set by "New list": the item leaves the list without a purchase and stays in the history.
+    /// Set by "New list": the item leaves the list and stays in the history.
+    /// Without a tick, it is in the archived list. With a tick, "New list" ended its trip early.
     public var archivedAt: Date?
     public let key: String
 
