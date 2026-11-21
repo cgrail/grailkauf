@@ -376,6 +376,16 @@
         }
       }
     },
+    "Edit item" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Artikel bearbeiten"
+          }
+        }
+      }
+    },
     "Fill with the usual" : {
       "localizations" : {
         "de" : {
@@ -742,6 +752,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sprich deine Artikel…"
+          }
+        }
+      }
+    },
+    "Section" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abteilung"
           }
         }
       }

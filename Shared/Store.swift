@@ -176,6 +176,16 @@ final class Store {
         save()
     }
 
+    /// Changes the text of an item in place. An empty text deletes the item, and commas make more items.
+    func edit(_ row: Row, to text: String) {
+        let parts = ItemName.split(text)
+        if parts.isEmpty {
+            delete([row.id])
+        } else if parts != [row.text] {
+            split(row.id, into: parts)
+        }
+    }
+
     /// Deletes the open items that `texts` repeat, and says which ones. See `repeated`.
     private func removeRepeats(of texts: [String], except kept: UUID? = nil) {
         let older = state.repeated(by: texts).filter { $0.id != kept }

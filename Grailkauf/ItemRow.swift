@@ -41,11 +41,6 @@ struct ItemRow: View {
 
     private func save() {
         editing = false
-        let parts = ItemName.split(text)
-        if parts.isEmpty {
-            store.delete([row.id])
-        } else if parts != [row.text] {
-            store.split(row.id, into: parts)
-        }
+        store.edit(row, to: text)
     }
 }

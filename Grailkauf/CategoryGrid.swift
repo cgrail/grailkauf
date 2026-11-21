@@ -5,8 +5,9 @@ import SwiftUI
 struct CategoryGrid: View {
     let store: Store
     let sections: [(category: GrailkaufCore.Category, rows: [Row])]
-    /// Shop mode ticks an item with a tap. List mode has no tap.
+    /// Shop mode ticks an item with a tap. In list mode, a tap opens the editor.
     var onTap: ((Row) -> Void)?
+    @State private var editing: Row?
     @Environment(\.dynamicTypeSize) private var typeSize
     private let gap: CGFloat = 4
 
@@ -27,6 +28,10 @@ struct CategoryGrid: View {
         }
         // Margins, not padding: the width of a section counts from the scroll view without its margins.
         .contentMargins(.horizontal, 8, for: .scrollContent)
+        .sheet(item: $editing) { row in
+            let section = sections.first { $0.rows.contains { $0.id == row.id } }?.category ?? .other
+            TileEditor(row: row, section: section, store: store)
+        }
     }
 
     private func section(_ category: GrailkaufCore.Category, _ rows: [Row]) -> some View {
@@ -53,13 +58,9 @@ struct CategoryGrid: View {
     }
 
     @ViewBuilder private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
-        if let onTap {
-            Button { onTap(row) } label: { picture(row, in: category) }
-                .buttonStyle(.plain)
-                .accessibilityAddTraits(row.tickedAt != nil ? .isSelected : [])
-        } else {
-            picture(row, in: category)
-        }
+        Button { if let onTap { onTap(row) } else { editing = row } } label: { picture(row, in: category) }
+            .buttonStyle(.plain)
+            .accessibilityAddTraits(row.tickedAt != nil ? .isSelected : [])
     }
 
     private func picture(_ row: Row, in category: GrailkaufCore.Category) -> some View {
@@ -91,6 +92,54 @@ struct CategoryGrid: View {
             }
             Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
         }
+    }
+}
+
+/// List mode: a tap on a tile opens this. Change the name, move the item to another section, or delete it.
+private struct TileEditor: View {
+    let row: Row
+    let store: Store
+    private let section: GrailkaufCore.Category
+    @State private var text: String
+    @State private var category: GrailkaufCore.Category
+    @Environment(\.dismiss) private var dismiss
+
+    init(row: Row, section: GrailkaufCore.Category, store: Store) {
+        self.row = row
+        self.section = section
+        self.store = store
+        _text = State(initialValue: row.text)
+        _category = State(initialValue: section)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Item", text: $text).onSubmit(save)
+                // The language model can pick the wrong section. Later items of the same name keep the correction.
+                Picker("Section", selection: $category) {
+                    ForEach(GrailkaufCore.Category.allCases, id: \.self) { Text($0.title).tag($0) }
+                }
+                Button("Delete", systemImage: "trash", role: .destructive) {
+                    store.delete([row.id])
+                    dismiss()
+                }
+            }
+            .navigationTitle("Edit item")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel", systemImage: "xmark") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) { Button("Done", systemImage: "checkmark", action: save) }
+            }
+        }
+        .presentationDetents([.medium])
+    }
+
+    private func save() {
+        // The text first: a new name takes the section of earlier items of that name, and the choice here must win.
+        store.edit(row, to: text)
+        if category != section { store.setCategory(row.id, category.rawValue) }
+        dismiss()
     }
 }
 
