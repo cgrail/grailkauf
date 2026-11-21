@@ -94,7 +94,7 @@ If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xc
 
 In the Watch simulator, the Watch starts with a sample list of 30 items, with each section filled, in English or German as the simulator's language. It goes away when the paired iPhone simulator sends a list with items sorted into sections. A list with no sorted items, as the iPhone simulator often has, does not replace it. Builds for a real Watch never show it.
 
-GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull request and every push to `main`. It builds with no code signing and does not measure coverage.
+GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull request and every push to `main`. It runs them as two parallel jobs, builds with no code signing for arm64 simulators only, and does not measure coverage.
 
 ## Project layout
 
