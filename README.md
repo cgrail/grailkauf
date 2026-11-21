@@ -107,7 +107,7 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 | `GrailkaufWidgets/`, `Activity/` | The Lock Screen Live Activity |
 | `GrailkaufShare/` | The share extension: "Grailkauf" in the share sheet |
 | `Strings/` | The texts in English and German |
-| `Config/` | Info.plist files and entitlements |
+| `Config/` | Info.plist files, entitlements, and `Version.xcconfig` with the version and build number of every target |
 | `docs/` | The privacy policy, served by GitHub Pages |
 | `scripts/` | `check-listing.py` checks the App Store texts in `APP-STORE.md` |
 
