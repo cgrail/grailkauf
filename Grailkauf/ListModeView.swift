@@ -126,6 +126,8 @@ struct ListModeView: View {
             // The grid has no keyboard: the space goes to the tiles.
             if !grid { textField }
         }
+        // Without the text field, the bar would shrink to the width of the dictation button.
+        .frame(maxWidth: .infinity)
         .padding()
         .background(.bar)
     }

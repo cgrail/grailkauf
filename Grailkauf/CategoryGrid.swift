@@ -5,13 +5,10 @@ import SwiftUI
 struct CategoryGrid: View {
     let store: Store
     @Environment(\.dynamicTypeSize) private var typeSize
-    @State private var width: CGFloat = 0
     private let gap: CGFloat = 4
 
     /// Five tiles a row fit about 40 items on one screen. Large text gets fewer, wider tiles.
     private var columns: Int { typeSize.isAccessibilitySize ? 3 : 5 }
-    /// One tile with its padding. A section with two items is two columns and one gap wide.
-    private var column: CGFloat { max(0, (width - CGFloat(columns - 1) * gap) / CGFloat(columns)) }
 
     var body: some View {
         let sections = store.state.sections
@@ -25,9 +22,9 @@ struct CategoryGrid: View {
                     .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .padding(.horizontal, 8)
         }
-        .onGeometryChange(for: CGFloat.self) { $0.size.width - 16 } action: { width = $0 }
+        // Margins, not padding: the width of a section counts from the scroll view without its margins.
+        .contentMargins(.horizontal, 8, for: .scrollContent)
     }
 
     private func section(_ category: GrailkaufCore.Category, _ rows: [Row]) -> some View {
@@ -47,7 +44,8 @@ struct CategoryGrid: View {
             }
         }
         .padding(6)
-        .frame(width: CGFloat(span) * column + CGFloat(span - 1) * gap, alignment: .topLeading)
+        // A section with two items is two of the five columns wide.
+        .containerRelativeFrame(.horizontal, count: columns, span: span, spacing: gap, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(category.color.opacity(0.25), in: .rect(cornerRadius: 12))
     }
