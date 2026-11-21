@@ -59,9 +59,10 @@ struct ShopView: View {
                     NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
                 }
             }
-            // Small text and low rows, so more than two items fit on one screen.
+            // Small text, low rows and little space between sections, so more than two items fit on one screen.
             .font(.footnote)
             .environment(\.defaultMinListRowHeight, 32)
+            .listSectionSpacing(.compact)
             .toolbar {
                 if total > 0 {
                     // Small, in the corner across from the time, so the current item is on the first screen.
