@@ -15,12 +15,7 @@ struct ShoppingLiveActivity: Widget {
 
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: ShoppingAttributes.self) { context in
-            VStack(alignment: .leading, spacing: 8) {
-                Progress(state: context.state)
-                Items(state: context.state)
-            }
-            .padding()
-            .widgetURL(shop)
+            LockScreen(state: context.state).widgetURL(shop)
         } dynamicIsland: { context in
             DynamicIsland {
                 DynamicIslandExpandedRegion(.center) { Progress(state: context.state) }
@@ -33,6 +28,28 @@ struct ShoppingLiveActivity: Widget {
                 Text("\(context.state.total - context.state.done)").monospacedDigit()
             }
             .widgetURL(shop)
+        }
+        // The Apple Watch Smart Stack shows the small family.
+        .supplementalActivityFamilies([.small, .medium])
+    }
+}
+
+private struct LockScreen: View {
+    @Environment(\.activityFamily) private var family
+    let state: ShoppingAttributes.ContentState
+
+    var body: some View {
+        if family == .small {
+            VStack(alignment: .leading, spacing: 4) {
+                Progress(state: state)
+                Text(state.current ?? String(localized: "All done.")).font(.headline).lineLimit(2)
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 8) {
+                Progress(state: state)
+                Items(state: state)
+            }
+            .padding()
         }
     }
 }
