@@ -31,13 +31,14 @@ final class Link: NSObject, WCSessionDelegate {
     func pull() async -> Bool {
         guard WCSession.default.isReachable else { return false }
         return await withCheckedContinuation { continuation in
+            // @Sendable: WatchConnectivity calls these on its own queue, not the main actor.
             WCSession.default.sendMessage(
                 ["pull": true],
-                replyHandler: { reply in
+                replyHandler: { @Sendable reply in
                     self.received(reply)
                     continuation.resume(returning: true)
                 },
-                errorHandler: { _ in continuation.resume(returning: false) })
+                errorHandler: { @Sendable _ in continuation.resume(returning: false) })
         }
     }
 
