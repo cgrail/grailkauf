@@ -258,6 +258,16 @@
         }
       }
     },
+    "Beer" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bier"
+          }
+        }
+      }
+    },
     "Beer, wine & spirits" : {
       "localizations" : {
         "de" : {
@@ -319,6 +329,16 @@
         }
       }
     },
+    "Cat food" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katzenfutter"
+          }
+        }
+      }
+    },
     "Checking the new items…" : {
       "localizations" : {
         "de" : {
@@ -339,6 +359,36 @@
         }
       }
     },
+    "Chicken breast" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hähnchenbrust"
+          }
+        }
+      }
+    },
+    "Chocolate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schokolade"
+          }
+        }
+      }
+    },
+    "Chopped tomatoes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gehackte Tomaten"
+          }
+        }
+      }
+    },
     "Coffee" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -346,6 +396,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kaffee"
+          }
+        }
+      }
+    },
+    "Cucumber" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gurke"
           }
         }
       }
@@ -376,6 +436,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle abwählen"
+          }
+        }
+      }
+    },
+    "Diapers" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Windeln"
+          }
+        }
+      }
+    },
+    "Dish soap" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spülmittel"
           }
         }
       }
@@ -461,12 +541,32 @@
         }
       }
     },
+    "Flour" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehl"
+          }
+        }
+      }
+    },
     "Frozen food" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tiefkühlkost"
+          }
+        }
+      }
+    },
+    "Frozen peas" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiefkühlerbsen"
           }
         }
       }
@@ -672,6 +772,26 @@
         }
       }
     },
+    "Mozzarella" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mozzarella"
+          }
+        }
+      }
+    },
+    "Muesli" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müsli"
+          }
+        }
+      }
+    },
     "Never" : {
       "localizations" : {
         "de" : {
@@ -718,6 +838,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "Onions" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwiebeln"
           }
         }
       }
@@ -772,12 +902,32 @@
         }
       }
     },
+    "Pepper" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pfeffer"
+          }
+        }
+      }
+    },
     "Pet food" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tiernahrung"
+          }
+        }
+      }
+    },
+    "Pretzels" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brezeln"
           }
         }
       }
@@ -818,6 +968,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
+          }
+        }
+      }
+    },
+    "Salmon" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lachs"
           }
         }
       }
@@ -882,6 +1042,16 @@
         }
       }
     },
+    "Shampoo" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shampoo"
+          }
+        }
+      }
+    },
     "Sharing" : {
       "localizations" : {
         "de" : {
@@ -928,6 +1098,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Etwas ist schiefgelaufen"
+          }
+        }
+      }
+    },
+    "Spaghetti" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spaghetti"
+          }
+        }
+      }
+    },
+    "Sparkling water" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mineralwasser"
           }
         }
       }
@@ -1072,6 +1262,36 @@
         }
       }
     },
+    "Toilet paper" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toilettenpapier"
+          }
+        }
+      }
+    },
+    "Tomatoes" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomaten"
+          }
+        }
+      }
+    },
+    "Toothpaste" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahnpasta"
+          }
+        }
+      }
+    },
     "Type below to add the first item." : {
       "localizations" : {
         "de" : {
@@ -1098,6 +1318,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wasser & Säfte"
+          }
+        }
+      }
+    },
+    "Yogurt" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Joghurt"
           }
         }
       }

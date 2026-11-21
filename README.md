@@ -88,7 +88,7 @@ xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf \
 
 If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` before the command.
 
-In the Watch simulator, the Watch starts with a sample list, in English or German as the simulator's language. It goes away when the paired iPhone simulator sends its list. Builds for a real Watch never show it.
+In the Watch simulator, the Watch starts with a sample list of 30 items, with each section filled, in English or German as the simulator's language. It goes away when the paired iPhone simulator sends its list. Builds for a real Watch never show it.
 
 GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull request and every push to `main`. It builds with no code signing and does not measure coverage.
 
