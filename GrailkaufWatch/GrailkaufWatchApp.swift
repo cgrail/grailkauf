@@ -33,7 +33,8 @@ final class WatchModel {
     init() {
         #if targetEnvironment(simulator)
         // The simulator has no iCloud list and often no phone, so it starts with a sample list.
-        if phone == nil { phone = Self.sample() }
+        // A saved list without any category is the old sample, which had none.
+        if phone?.rows.contains(where: { $0.category != nil }) != true { phone = Self.sample() }
         #endif
         store.onChange = { [unowned self] in recompute() }
         link.onReceive = { [unowned self] incoming in
@@ -74,14 +75,25 @@ final class WatchModel {
     }
 
     #if targetEnvironment(simulator)
-    /// A trip in progress: two items ticked, five open in the learned order.
+    /// A trip in progress: two items ticked, 28 open in the learned order, one or more in each section.
     private static func sample() -> ListState {
         let now = Date.now
         let items: [(String, GrailkaufCore.Category)] = [
             (String(localized: "Apples"), .produce), (String(localized: "Bananas"), .produce),
-            (String(localized: "Bread"), .bakery), (String(localized: "Coffee"), .breakfast),
-            (String(localized: "Cheese"), .cheese), (String(localized: "Milk"), .dairy),
-            (String(localized: "Eggs"), .dairy),
+            (String(localized: "Tomatoes"), .produce), (String(localized: "Cucumber"), .produce),
+            (String(localized: "Onions"), .produce), (String(localized: "Pepper"), .spices),
+            (String(localized: "Chopped tomatoes"), .tins), (String(localized: "Dish soap"), .household),
+            (String(localized: "Toilet paper"), .household), (String(localized: "Toothpaste"), .toiletries),
+            (String(localized: "Shampoo"), .toiletries), (String(localized: "Diapers"), .baby),
+            (String(localized: "Chocolate"), .sweets), (String(localized: "Chicken breast"), .meat),
+            (String(localized: "Salmon"), .fish), (String(localized: "Coffee"), .breakfast),
+            (String(localized: "Muesli"), .breakfast), (String(localized: "Bread"), .bakery),
+            (String(localized: "Pretzels"), .bakery), (String(localized: "Frozen peas"), .frozen),
+            (String(localized: "Flour"), .baking), (String(localized: "Spaghetti"), .pasta),
+            (String(localized: "Cheese"), .cheese), (String(localized: "Mozzarella"), .cheese),
+            (String(localized: "Milk"), .dairy), (String(localized: "Eggs"), .dairy),
+            (String(localized: "Yogurt"), .dairy), (String(localized: "Cat food"), .pets),
+            (String(localized: "Sparkling water"), .softDrinks), (String(localized: "Beer"), .alcohol),
         ]
         let rows = items.enumerated().map { index, item in
             Row(Entry(text: item.0, category: item.1.rawValue, createdAt: now,

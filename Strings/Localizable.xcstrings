@@ -258,6 +258,17 @@
         }
       }
     },
+    "Beer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bier"
+          }
+        }
+      }
+    },
     "Beer, wine & spirits" : {
       "localizations" : {
         "de" : {
@@ -319,6 +330,17 @@
         }
       }
     },
+    "Cat food" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katzenfutter"
+          }
+        }
+      }
+    },
     "Checking the new items…" : {
       "localizations" : {
         "de" : {
@@ -339,6 +361,39 @@
         }
       }
     },
+    "Chicken breast" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hähnchenbrust"
+          }
+        }
+      }
+    },
+    "Chocolate" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schokolade"
+          }
+        }
+      }
+    },
+    "Chopped tomatoes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gehackte Tomaten"
+          }
+        }
+      }
+    },
     "Coffee" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -346,6 +401,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kaffee"
+          }
+        }
+      }
+    },
+    "Cucumber" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gurke"
           }
         }
       }
@@ -376,6 +442,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alle abwählen"
+          }
+        }
+      }
+    },
+    "Diapers" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Windeln"
+          }
+        }
+      }
+    },
+    "Dish soap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spülmittel"
           }
         }
       }
@@ -461,12 +549,34 @@
         }
       }
     },
+    "Flour" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehl"
+          }
+        }
+      }
+    },
     "Frozen food" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tiefkühlkost"
+          }
+        }
+      }
+    },
+    "Frozen peas" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiefkühlerbsen"
           }
         }
       }
@@ -672,6 +782,28 @@
         }
       }
     },
+    "Mozzarella" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mozzarella"
+          }
+        }
+      }
+    },
+    "Muesli" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müsli"
+          }
+        }
+      }
+    },
     "Never" : {
       "localizations" : {
         "de" : {
@@ -718,6 +850,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        }
+      }
+    },
+    "Onions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zwiebeln"
           }
         }
       }
@@ -772,12 +915,34 @@
         }
       }
     },
+    "Pepper" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pfeffer"
+          }
+        }
+      }
+    },
     "Pet food" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tiernahrung"
+          }
+        }
+      }
+    },
+    "Pretzels" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brezeln"
           }
         }
       }
@@ -818,6 +983,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Entfernen"
+          }
+        }
+      }
+    },
+    "Salmon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lachs"
           }
         }
       }
@@ -882,6 +1058,17 @@
         }
       }
     },
+    "Shampoo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shampoo"
+          }
+        }
+      }
+    },
     "Sharing" : {
       "localizations" : {
         "de" : {
@@ -928,6 +1115,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Etwas ist schiefgelaufen"
+          }
+        }
+      }
+    },
+    "Spaghetti" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spaghetti"
+          }
+        }
+      }
+    },
+    "Sparkling water" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mineralwasser"
           }
         }
       }
@@ -1072,6 +1281,39 @@
         }
       }
     },
+    "Toilet paper" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toilettenpapier"
+          }
+        }
+      }
+    },
+    "Tomatoes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomaten"
+          }
+        }
+      }
+    },
+    "Toothpaste" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zahnpasta"
+          }
+        }
+      }
+    },
     "Type below to add the first item." : {
       "localizations" : {
         "de" : {
@@ -1098,6 +1340,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wasser & Säfte"
+          }
+        }
+      }
+    },
+    "Yogurt" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Joghurt"
           }
         }
       }

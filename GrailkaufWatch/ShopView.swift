@@ -14,30 +14,17 @@ struct ShopView: View {
         NavigationStack {
             List {
                 if let current = open.first {
-                    Section {
-                        Button {
-                            model.tick(current.id)
-                        } label: {
-                            VStack(alignment: .leading) {
-                                if current.isNew {
-                                    Text("New").font(.caption2).foregroundStyle(.secondary)
-                                }
-                                item(current).font(.title3.bold())
-                            }
-                        }
-                        .handGestureShortcut(.primaryAction)
-                        .swipeActions { later(current) }
-                        if open.count > 1 {
-                            Text(open.dropFirst().prefix(3).map(\.name).joined(separator: ", "))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    ForEach(Grid.sections(Array(open.dropFirst())), id: \.category) { section in
+                    ForEach(currentFirst(Grid.sections(open), current), id: \.category) { section in
                         Section {
                             ForEach(section.rows) { row in
-                                Button { model.tick(row.id) } label: { item(row) }
-                                    .swipeActions { later(row) }
+                                if row.id == current.id {
+                                    Button { model.tick(row.id) } label: { item(row).font(.title3.bold()) }
+                                        .handGestureShortcut(.primaryAction)
+                                        .swipeActions { later(row) }
+                                } else {
+                                    Button { model.tick(row.id) } label: { item(row) }
+                                        .swipeActions { later(row) }
+                                }
                             }
                         } header: {
                             Label { Text(section.category.title) } icon: { Text(section.category.emoji) }
@@ -72,14 +59,11 @@ struct ShopView: View {
                 if total > 0 {
                     // Small, in the corner across from the time, so the current item is on the first screen.
                     ToolbarItem(placement: .topBarLeading) {
-                        HStack(spacing: 4) {
-                            ProgressView(value: Double(done.count), total: Double(total))
-                                .progressViewStyle(.circular)
-                                .frame(width: 16, height: 16)
-                            Text("\(done.count)/\(total)").font(.footnote).monospacedDigit()
-                        }
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text("\(done.count)/\(total)"))
+                        Progress(done: done.count, total: total)
+                            // shortcut: the toolbar row sits lower than the time; a fixed nudge lifts it level. Recheck on a new watchOS.
+                            .offset(y: -10)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(Text("\(done.count)/\(total)"))
                     }
                 }
             }
@@ -102,11 +86,43 @@ struct ShopView: View {
         .accessibilityAddTraits(ticked ? .isSelected : [])
     }
 
+    /// The section of the current item goes first, so its header is on top. The current item is first in it,
+    /// as `open` is in shop order.
+    private func currentFirst(_ sections: [(category: GrailkaufCore.Category, rows: [Row])], _ current: Row)
+        -> [(category: GrailkaufCore.Category, rows: [Row])] {
+        var sections = sections
+        if let index = sections.firstIndex(where: { $0.rows.contains { $0.id == current.id } }) {
+            sections.insert(sections.remove(at: index), at: 0)
+        }
+        return sections
+    }
+
     private func later(_ row: Row) -> some View {
         Button("Later", systemImage: "arrow.uturn.down") { model.later(row.id) }
     }
 
     private func pull() {
         Task { unreachable = !(await model.refresh()) }
+    }
+}
+
+/// A ring and a count in the font of the time, as tall as its digits, so both read as one line with the time.
+private struct Progress: View {
+    let done: Int
+    let total: Int
+    private let font = UIFont.systemFont(ofSize: 17, weight: .medium)
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            ZStack {
+                Circle().inset(by: 1).stroke(.secondary, lineWidth: 2)
+                Circle().inset(by: 1).trim(from: 0, to: Double(done) / Double(total))
+                    .stroke(.primary, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+            }
+            .frame(width: font.capHeight, height: font.capHeight)
+            .alignmentGuide(.firstTextBaseline) { $0[.bottom] }
+            Text("\(done)/\(total)").font(Font(font)).monospacedDigit()
+        }
     }
 }
