@@ -25,6 +25,7 @@
 - The iPhone and the Watch sync over Bluetooth, also with no internet.
 - On the Watch, the progress is a ring with a count in the top left corner, in the size of the time and level with it, so the current item fits on the first screen. Each open item has an empty circle and a picture, and a ticked item has a check mark. The current item is at the top, below the name of its supermarket section, with no "New" label and no line with the next items.
 - The Watch shows the list in smaller text and lower rows, so more than two items fit on one screen. The current item is in bold.
+- The Watch shows less space between the supermarket sections.
 - "Info" at the end of the list on the Watch opens an info screen with the time of the last sync, the version and the commit of the app. "Refresh" is there now, not at the end of the list.
 - When you tick the last item in shop mode, the iPhone and the Watch show a big 🎉 and "All done.".
 - The Lock Screen shows the progress of your shop.
