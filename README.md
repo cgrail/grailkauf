@@ -55,11 +55,11 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch
-- The Watch shows the current item and the next three items. A small ring with a count in the top left corner shows the progress.
+- The Watch shows the current item at the top, with no label. A small ring with a count in the top left corner shows the progress.
 - Each open item has an empty circle and a picture of the kind of item. A ticked item has a check mark.
 - Tap the current item, or use the Double Tap gesture, to tick it.
 - Swipe an item and tap "Later" to move it to the end of the trip.
-- Scroll down for the full list, grouped by supermarket section as in "Sections", then the ticked items and "Refresh".
+- Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items and "Refresh".
 - The Watch and the iPhone sync over Bluetooth. This works with no internet.
 
 ### Settings (iPhone)

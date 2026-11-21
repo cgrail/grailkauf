@@ -50,7 +50,7 @@ SHOP IN YOUR ORDER
 Shop mode sorts the list in the order in which you pick up your items. Grailkauf learns it from your ticks, from your last five trips, so one chaotic trip changes nothing. Tap an item to tick it. Drag an item on the order screen to correct its place. With Apple Intelligence, a new item goes next to items of the same kind, and an entry like "milk sparkling water" becomes two items.
 
 ON YOUR WRIST AND LOCK SCREEN
-The Apple Watch shows the current item and the next three. Tick with a tap or with Double Tap, or move an item to the end with Later. iPhone and watch talk over Bluetooth, so this works in a store with no signal. While you shop, the Lock Screen shows your progress and the next items.
+The Apple Watch shows the current item, then the rest of the list by supermarket section. Tick with a tap or with Double Tap, or move an item to the end with Later. iPhone and watch talk over Bluetooth, so this works in a store with no signal. While you shop, the Lock Screen shows your progress and the next items.
 
 ONE LIST FOR THE HOUSEHOLD
 Invite your partner or your family, and everyone writes on the same list through iCloud. Share a note from another app to Grailkauf, and each line becomes an item.
@@ -102,7 +102,7 @@ EINKAUFEN IN DEINER REIHENFOLGE
 Der Einkaufsmodus sortiert die Liste in der Reihenfolge, in der du deine Artikel holst. Grailkauf lernt sie aus deinen Haken, aus deinen letzten fünf Einkäufen, also ändert ein chaotischer Einkauf nichts. Tipp einen Artikel an, um ihn abzuhaken. Zieh einen Artikel in der Reihenfolge an seinen richtigen Platz. Mit Apple Intelligence landet ein neuer Artikel bei ähnlichen Artikeln, und aus "Milch Sprudel" werden zwei Artikel.
 
 AM HANDGELENK UND AUF DEM SPERRBILDSCHIRM
-Die Apple Watch zeigt den aktuellen Artikel und die nächsten drei. Hak mit einem Tipp oder mit Doppeltippen ab, oder schieb einen Artikel mit Später ans Ende. iPhone und Watch sprechen per Bluetooth miteinander, also klappt das auch im Laden ohne Empfang. Beim Einkaufen zeigt der Sperrbildschirm deinen Fortschritt und die nächsten Artikel.
+Die Apple Watch zeigt den aktuellen Artikel, darunter den Rest der Liste nach Supermarktbereich. Hak mit einem Tipp oder mit Doppeltippen ab, oder schieb einen Artikel mit Später ans Ende. iPhone und Watch sprechen per Bluetooth miteinander, also klappt das auch im Laden ohne Empfang. Beim Einkaufen zeigt der Sperrbildschirm deinen Fortschritt und die nächsten Artikel.
 
 EINE LISTE FÜR DEN HAUSHALT
 Lade deinen Partner oder deine Familie ein, und alle schreiben über iCloud auf dieselbe Liste. Teile eine Notiz aus einer anderen App mit Grailkauf, und jede Zeile wird ein Artikel.

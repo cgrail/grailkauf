@@ -18,20 +18,10 @@ struct ShopView: View {
                         Button {
                             model.tick(current.id)
                         } label: {
-                            VStack(alignment: .leading) {
-                                if current.isNew {
-                                    Text("New").font(.caption2).foregroundStyle(.secondary)
-                                }
-                                item(current).font(.title3.bold())
-                            }
+                            item(current).font(.title3.bold())
                         }
                         .handGestureShortcut(.primaryAction)
                         .swipeActions { later(current) }
-                        if open.count > 1 {
-                            Text(open.dropFirst().prefix(3).map(\.name).joined(separator: ", "))
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
-                        }
                     }
                     ForEach(Grid.sections(Array(open.dropFirst())), id: \.category) { section in
                         Section {
