@@ -6,10 +6,9 @@ import SwiftUI
 struct ListModeView: View {
     @Environment(AppModel.self) private var model
     @State private var draft = ""
-    @State private var editing: Row?
-    @State private var editedText = ""
-    @State private var confirmingDeleteAll = false
+    @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
+    @State private var holding = false
     @FocusState private var typing: Bool
 
     private var store: Store { model.store }
@@ -17,24 +16,13 @@ struct ListModeView: View {
     var body: some View {
         let items = store.state.todo
         ScrollViewReader { scroll in
-            List {
+            // In select mode, slide a finger down the circles to select many items, as in Photos.
+            List(selection: $selection) {
                 ForEach(items) { row in
-                    HStack {
-                        Button {
-                            editedText = row.text
-                            editing = row
-                        } label: {
-                            Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
-                        }
-                        .foregroundStyle(.primary)
-                        Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
-                            .labelStyle(.iconOnly)
-                            .foregroundStyle(.red)
-                    }
-                    // Each button gets its own tap, not the whole row.
-                    .buttonStyle(.borderless)
-                    .swipeActions {
-                        Button("Delete", systemImage: "trash", role: .destructive) { store.delete(row.id) }
+                    if model.selecting {
+                        Text(row.text)
+                    } else {
+                        ItemRow(row: row, store: store)
                     }
                 }
                 .onMove { from, to in
@@ -43,6 +31,7 @@ struct ListModeView: View {
                     }
                 }
             }
+            .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
             .overlay {
                 if items.isEmpty {
                     ContentUnavailableView(
@@ -54,62 +43,104 @@ struct ListModeView: View {
                 if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
             }
         }
-        .safeAreaInset(edge: .bottom) { composer }
+        .overlay(alignment: .bottom) { repeatedNotice }
+        // An overlay, not a full screen cover: a cover would cancel the finger that holds the dictation button.
+        // It covers the list only. The bar with the button stays visible below it.
+        .overlay {
+            if dictation.isRecording {
+                DictationScreen(dictation: dictation, holding: holding)
+            }
+        }
+        .safeAreaInset(edge: .bottom) { if !model.selecting { composer } }
+        // While selecting, only the buttons for the selection stay, as in a mail app.
+        .navigationTitle(model.selecting ? Text("\(selection.count) selected") : Text(verbatim: ""))
         .toolbar {
-            if !items.isEmpty {
+            if model.selecting {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel", systemImage: "xmark", action: stopSelecting)
+                }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Delete all", systemImage: "xmark.bin") { confirmingDeleteAll = true }
+                    let all = Set(items.map(\.id))
+                    Button(selection == all ? "Deselect all" : "Select all") {
+                        selection = selection == all ? [] : all
+                    }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Delete", systemImage: "trash", role: .destructive) {
+                        store.delete(selection)
+                        stopSelecting()
+                    }
+                    .disabled(selection.isEmpty)
+                }
+            } else if !items.isEmpty {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
                 }
             }
         }
-        .confirmationDialog("Delete all items?", isPresented: $confirmingDeleteAll, titleVisibility: .visible) {
-            Button("Delete all", role: .destructive) { store.deleteAll() }
+        .onDisappear {
+            if dictation.isRecording { finishDictation() }
+            stopSelecting()
         }
-        .onDisappear { if dictation.isRecording { finishDictation() } }
-        .alert("Edit item", isPresented: .constant(editing != nil), presenting: editing) { row in
-            TextField("Add item", text: $editedText)
-            Button("Save") {
-                let text = editedText.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !text.isEmpty { store.rename(row.id, to: text) }
-                editing = nil
-            }
-            Button("Cancel", role: .cancel) { editing = nil }
-        }
+        .toolbarVisibility(dictation.isRecording ? .hidden : .automatic, for: .navigationBar)
+
     }
 
     private var composer: some View {
+        // Only the rows above the button change while dictating, so the button stays under the finger.
         VStack(spacing: 8) {
             if dictation.isRecording {
-                Text(dictation.text.isEmpty ? String(localized: "Say your items…") : dictation.text)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                RecordingBar(dictation: dictation)
             } else {
                 suggestions
             }
+            if model.classifying, !dictation.isRecording {
+                // The model splits and sorts new items in the background. They can still change.
+                Label {
+                    Text("Checking the new items…")
+                } icon: {
+                    ProgressView()
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+            holdToDictate
             HStack(alignment: .bottom) {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
                 TextField("Add item", text: $draft, axis: .vertical)
                     .lineLimit(1...4)
-                    .textFieldStyle(.roundedBorder)
+                    .font(.title3)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(.background, in: .rect(cornerRadius: 24))
                     .focused($typing)
                     .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
                 Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
                     .labelStyle(.iconOnly)
-                    .font(.title)
+                    .font(.system(size: 44))
                     .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
-                Button(
-                    dictation.isRecording ? "Stop" : "Dictate",
-                    systemImage: dictation.isRecording ? "stop.circle.fill" : "mic.circle.fill"
-                ) {
-                    if dictation.isRecording { finishDictation() } else { startDictation() }
-                }
-                .labelStyle(.iconOnly)
-                .font(.title)
-                .tint(dictation.isRecording ? .red : nil)
             }
+            .opacity(dictation.isRecording ? 0 : 1)
+            .disabled(dictation.isRecording)
         }
         .padding()
         .background(.bar)
+    }
+
+    /// Shows for a few seconds after an add replaced items that were on the list already.
+    @ViewBuilder private var repeatedNotice: some View {
+        if let names = store.repeated {
+            Label("Already on the list: \(names)", systemImage: "info.circle")
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.thinMaterial, in: .capsule)
+                .padding(.bottom, 8)
+                .task(id: names) {
+                    AccessibilityNotification.Announcement(String(localized: "Already on the list: \(names)")).post()
+                    try? await Task.sleep(for: .seconds(3))
+                    withAnimation { store.repeated = nil }
+                }
+        }
     }
 
     /// While typing: past items that match. Otherwise: what the household is due to buy again.
@@ -139,6 +170,34 @@ struct ListModeView: View {
         }
     }
 
+    private func stopSelecting() {
+        model.selecting = false
+        selection = []
+    }
+
+    /// Hold to dictate, let go to add the items.
+    private var holdToDictate: some View {
+        Label(holding ? "Let go to add" : "Hold to dictate", systemImage: "mic.fill")
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 14)
+            .background(.tint, in: .capsule)
+            .background { if holding { PulseRings(level: dictation.levels.last ?? 0) } }
+            .scaleEffect(holding ? 1.1 : 1)
+            .animation(.snappy, value: holding)
+            // Reports the finger going down and up, also when the system cancels the touch. `perform` never runs.
+            .onLongPressGesture(minimumDuration: 3600, maximumDistance: 10_000, perform: {}, onPressingChanged: hold)
+            // With VoiceOver, a double tap and hold passes the press through.
+            .accessibilityAddTraits(.isButton)
+            .accessibilityHint("Double tap and hold, then speak.")
+    }
+
+    private func hold(_ down: Bool) {
+        holding = down
+        if down { startDictation() } else { finishDictation() }
+    }
+
     private func startDictation() {
         typing = false
         Task {
@@ -157,5 +216,54 @@ struct ListModeView: View {
         store.add(text)
         draft = ""
         typing = true
+    }
+}
+
+/// An item that edits in place, as in a notes app. Tap the text to change it. Enter or a tap elsewhere saves.
+/// An emptied item goes away, and commas make more items. Touch and hold still drags the item.
+private struct ItemRow: View {
+    let row: Row
+    let store: Store
+    @State private var editing = false
+    @State private var text = ""
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        HStack {
+            if editing {
+                TextField("Item", text: $text)
+                    .focused($focused)
+                    .submitLabel(.done)
+                    .onSubmit { focused = false }
+                    .onAppear { focused = true }
+                    .onChange(of: focused) { if !focused { save() } }
+            } else {
+                Button {
+                    text = row.text
+                    editing = true
+                } label: {
+                    Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
+                }
+                .foregroundStyle(.primary)
+            }
+            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+                .labelStyle(.iconOnly)
+                .foregroundStyle(.red)
+        }
+        // Each button gets its own tap, not the whole row.
+        .buttonStyle(.borderless)
+        .swipeActions {
+            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+        }
+    }
+
+    private func save() {
+        editing = false
+        let parts = ItemName.split(text)
+        if parts.isEmpty {
+            store.delete([row.id])
+        } else if parts != [row.text] {
+            store.split(row.id, into: parts)
+        }
     }
 }

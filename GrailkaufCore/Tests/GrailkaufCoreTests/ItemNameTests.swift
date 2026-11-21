@@ -25,7 +25,22 @@ import Testing
     }
 
     @Test func spokenListSplitsOnAndAndSentences() {
-        #expect(ItemName.splitSpoken("Milch 1.5% und Eier. Butter, Brot and Salt") ==
-            ["Milch 1.5%", "Eier", "Butter", "Brot", "Salt"])
+        #expect(ItemName.splitSpoken("Milch 1.5% und Eier. Butter, Brot and Salt? Zucker!") ==
+            ["Milch 1.5%", "Eier", "Butter", "Brot", "Salt", "Zucker"])
+    }
+
+    @Test func spokenListLosesFillerWords() {
+        #expect(ItemName.splitSpoken("Ähm Milch, äh, dann noch zwei Liter Saft. Also bitte Brot uh") ==
+            ["Milch", "zwei Liter Saft", "Brot"])
+    }
+
+    @Test func repeatsKeepTheLastText() {
+        #expect(ItemName.withoutRepeats(["Zucker", "Wasser", "2 Zucker", "Mehl", "wasser"]) == ["2 Zucker", "Mehl", "wasser"])
+    }
+
+    @Test func splitMustKeepEverySpokenWord() {
+        #expect(ItemName.isSplit(["Milch 3,5%", "Eier"], of: "milch 3,5% Eier."))
+        #expect(!ItemName.isSplit(["zwei Eier", "Speck"], of: "Eier Speck"))
+        #expect(!ItemName.isSplit(["Butter"], of: "Milch Butter"))
     }
 }

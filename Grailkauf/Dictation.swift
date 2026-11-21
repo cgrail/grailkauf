@@ -1,5 +1,4 @@
 import AVFoundation
-import FoundationModels
 import GrailkaufCore
 import Observation
 import Speech
@@ -7,50 +6,126 @@ import Speech
 /// Records one spoken list and turns it into items. Speech recognition stays on the phone if the phone can do it.
 @MainActor @Observable
 final class Dictation {
+    /// One stretch of speech up to a pause, and the items in it. `items` is nil while the language model splits it.
+    struct Part {
+        let text: String
+        var items: [String]?
+    }
+
     private(set) var isRecording = false
-    /// What the phone understood so far.
-    private(set) var text = ""
+    /// True once the microphone runs: after the permission prompts.
+    private(set) var isListening = false
+    /// The parts up to the last pause. The phone is sure of their words.
+    private(set) var parts: [Part] = []
+    /// What the phone hears since the last pause. It can still change the words.
+    private(set) var hearing = ""
+    /// The loudness of the last moments, oldest first, each from 0 (silence) to 1.
+    private(set) var levels = [Float](repeating: 0, count: 32)
+    /// When the microphone started. Nil before.
+    private(set) var listeningSince: Date?
+    /// True after the finger lets go, while the last parts become items.
+    private(set) var stopping = false
+
+    /// What the app does now, for the speaker.
+    enum Status { case starting, listening, splitting, adding }
+
+    var status: Status? {
+        guard isRecording else { return nil }
+        if !isListening { return .starting }
+        if !stopping { return .listening }
+        return pending > 0 ? .splitting : .adding
+    }
+
+    /// The parts that the language model still splits.
+    var pending: Int { parts.count { $0.items == nil } }
 
     @ObservationIgnored private let recorder = Recorder()
-    @ObservationIgnored private var stopping = false
     @ObservationIgnored private var finished = false
     @ObservationIgnored private var waiting: CheckedContinuation<Void, Never>?
+    @ObservationIgnored private var splitting: [Task<Void, Never>] = []
+    @ObservationIgnored private var lastPart = ""
 
     func start() async throws {
         guard !isRecording else { return }
-        // Set at once, so a second tap during the permission prompt starts nothing.
+        // Set at once, so a second press during the permission prompt starts nothing.
         isRecording = true
-        text = ""
+        parts = []
+        splitting = []
+        hearing = ""
+        lastPart = ""
+        levels = levels.map { _ in 0 }
+        listeningSince = nil
         finished = false
         do {
             guard await Self.allowed() else { throw Failure.notAllowed }
-            try await recorder.start { [weak self] text, done in
-                Task { @MainActor in self?.update(text, done: done) }
+            // The finger let go during the permission prompt.
+            guard isRecording else { return }
+            try await recorder.start { [weak self] text, paused, done in
+                Task { @MainActor in self?.update(text, paused: paused, done: done) }
+            } level: { [weak self] level in
+                Task { @MainActor in self?.levels = (self?.levels.dropFirst() ?? []) + [level] }
             }
+            guard isRecording else { return await recorder.stop() }
+            listeningSince = .now
+            isListening = true
         } catch {
             isRecording = false
             throw error
         }
     }
 
-    /// Stops the recording and returns the items. Empty if the phone understood nothing.
+    /// Stops the recording and returns the items, once the language model split the last parts.
+    /// Empty if the phone understood nothing, or if the microphone did not run yet.
     func stop() async -> [String] {
         guard isRecording, !stopping else { return [] }
+        guard isListening else {
+            isRecording = false
+            return []
+        }
         stopping = true
         await recorder.stop()
         if !finished { await withCheckedContinuation { waiting = $0 } }
-        let items = await Self.items(in: text)
+        if !hearing.isEmpty { confirm(hearing) }
+        hearing = ""
+        for task in splitting { await task.value }
+        let items = parts.flatMap { $0.items ?? [] }
         stopping = false
+        isListening = false
         isRecording = false
         return items
     }
 
-    private func update(_ newText: String?, done: Bool) {
-        if let newText { text = newText }
+    private func update(_ newText: String?, paused: Bool, done: Bool) {
+        // The final result repeats the part that the last pause ended, with or without the pause mark.
+        if let newText, newText != lastPart {
+            if paused {
+                confirm(newText)
+                lastPart = newText
+            }
+            hearing = paused ? "" : newText
+        }
         guard done else { return }
         finished = true
         waiting?.resume()
         waiting = nil
+    }
+
+    /// The words of a part are final. The language model splits it now, while the speaker goes on.
+    private func confirm(_ text: String) {
+        let index = parts.count
+        parts.append(Part(text: text))
+        splitting.append(Task { parts[index].items = await Self.items(in: text) })
+    }
+
+    /// "und", "and" and punctuation split the part, and filler words go away.
+    /// With Apple Intelligence, the language model then splits "Milch Sprudel" into two items.
+    private static func items(in text: String) async -> [String] {
+        var items: [String] = []
+        for piece in ItemName.splitSpoken(text) {
+            let many = Classifier.isAvailable && piece.split(separator: " ").count > 1
+            items += many ? await Classifier.items(in: piece) ?? [piece] : [piece]
+        }
+        return items
     }
 
     nonisolated private static func allowed() async -> Bool {
@@ -60,23 +135,6 @@ final class Dictation {
         guard speech == .authorized else { return false }
         return await AVAudioApplication.requestRecordPermission()
     }
-
-    /// Spoken lists rarely have commas: "zwei Liter Milch Eier Butter". The language model finds the items.
-    /// Without the model, "und", "and" and the punctuation of the recognizer split the text.
-    private static func items(in text: String) async -> [String] {
-        let fallback = ItemName.splitSpoken(text)
-        guard Classifier.isAvailable, !fallback.isEmpty else { return fallback }
-        let session = LanguageModelSession(instructions: instructions)
-        let options = GenerationOptions(samplingMode: .greedy)
-        let answer = try? await session.respond(to: text, generating: SpokenList.self, options: options).content
-        let items = (answer?.items ?? []).flatMap(ItemName.split)
-        return items.isEmpty ? fallback : items
-    }
-
-    private static let instructions = """
-        You split a spoken grocery shopping list, in German or English, into its items.
-        Keep each item as spoken, with its amount: "zwei Liter Milch". Do not translate, correct or add items.
-        """
 
     enum Failure: LocalizedError {
         case notAllowed, unavailable
@@ -90,20 +148,15 @@ final class Dictation {
     }
 }
 
-@Generable
-struct SpokenList {
-    @Guide(description: "The items in the order spoken")
-    var items: [String]
-}
-
 /// The audio part of `Dictation`. It runs off the main thread, because the audio session can block for a while.
 private actor Recorder {
     private let engine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
 
-    /// `update` gets the text so far, and true when the recognition is over.
-    func start(update: @escaping @Sendable (String?, Bool) -> Void) throws {
+    /// `update` gets the text of the part since the last pause, true at a pause, and true when the recognition is over.
+    /// `level` gets the loudness of each piece of sound, from 0 to 1.
+    func start(update: @escaping @Sendable (String?, Bool, Bool) -> Void, level: @escaping @Sendable (Float) -> Void) throws {
         guard let recognizer = SFSpeechRecognizer(), recognizer.isAvailable else { throw Dictation.Failure.unavailable }
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.addsPunctuation = true
@@ -113,7 +166,7 @@ private actor Recorder {
         try session.setCategory(.record, mode: .measurement, options: .duckOthers)
         try session.setActive(true)
         do {
-            try Self.startMicrophone(engine, feeding: request)
+            try Self.startMicrophone(engine, feeding: request, level: level)
         } catch {
             try? session.setActive(false, options: .notifyOthersOnDeactivation)
             throw error
@@ -135,11 +188,13 @@ private actor Recorder {
     // so Swift does not insert an isolation check that stops the app.
 
     nonisolated private static func startMicrophone(
-        _ engine: AVAudioEngine, feeding request: SFSpeechAudioBufferRecognitionRequest
+        _ engine: AVAudioEngine, feeding request: SFSpeechAudioBufferRecognitionRequest,
+        level: @escaping @Sendable (Float) -> Void
     ) throws {
         let input = engine.inputNode
         input.installTap(onBus: 0, bufferSize: 1024, format: input.outputFormat(forBus: 0)) { buffer, _ in
             request.append(buffer)
+            level(loudness(of: buffer))
         }
         engine.prepare()
         do {
@@ -150,12 +205,25 @@ private actor Recorder {
         }
     }
 
+    /// -50 dB and below is 0, 0 dB is 1.
+    nonisolated private static func loudness(of buffer: AVAudioPCMBuffer) -> Float {
+        guard let samples = buffer.floatChannelData?[0], buffer.frameLength > 0 else { return 0 }
+        let count = Int(buffer.frameLength)
+        var sum: Float = 0
+        for index in 0..<count { sum += samples[index] * samples[index] }
+        let decibels = 20 * log10(max((sum / Float(count)).squareRoot(), 1e-7))
+        return min(max((decibels + 50) / 50, 0), 1)
+    }
+
     nonisolated private static func recognize(
         _ request: SFSpeechAudioBufferRecognitionRequest, with recognizer: SFSpeechRecognizer,
-        update: @escaping @Sendable (String?, Bool) -> Void
+        update: @escaping @Sendable (String?, Bool, Bool) -> Void
     ) -> SFSpeechRecognitionTask {
         recognizer.recognitionTask(with: request) { result, error in
-            update(result?.bestTranscription.formattedString, error != nil || result?.isFinal == true)
+            // The recognizer adds metadata only to the result that ends a part.
+            update(
+                result?.bestTranscription.formattedString, result?.speechRecognitionMetadata != nil,
+                error != nil || result?.isFinal == true)
         }
     }
 }

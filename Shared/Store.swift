@@ -16,6 +16,8 @@ final class Store {
     /// Last successful import from iCloud on this device.
     private(set) var lastSync = UserDefaults.standard.object(forKey: "lastSync") as? Date
     var problem: String?
+    /// The names of items that the last `add` had on the list already. The older copies are gone.
+    var repeated: String?
 
     @ObservationIgnored var onChange: () -> Void = {}
     @ObservationIgnored let container: NSPersistentCloudKitContainer
@@ -128,11 +130,14 @@ final class Store {
     // MARK: Changes
 
     /// Adds one item per line or comma-separated part, in the order typed. False if nothing was saved.
+    /// An item that is on the list already moves to the end with its new text.
     @discardableResult
     func add(_ input: String) -> Bool {
         guard let list = activeList(), let store = list.objectID.persistentStore else { return false }
         let now = Date.now
-        for (offset, text) in ItemName.split(input).enumerated() {
+        let texts = ItemName.withoutRepeats(ItemName.split(input))
+        removeRepeats(of: texts)
+        for (offset, text) in texts.enumerated() {
             let item = Item(context: context)
             context.assign(item, to: store)
             item.id = UUID()
@@ -146,26 +151,44 @@ final class Store {
         return save()
     }
 
-    func rename(_ id: UUID, to text: String) {
-        change(id) {
-            $0.text = text
-            $0.category = knownCategory(of: text)
+    /// The item takes the first part. The other parts become new items right after it.
+    func split(_ id: UUID, into parts: [String]) {
+        let parts = ItemName.withoutRepeats(parts)
+        guard let item = item(id), let first = parts.first, let list = item.list,
+            let store = item.objectID.persistentStore
+        else { return }
+        removeRepeats(of: parts, except: id)
+        let now = Date.now
+        item.text = first
+        item.category = knownCategory(of: first)
+        item.modifiedAt = now
+        for (offset, text) in parts.dropFirst().enumerated() {
+            let part = Item(context: context)
+            context.assign(part, to: store)
+            part.id = UUID()
+            part.text = text
+            part.category = knownCategory(of: text)
+            // A tenth of a second apart, so they stay before the next item, which was added at least a second later.
+            part.createdAt = (item.createdAt ?? now).addingTimeInterval(Double(offset + 1) / 10)
+            part.modifiedAt = now
+            part.list = list
         }
+        save()
+    }
+
+    /// Deletes the open items that `texts` repeat, and says which ones. See `repeated`.
+    private func removeRepeats(of texts: [String], except kept: UUID? = nil) {
+        let older = state.repeated(by: texts).filter { $0.id != kept }
+        for row in older { item(row.id).map(context.delete) }
+        if !older.isEmpty { repeated = older.map(\.name).joined(separator: ", ") }
     }
 
     func setTicked(_ id: UUID, _ ticked: Bool) { change(id) { $0.tickedAt = ticked ? .now : nil } }
 
     func later(_ id: UUID) { change(id) { $0.deferredAt = .now } }
 
-    func delete(_ id: UUID) {
-        guard let item = item(id) else { return }
-        context.delete(item)
-        save()
-    }
-
-    /// List mode: empties the list. Ticked items stay, so the history and the order keep them.
-    func deleteAll() {
-        for row in state.todo { item(row.id).map(context.delete) }
+    func delete(_ ids: some Sequence<UUID>) {
+        for id in ids { item(id).map(context.delete) }
         save()
     }
 

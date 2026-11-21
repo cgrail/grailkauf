@@ -111,6 +111,14 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(list.reordered(from: 1, to: 2) == nil)
     }
 
+    @Test func repeatedFindsOpenItemsWithTheSameName() {
+        let list = state([
+            Entry(text: "Milch", createdAt: friday - 2), Entry(text: "Brot", createdAt: friday - 1),
+            Entry(text: "Eier", createdAt: friday - hour, tickedAt: friday),
+        ])
+        #expect(list.repeated(by: ["2 milch", "Eier", "Salz"]).map(\.text) == ["Milch"])
+    }
+
     @Test func unknownItemsBorrowGuessOrGoToNew() {
         var tagged = history
         tagged[2].category = Category.spices.rawValue  // Pfeffer
