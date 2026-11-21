@@ -27,7 +27,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Menu and history (iPhone)
 - Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.
 - The menu opens the settings and shows each past shopping trip, newest first.
-- Each trip shows its date, its first items and how many of its items are not on the list now.
+- Each trip shows its date and the items that are not on the list now. These are the items that your list can miss.
 - Tap a trip to open it. Tap + to add an item to the list again.
 - Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
