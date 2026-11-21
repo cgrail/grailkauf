@@ -19,7 +19,8 @@ struct ListModeView: View {
         let items = store.state.todo
         Group {
             if grid {
-                CategoryGrid(store: store, sections: Grid.sections(items))
+                // The learned order, as in shop mode: the grid is a map of the store, not a history of the list.
+                CategoryGrid(store: store, sections: Grid.sections(store.state.shop(now: .now)))
             } else {
                 ScrollViewReader { scroll in
                     // In select mode, slide a finger down the circles to select many items, as in Photos.
