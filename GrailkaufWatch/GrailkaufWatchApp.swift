@@ -34,10 +34,14 @@ final class WatchModel {
         #if targetEnvironment(simulator)
         // The simulator has no iCloud list and often no phone, so it starts with a sample list.
         // A saved list without any category is the old sample, which had none.
-        if phone?.rows.contains(where: { $0.category != nil }) != true { phone = Self.sample() }
+        if !Self.hasSections(phone) { phone = Self.sample() }
         #endif
         store.onChange = { [unowned self] in recompute() }
         link.onReceive = { [unowned self] incoming in
+            #if targetEnvironment(simulator)
+            // The iPhone simulator has no Apple Intelligence to sort items, and its few test items would hide the sample.
+            guard Self.hasSections(incoming) else { return }
+            #endif
             // Keep the ticks that the phone does not know yet.
             phone = incoming.updated(from: phone?.rows ?? [])
             recompute()
@@ -75,6 +79,10 @@ final class WatchModel {
     }
 
     #if targetEnvironment(simulator)
+    private static func hasSections(_ list: ListState?) -> Bool {
+        list?.rows.contains { $0.category != nil } == true
+    }
+
     /// A trip in progress: two items ticked, 28 open in the learned order, one or more in each section.
     private static func sample() -> ListState {
         let now = Date.now

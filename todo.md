@@ -1,3 +1,3 @@
 Todo
 
-- [ ] get rid of the refresh on apple watch. move it to info (i) with details about commit/version
+- [ ] get rid of the refresh on apple watch. move it to info (i) with details about commit/version and general information about the app
