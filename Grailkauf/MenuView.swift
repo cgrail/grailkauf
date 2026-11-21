@@ -7,7 +7,7 @@ enum Route: Hashable {
     case settings
 }
 
-/// The side menu, as in a mail app: a new list, the settings, and the past trips and lists, newest first.
+/// The side menu, as in a mail app: a new list, the past trips and lists, newest first, and the settings at the bottom.
 struct MenuView: View {
     @Environment(AppModel.self) private var model
     let open: (Route) -> Void
@@ -24,7 +24,6 @@ struct MenuView: View {
                 } message: {
                     Text("The current list with \(count) items moves to the history.")
                 }
-            Button { open(.settings) } label: { Label("Settings", systemImage: "gearshape") }
             Section("History") {
                 ForEach(trips, id: \.date) { trip in
                     Button { open(.trip(trip.date)) } label: { row(trip) }
@@ -33,6 +32,13 @@ struct MenuView: View {
                     Text("Your shopping trips appear here after your first shop.").foregroundStyle(.secondary)
                 }
             }
+        }
+        // Pinned to the bottom, as in a mail app: a long history does not push it out of reach.
+        .safeAreaInset(edge: .bottom) {
+            Button { open(.settings) } label: { Label("Settings", systemImage: "gearshape") }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(.bar)
         }
         .foregroundStyle(.primary)
     }
