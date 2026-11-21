@@ -31,6 +31,10 @@ final class WatchModel {
     }
 
     init() {
+        #if targetEnvironment(simulator)
+        // The simulator has no iCloud list and often no phone, so it starts with a sample list.
+        if phone == nil { phone = Self.sample() }
+        #endif
         store.onChange = { [unowned self] in recompute() }
         link.onReceive = { [unowned self] incoming in
             // Keep the ticks that the phone does not know yet.
@@ -68,6 +72,23 @@ final class WatchModel {
         store.refresh()
         link.send(state)
     }
+
+    #if targetEnvironment(simulator)
+    /// A trip in progress: two items ticked, five open in the learned order.
+    private static func sample() -> ListState {
+        let now = Date.now
+        let texts = [
+            String(localized: "Apples"), String(localized: "Bananas"), String(localized: "Bread"),
+            String(localized: "Coffee"), String(localized: "Cheese"), String(localized: "Milk"),
+            String(localized: "Eggs"),
+        ]
+        let rows = texts.enumerated().map { index, text in
+            Row(Entry(text: text, createdAt: now, tickedAt: index < 2 ? now - Double(60 * (2 - index)) : nil),
+                sort: Double(index))
+        }
+        return ListState(rows: rows, lastSync: now)
+    }
+    #endif
 
     /// Reads the store again and asks the phone for its list. False if the phone is not reachable.
     func refresh() async -> Bool {
