@@ -4,6 +4,17 @@
 <dict>
 	<key>CKSharingSupported</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>de.grails.grailkauf</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>grailkauf</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Grailkauf records your voice when you dictate items.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

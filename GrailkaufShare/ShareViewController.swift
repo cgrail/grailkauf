@@ -2,8 +2,8 @@ import GrailkaufCore
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// "Grailkauf" in the share sheet. It keeps the shared text in the inbox and shows the number of items.
-/// The app adds the items when it runs next.
+/// "Grailkauf" in the share sheet. It keeps the shared text in the inbox and opens the app on the list.
+/// The app adds the items when it opens.
 final class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,9 +16,28 @@ final class ShareViewController: UIViewController {
             return
         }
         Inbox.put(text, in: defaults)
+        if openList() {
+            extensionContext?.completeRequest(returningItems: nil)
+            return
+        }
         show(Confirmation(count: ItemName.split(text).count))
         try? await Task.sleep(for: .seconds(2))
         extensionContext?.completeRequest(returningItems: nil)
+    }
+
+    /// An extension cannot call `UIApplication.open`, so this finds the app in the responder chain
+    /// and calls the method by its name. False if no app object is in the chain.
+    private func openList() -> Bool {
+        typealias Open = @convention(c) (
+            AnyObject, Selector, NSURL, NSDictionary, (@convention(block) (Bool) -> Void)?
+        ) -> Void
+        let selector = NSSelectorFromString("openURL:options:completionHandler:")
+        guard let url = NSURL(string: "grailkauf://list"),
+            let app = sequence(first: self as UIResponder, next: \.next).first(where: { $0 is UIApplication }),
+            app.responds(to: selector)
+        else { return false }
+        unsafeBitCast(app.method(for: selector), to: Open.self)(app, selector, url, [:] as NSDictionary, nil)
+        return true
     }
 
     private func sharedText() async -> String? {

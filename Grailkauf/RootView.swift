@@ -28,8 +28,8 @@ struct RootView: View {
         .overlay { menu }
         // Time alone changes the picture: a trip ends four hours after its last tick.
         .onChange(of: scenePhase) { if scenePhase == .active { model.store.refresh() } }
-        // The Live Activity links here.
-        .onOpenURL { _ in model.mode = .shop }
+        // The Live Activity links to grailkauf://shop, the share extension to grailkauf://list.
+        .onOpenURL { url in model.mode = url.host() == "list" ? .list : .shop }
         .confirmationDialog(
             "Join shared list?", isPresented: .constant(model.invite != nil), titleVisibility: .visible,
             presenting: model.invite

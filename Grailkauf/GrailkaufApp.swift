@@ -39,6 +39,8 @@ final class AppModel {
     private(set) var classifying = false
     /// The items that the model got since launch. The app then asks only once for an item that fails.
     @ObservationIgnored private var asked: Set<UUID> = []
+    /// Lines of a shared note. The user wrote each line as one item, so the model does not split it.
+    @ObservationIgnored private var sharedTexts: Set<String> = []
 
     private init() {
         store.onChange = { [unowned self] in changed() }
@@ -61,7 +63,9 @@ final class AppModel {
         guard store.problem == nil, let inbox = UserDefaults(suiteName: Inbox.group), let text = Inbox.text(in: inbox)
         else { return }
         // The text stays in the inbox until the items are saved.
-        if store.add(text) { Inbox.remove(text, from: inbox) }
+        guard store.add(text) else { return }
+        Inbox.remove(text, from: inbox)
+        sharedTexts.formUnion(ItemName.split(text))
     }
 
     /// Splits each new item into the products in it, then gives it a category.
@@ -76,7 +80,8 @@ final class AppModel {
             for entry in new {
                 asked.insert(entry.id)
                 var text = entry.text
-                if text.split(separator: " ").count > 1, let parts = await Classifier.items(in: text), parts.count > 1 {
+                let shared = sharedTexts.remove(text) != nil
+                if !shared, text.split(separator: " ").count > 1, let parts = await Classifier.items(in: text), parts.count > 1 {
                     store.split(entry.id, into: parts)
                     text = parts[0]
                 }

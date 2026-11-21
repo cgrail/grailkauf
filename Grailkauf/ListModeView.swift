@@ -9,38 +9,49 @@ struct ListModeView: View {
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @State private var holding = false
+    /// Shows the items as tiles by supermarket section. Kept for the next launch.
+    @AppStorage("grid") private var grid = false
     @FocusState private var typing: Bool
 
     private var store: Store { model.store }
 
     var body: some View {
         let items = store.state.todo
-        ScrollViewReader { scroll in
-            // In select mode, slide a finger down the circles to select many items, as in Photos.
-            List(selection: $selection) {
-                ForEach(items) { row in
-                    if model.selecting {
-                        Text(row.text)
-                    } else {
-                        ItemRow(row: row, store: store)
+        Group {
+            if grid {
+                // The learned order, as in shop mode: the grid is a map of the store, not a history of the list.
+                CategoryGrid(store: store, sections: Grid.sections(store.state.shop(now: .now)))
+            } else {
+                ScrollViewReader { scroll in
+                    // In select mode, slide a finger down the circles to select many items, as in Photos.
+                    List(selection: $selection) {
+                        ForEach(items) { row in
+                            if model.selecting {
+                                Text(row.text)
+                            } else {
+                                ItemRow(row: row, store: store)
+                            }
+                        }
+                        .onMove { from, to in
+                            if let source = from.first, let change = store.state.reordered(from: source, to: to) {
+                                store.move(change.id, toCreatedAt: change.createdAt)
+                            }
+                        }
                     }
-                }
-                .onMove { from, to in
-                    if let source = from.first, let change = store.state.reordered(from: source, to: to) {
-                        store.move(change.id, toCreatedAt: change.createdAt)
+                    .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
+                    .onChange(of: items.last?.id) { _, newest in
+                        if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
                     }
                 }
             }
-            .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
-            .overlay {
-                if items.isEmpty {
-                    ContentUnavailableView(
-                        "The list is empty", systemImage: "cart",
-                        description: Text("Type below to add the first item."))
-                }
-            }
-            .onChange(of: items.last?.id) { _, newest in
-                if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
+        }
+        .overlay {
+            if items.isEmpty {
+                ContentUnavailableView(
+                    "The list is empty", systemImage: "cart",
+                    description: grid
+                        ? Text("Hold the button below and say the items.")
+                        : Text("Type below to add the first item."))
             }
         }
         .overlay(alignment: .bottom) { repeatedNotice }
@@ -73,8 +84,11 @@ struct ListModeView: View {
                     .disabled(selection.isEmpty)
                 }
             } else if !items.isEmpty {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    GridToggle()
+                    if !grid {
+                        Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
+                    }
                 }
             }
         }
@@ -91,7 +105,7 @@ struct ListModeView: View {
         VStack(spacing: 8) {
             if dictation.isRecording {
                 RecordingBar(dictation: dictation)
-            } else {
+            } else if !grid {
                 suggestions
             }
             if model.classifying, !dictation.isRecording {
@@ -105,26 +119,33 @@ struct ListModeView: View {
                 .foregroundStyle(.secondary)
             }
             holdToDictate
-            HStack(alignment: .bottom) {
-                // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
-                TextField("Add item", text: $draft, axis: .vertical)
-                    .lineLimit(1...4)
-                    .font(.title3)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(.background, in: .rect(cornerRadius: 24))
-                    .focused($typing)
-                    .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
-                Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
-                    .labelStyle(.iconOnly)
-                    .font(.system(size: 44))
-                    .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
-            .opacity(dictation.isRecording ? 0 : 1)
-            .disabled(dictation.isRecording)
+            // The grid has no keyboard: the space goes to the tiles.
+            if !grid { textField }
         }
+        // Without the text field, the bar would shrink to the width of the dictation button.
+        .frame(maxWidth: .infinity)
         .padding()
         .background(.bar)
+    }
+
+    private var textField: some View {
+        HStack(alignment: .bottom) {
+            // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
+            TextField("Add item", text: $draft, axis: .vertical)
+                .lineLimit(1...4)
+                .font(.title3)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(.background, in: .rect(cornerRadius: 24))
+                .focused($typing)
+                .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
+            Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
+                .labelStyle(.iconOnly)
+                .font(.system(size: 44))
+                .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
+        }
+        .opacity(dictation.isRecording ? 0 : 1)
+        .disabled(dictation.isRecording)
     }
 
     /// Shows for a few seconds after an add replaced items that were on the list already.
