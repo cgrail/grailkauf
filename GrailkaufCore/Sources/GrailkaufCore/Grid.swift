@@ -1,3 +1,24 @@
+/// The grid view: tiles in rows of a fixed width, grouped by section.
+public enum Grid {
+    /// Puts sections next to each other while they fit in one row, in their order.
+    /// A section takes one column for each item, and a full row if it has more items than the row has columns.
+    /// - Returns: the indices of `sizes` for each row.
+    public static func rows(sizes: [Int], columns: Int) -> [[Int]] {
+        var rows: [[Int]] = []
+        var used = columns
+        for (index, size) in sizes.enumerated() {
+            let width = min(size, columns)
+            if used + width > columns {
+                rows.append([])
+                used = 0
+            }
+            rows[rows.count - 1].append(index)
+            used += width
+        }
+        return rows
+    }
+}
+
 /// The pictures of the grid view. A fixed table with no model involved.
 extension ItemName {
     /// "Apfelsaft" is 🧃: a German compound word ends with what the thing is.

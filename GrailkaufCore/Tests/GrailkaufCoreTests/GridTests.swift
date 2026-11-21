@@ -17,6 +17,10 @@ import Testing
         #expect(state.sections[1].rows.map(\.text) == ["Milch", "Joghurt"])
     }
 
+    @Test func smallSectionsShareARowInTheirOrder() {
+        #expect(Grid.rows(sizes: [4, 1, 2, 2, 7, 1, 3], columns: 5) == [[0, 1], [2, 3], [4], [5, 6]])
+    }
+
     @Test func emojiTakesTheEndOfACompoundWord() {
         #expect(ItemName.emoji("2 Äpfel") == "🍎")
         #expect(ItemName.emoji("Apfelsaft") == "🧃")

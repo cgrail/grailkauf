@@ -37,10 +37,10 @@ enum Classifier {
         Answer with exactly one word from this list and nothing else:
         \(GrailkaufCore.Category.allCases.map(\.rawValue).joined(separator: ", "))
 
-        produce: fruit, vegetables, fresh herbs. bakery: bread, rolls, pastries. meat: meat, sausage, cold cuts.
+        produce: fruit, vegetables, fresh herbs, bell peppers ("Paprika"). bakery: bread, rolls, pastries. meat: meat, sausage, cold cuts.
         fish: fish, seafood. cheese: cheese. dairy: milk, yoghurt, butter, cream, eggs. frozen: frozen food, ice cream.
         tins: canned food, jars, ready meals. pasta: pasta, rice, grains, pulses. baking: flour, sugar, baking goods.
-        spices: spices, salt, sauces, oil, vinegar, condiments. breakfast: cereal, jam, spreads, coffee, tea.
+        spices: spices, paprika powder, salt, sauces, oil, vinegar, condiments. breakfast: cereal, jam, spreads, coffee, tea.
         sweets: chocolate, sweets, crisps, snacks. softDrinks: water, juice, soda. alcohol: beer, wine, spirits.
         toiletries: personal care, pharmacy. household: cleaning, paper goods, kitchen supplies.
         baby: baby food, nappies. pets: pet food and supplies. other: anything else, or if you are unsure.

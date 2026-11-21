@@ -576,6 +576,16 @@
         }
       }
     },
+    "Move to section" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Abteilung verschieben"
+          }
+        }
+      }
+    },
     "Never" : {
       "localizations" : {
         "de" : {
