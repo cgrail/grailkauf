@@ -59,7 +59,8 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Each open item has an empty circle and a picture of the kind of item. A ticked item has a check mark.
 - Tap the current item, or use the Double Tap gesture, to tick it.
 - Swipe an item and tap "Later" to move it to the end of the trip.
-- Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items and "Refresh".
+- Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items.
+- Tap the (i) button in the top right corner for the info screen. It shows the time of the last sync, the version and the commit of the app. "Refresh" there gets the list from the iPhone.
 - The Watch and the iPhone sync over Bluetooth. This works with no internet.
 
 ### Settings (iPhone)
@@ -115,7 +116,7 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - Before a public release, deploy the iCloud schema to production in the CloudKit Console.
 
 ## Limits
-- The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the Watch gets the list from the iPhone.
+- The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the info screen of the Watch gets the list from the iPhone.
 - The position guess for new items needs an iPhone with Apple Intelligence. On other iPhones, new items go to the "New" group.
 - The position guess does not work in the simulator.
 - A pause, "und", "and" and punctuation split a dictated list.
