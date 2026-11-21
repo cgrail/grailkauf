@@ -31,13 +31,17 @@ enum ShoppingActivity {
     nonisolated private static func apply(
         _ content: ActivityContent<ShoppingAttributes.ContentState>, stop: Bool, finished: Bool, canStart: Bool
     ) async {
-        let running = Activity<ShoppingAttributes>.activities
+        // An ended activity stays in the list while it lingers on screen, and ignores updates.
+        let all = Activity<ShoppingAttributes>.activities
+        let running = all.filter { $0.activityState == .active || $0.activityState == .stale }
         if stop {
-            for activity in running { await activity.end(nil, dismissalPolicy: .immediate) }
+            for activity in all { await activity.end(nil, dismissalPolicy: .immediate) }
         } else if finished {
             let linger = ActivityUIDismissalPolicy.after(.now.addingTimeInterval(600))
             for activity in running { await activity.end(content, dismissalPolicy: linger) }
         } else if running.isEmpty {
+            // Items are open again: take down a lingering "All done" before showing the list.
+            for activity in all { await activity.end(nil, dismissalPolicy: .immediate) }
             if canStart { _ = try? Activity.request(attributes: ShoppingAttributes(), content: content) }
         } else {
             for activity in running { await activity.update(content) }
