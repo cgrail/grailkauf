@@ -32,7 +32,16 @@ struct ShopView: View {
                 } else if !model.hasData {
                     Text("Open Grailkauf on your iPhone to load the list.")
                 } else {
-                    Text(done.isEmpty ? "The list is empty." : "All done.")
+                    if done.isEmpty {
+                        Text("The list is empty.")
+                    } else {
+                        VStack {
+                            Text("🎉").font(.system(size: 60)).accessibilityHidden(true)
+                            Text("All done.").font(.title3.bold())
+                        }
+                        .frame(maxWidth: .infinity)
+                        .listRowBackground(Color.clear)
+                    }
                 }
                 if !done.isEmpty {
                     Section("Done") {

@@ -52,6 +52,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
 - Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" below a line at the bottom, grouped by faded sections. Tap "Done" to show or hide them. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. Shop mode keeps the view that you chose last.
+- When you tick the last item, a big 🎉 and "All done." show above the list.
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch
@@ -61,6 +62,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Swipe an item and tap "Later" to move it to the end of the trip.
 - Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items.
 - Tap the (i) button in the top right corner for the info screen. It shows the time of the last sync, the version and the commit of the app. "Refresh" there gets the list from the iPhone.
+- When you tick the last item, the Watch shows a big 🎉 and "All done.".
 - The Watch and the iPhone sync over Bluetooth. This works with no internet.
 
 ### Settings (iPhone)
