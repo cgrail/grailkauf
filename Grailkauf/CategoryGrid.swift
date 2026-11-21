@@ -10,6 +10,7 @@ struct CategoryGrid: View {
     /// Shop mode ticks an item with a tap. In list mode, a tap opens the editor.
     var onTap: ((Row) -> Void)?
     @State private var editing: Row?
+    @State private var showsDone = false
     @Environment(\.dynamicTypeSize) private var typeSize
     private let gap: CGFloat = 4
 
@@ -21,10 +22,14 @@ struct CategoryGrid: View {
             VStack(alignment: .leading, spacing: 6) {
                 packed(sections)
                 if !done.isEmpty {
-                    Text("Done (\(done.reduce(0) { $0 + $1.rows.count }))")
-                        .font(.caption.weight(.semibold))
-                        .accessibilityAddTraits(.isHeader)
-                    packed(done)
+                    Divider().padding(.vertical, 6)
+                    DisclosureGroup(isExpanded: $showsDone) {
+                        VStack(alignment: .leading, spacing: 6) { packed(done, faded: true) }
+                    } label: {
+                        Text("Done (\(done.reduce(0) { $0 + $1.rows.count }))")
+                            .font(.caption.weight(.semibold))
+                            .accessibilityAddTraits(.isHeader)
+                    }
                 }
             }
         }
@@ -36,17 +41,18 @@ struct CategoryGrid: View {
         }
     }
 
-    private func packed(_ sections: [(category: GrailkaufCore.Category, rows: [Row])]) -> some View {
+    private func packed(_ sections: [(category: GrailkaufCore.Category, rows: [Row])], faded: Bool = false) -> some View {
         ForEach(Grid.rows(sizes: sections.map(\.rows.count), columns: columns), id: \.self) { row in
             HStack(alignment: .top, spacing: gap) {
-                ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows) }
+                ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows, faded: faded) }
             }
             // The sections of a row get the height of the tallest one.
             .fixedSize(horizontal: false, vertical: true)
         }
     }
 
-    private func section(_ category: GrailkaufCore.Category, _ rows: [Row]) -> some View {
+    /// A faded section holds only ticked tiles. Its color and title fade as its tiles do.
+    private func section(_ category: GrailkaufCore.Category, _ rows: [Row], faded: Bool = false) -> some View {
         let span = min(rows.count, columns)
         return VStack(alignment: .leading, spacing: 4) {
             Label {
@@ -57,6 +63,7 @@ struct CategoryGrid: View {
             .font(.caption.weight(.semibold))
             .lineLimit(1)
             .minimumScaleFactor(0.8)
+            .opacity(faded ? 0.4 : 1)
             .accessibilityAddTraits(.isHeader)
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: span), spacing: gap) {
                 ForEach(rows) { row in tile(row, in: category) }
@@ -66,7 +73,7 @@ struct CategoryGrid: View {
         // A section with two items is two of the five columns wide.
         .containerRelativeFrame(.horizontal, count: columns, span: span, spacing: gap, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(category.color.opacity(0.25), in: .rect(cornerRadius: 12))
+        .background(category.color.opacity(faded ? 0.1 : 0.25), in: .rect(cornerRadius: 12))
     }
 
     @ViewBuilder private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
