@@ -23,7 +23,7 @@
 - You can invite another person to your list. The list syncs through iCloud.
 - The Apple Watch app shows the current item on top and the rest of the list below it, grouped by supermarket section. You tick an item with a tap or with Double Tap.
 - The iPhone and the Watch sync over Bluetooth, also with no internet.
-- On the Watch, the progress is a small ring with a count in the top left corner, so the current item fits on the first screen. Each open item has an empty circle and a picture, and a ticked item has a check mark. The current item has no "New" label and no line with the next items.
+- On the Watch, the progress is a small ring with a count in the top left corner, level with the time, so the current item fits on the first screen. Each open item has an empty circle and a picture, and a ticked item has a check mark. The current item is at the top, below the name of its supermarket section, with no "New" label and no line with the next items.
 - The Lock Screen shows the progress of your shop.
 - You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.

@@ -55,7 +55,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch
-- The Watch shows the current item at the top, with no label. A small ring with a count in the top left corner shows the progress.
+- The Watch shows the current item at the top, below the name of its supermarket section. A small ring with a count in the top left corner, level with the time, shows the progress.
 - Each open item has an empty circle and a picture of the kind of item. A ticked item has a check mark.
 - Tap the current item, or use the Double Tap gesture, to tick it.
 - Swipe an item and tap "Later" to move it to the end of the trip.

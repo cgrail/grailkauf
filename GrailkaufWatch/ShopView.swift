@@ -14,20 +14,17 @@ struct ShopView: View {
         NavigationStack {
             List {
                 if let current = open.first {
-                    Section {
-                        Button {
-                            model.tick(current.id)
-                        } label: {
-                            item(current).font(.title3.bold())
-                        }
-                        .handGestureShortcut(.primaryAction)
-                        .swipeActions { later(current) }
-                    }
-                    ForEach(Grid.sections(Array(open.dropFirst())), id: \.category) { section in
+                    ForEach(currentFirst(Grid.sections(open), current), id: \.category) { section in
                         Section {
                             ForEach(section.rows) { row in
-                                Button { model.tick(row.id) } label: { item(row) }
-                                    .swipeActions { later(row) }
+                                if row.id == current.id {
+                                    Button { model.tick(row.id) } label: { item(row).font(.title3.bold()) }
+                                        .handGestureShortcut(.primaryAction)
+                                        .swipeActions { later(row) }
+                                } else {
+                                    Button { model.tick(row.id) } label: { item(row) }
+                                        .swipeActions { later(row) }
+                                }
                             }
                         } header: {
                             Label { Text(section.category.title) } icon: { Text(section.category.emoji) }
@@ -68,6 +65,8 @@ struct ShopView: View {
                                 .frame(width: 16, height: 16)
                             Text("\(done.count)/\(total)").font(.footnote).monospacedDigit()
                         }
+                        // shortcut: the toolbar row sits lower than the time; a fixed nudge lifts it level. Recheck on a new watchOS.
+                        .offset(y: -11)
                         .accessibilityElement(children: .ignore)
                         .accessibilityLabel(Text("\(done.count)/\(total)"))
                     }
@@ -90,6 +89,17 @@ struct ShopView: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(row.text)
         .accessibilityAddTraits(ticked ? .isSelected : [])
+    }
+
+    /// The section of the current item goes first, so its header is on top. The current item is first in it,
+    /// as `open` is in shop order.
+    private func currentFirst(_ sections: [(category: GrailkaufCore.Category, rows: [Row])], _ current: Row)
+        -> [(category: GrailkaufCore.Category, rows: [Row])] {
+        var sections = sections
+        if let index = sections.firstIndex(where: { $0.rows.contains { $0.id == current.id } }) {
+            sections.insert(sections.remove(at: index), at: 0)
+        }
+        return sections
     }
 
     private func later(_ row: Row) -> some View {
