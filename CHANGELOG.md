@@ -5,7 +5,7 @@
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
-- You can dictate many items at once. Tap "Start dictation" above the text field and say the items. All items stay on the screen, also after a pause. The screen shows each item on its own line. Say "fertig" or "done", or tap the big stop button, to finish.
+- You can dictate many items at once. Tap "Start dictation" above the text field and say the items. All items stay on the screen, also after a pause. The screen shows each item on its own line, and the list gets the items as the screen shows them. Say "fertig" or "done", or tap the big stop button, to finish.
 - If you add an item that is on the list already, the older copy goes away. A short notice tells you so.
 - Each item in list mode has a trash button.
 - You can drag the items in list mode into a new order.

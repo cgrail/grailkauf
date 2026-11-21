@@ -97,5 +97,5 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the Watch gets the list from the iPhone.
 - The position guess for new items needs an iPhone with Apple Intelligence. On other iPhones, new items go to the "New" group.
 - The position guess does not work in the simulator.
-- To split a dictated list, the app also needs Apple Intelligence. On other iPhones, only "und", "and" and the punctuation split it.
+- A pause, "und", "and" and punctuation split a dictated list. If you say many items with no pause, Apple Intelligence splits them. On other iPhones, they stay one item.
 - The share extension cannot write to the list, because the list is in the app's own folder. It keeps the text, and the app adds the items when it runs next.

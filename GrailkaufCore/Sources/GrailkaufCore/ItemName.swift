@@ -30,6 +30,15 @@ public enum ItemName {
             of: #"(?<!\d)\.|\.(?!\d)|\s+(?:und|and)\s+"#, with: "\n", options: [.regularExpression, .caseInsensitive]))
     }
 
+    /// True if `items` hold exactly the spoken words in their order. A language model may add or drop words.
+    public static func isSplit(_ items: [String], of spoken: String) -> Bool {
+        words(items.joined(separator: " ")) == words(spoken)
+    }
+
+    private static func words(_ text: String) -> [Substring] {
+        text.lowercased().split { !$0.isLetter && !$0.isNumber }
+    }
+
     /// "Milch Eier fertig" ends a dictation and leaves "Milch Eier". Nil if the text does not end with "fertig" or "done".
     public static func beforeDoneWord(_ spoken: String) -> String? {
         guard let done = spoken.range(of: #"\b(?:fertig|done)\W*$"#, options: [.regularExpression, .caseInsensitive])
