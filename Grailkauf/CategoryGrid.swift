@@ -5,6 +5,8 @@ import SwiftUI
 struct CategoryGrid: View {
     let store: Store
     let sections: [(category: GrailkaufCore.Category, rows: [Row])]
+    /// Shop mode: the ticked items, at the bottom. A tap brings one back.
+    var done: [Row] = []
     /// Shop mode ticks an item with a tap. In list mode, a tap opens the editor.
     var onTap: ((Row) -> Void)?
     @State private var editing: Row?
@@ -24,6 +26,7 @@ struct CategoryGrid: View {
                     // The sections of a row get the height of the tallest one.
                     .fixedSize(horizontal: false, vertical: true)
                 }
+                if !done.isEmpty { doneTiles }
             }
         }
         // Margins, not padding: the width of a section counts from the scroll view without its margins.
@@ -55,6 +58,20 @@ struct CategoryGrid: View {
         .containerRelativeFrame(.horizontal, count: columns, span: span, spacing: gap, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(category.color.opacity(0.25), in: .rect(cornerRadius: 12))
+    }
+
+    private var doneTiles: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Done (\(done.count))")
+                .font(.caption.weight(.semibold))
+                .accessibilityAddTraits(.isHeader)
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: columns), spacing: gap) {
+                ForEach(done) { row in
+                    tile(row, in: GrailkaufCore.Category(rawValue: row.category ?? "") ?? .other)
+                }
+            }
+        }
+        .padding(6)
     }
 
     @ViewBuilder private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {

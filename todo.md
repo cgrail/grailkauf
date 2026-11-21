@@ -5,4 +5,4 @@ Todo
 - [x] in list mode, in galery view, allow moving items to other sections. simple touch brings up an edit popup
 - [x] in burger menu, move settings to bottom
 - [x] in gallery mode in list view, add text input to bottom, on enter go back to list view and allow adding items
-- [ ] in shopping mode in galery mode, add done items to bottom
+- [x] in shopping mode in galery mode, add done items to bottom
