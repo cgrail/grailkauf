@@ -105,6 +105,16 @@
         }
       }
     },
+    "%lld not on the list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld nicht auf der Liste"
+          }
+        }
+      }
+    },
     "%lld selected" : {
       "localizations" : {
         "de" : {
@@ -151,6 +161,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Alles erledigt."
+          }
+        }
+      }
+    },
+    "All on the list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles auf der Liste"
           }
         }
       }
@@ -331,6 +351,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Liste"
+          }
+        }
+      }
+    },
+    "Menu" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menü"
           }
         }
       }

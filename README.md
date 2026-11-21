@@ -20,10 +20,12 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The history keeps the items that you bought, also after you delete them from the list.
 - Tap "Start dictation" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". The screen shows each item on its own line. To finish, say "fertig" or "done", or tap the stop button. Each item goes to the list.
 
-### History (iPhone)
-- Tap the clock at the top left. The history shows each shopping trip, newest first, with its date.
-- The history shows only the items that are not on the list now. Tap + to add an item again.
-- Below each trip, a line counts the items of that trip that are already on the list. Tap the line to show them.
+### Menu and history (iPhone)
+- Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.
+- The menu opens the settings and shows each past shopping trip, newest first.
+- Each trip shows its date, its first items and how many of its items are not on the list now.
+- Tap a trip to open it. Tap + to add an item to the list again.
+- Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
 ### Add from another app (iPhone)
 - Share a text, for example a note, and tap "Grailkauf" in the share sheet. Each line becomes one item. List marks such as "✓" or "•" at the start of a line go away.

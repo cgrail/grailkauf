@@ -3,9 +3,11 @@ import SwiftUI
 struct RootView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
+    @State private var path: [Route] = []
+    @State private var menuOpen = false
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 switch model.mode {
                 case .list: ListModeView()
@@ -14,9 +16,16 @@ struct RootView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if !model.selecting { modeAndScreens }
+                if !model.selecting { modeAndMenu }
+            }
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .trip(let date): TripView(date: date)
+                case .settings: SettingsView()
+                }
             }
         }
+        .overlay(alignment: .leading) { menu }
         // Time alone changes the picture: a trip ends four hours after its last tick.
         .onChange(of: scenePhase) { if scenePhase == .active { model.store.refresh() } }
         // The Live Activity links here.
@@ -40,7 +49,28 @@ struct RootView: View {
         }
     }
 
-    @ToolbarContentBuilder private var modeAndScreens: some ToolbarContent {
+    /// Slides in from the left. A tap next to it closes it.
+    @ViewBuilder private var menu: some View {
+        if menuOpen {
+            Color.black.opacity(0.3)
+                .ignoresSafeArea()
+                .onTapGesture(perform: closeMenu)
+                .accessibilityHidden(true)
+                .transition(.opacity)
+            MenuView { route in
+                closeMenu()
+                path.append(route)
+            }
+            .containerRelativeFrame(.horizontal) { width, _ in min(width * 0.85, 360) }
+            .accessibilityAddTraits(.isModal)
+            .accessibilityAction(.escape, closeMenu)
+            .transition(.move(edge: .leading))
+        }
+    }
+
+    private func closeMenu() { withAnimation { menuOpen = false } }
+
+    @ToolbarContentBuilder private var modeAndMenu: some ToolbarContent {
         @Bindable var model = model
         ToolbarItem(placement: .principal) {
             Picker("Mode", selection: $model.mode) {
@@ -51,18 +81,7 @@ struct RootView: View {
             .frame(maxWidth: 240)
         }
         ToolbarItem(placement: .topBarLeading) {
-            NavigationLink {
-                HistoryView()
-            } label: {
-                Label("History", systemImage: "clock")
-            }
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            NavigationLink {
-                SettingsView()
-            } label: {
-                Label("Settings", systemImage: "gearshape")
-            }
+            Button("Menu", systemImage: "line.3.horizontal") { withAnimation { menuOpen = true } }
         }
     }
 }
