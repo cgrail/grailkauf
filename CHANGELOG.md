@@ -23,5 +23,5 @@
 - The Apple Watch app shows the current item and the next three items. You tick an item with a tap or with Double Tap.
 - The iPhone and the Watch sync over Bluetooth, also with no internet.
 - The Lock Screen shows the progress of your shop.
-- You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item.
+- You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.
