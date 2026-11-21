@@ -24,6 +24,10 @@ struct ShopModeView: View {
                 list(open: open, done: done, left: left, total: total)
             }
         }
+        // Above the list, not over it, so the done items stay readable and a wrong tick can be undone.
+        .safeAreaInset(edge: .top) {
+            if total > 0, open.isEmpty { AllDone().transition(.scale.combined(with: .opacity)) }
+        }
         .animation(.default, value: open.map(\.id))
         .overlay {
             if total == 0 { ContentUnavailableView("The list is empty", systemImage: "cart") }
@@ -88,5 +92,17 @@ struct ShopModeView: View {
             try? await Task.sleep(for: .seconds(2))
             lingering.remove(row.id)
         }
+    }
+}
+
+/// A big party popper when every item is ticked.
+struct AllDone: View {
+    var body: some View {
+        VStack {
+            Text("🎉").font(.system(size: 80)).accessibilityHidden(true)
+            Text("All done.").font(.title2.bold())
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical)
     }
 }

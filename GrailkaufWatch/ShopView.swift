@@ -32,7 +32,16 @@ struct ShopView: View {
                 } else if !model.hasData {
                     Text("Open Grailkauf on your iPhone to load the list.")
                 } else {
-                    Text(done.isEmpty ? "The list is empty." : "All done.")
+                    if done.isEmpty {
+                        Text("The list is empty.")
+                    } else {
+                        VStack {
+                            Text("🎉").font(.system(size: 60)).accessibilityHidden(true)
+                            Text("All done.").font(.title3.bold())
+                        }
+                        .frame(maxWidth: .infinity)
+                        .listRowBackground(Color.clear)
+                    }
                 }
                 if !done.isEmpty {
                     Section("Done") {
@@ -45,6 +54,10 @@ struct ShopView: View {
                         }
                     }
                 }
+                // At the end, so the top shows only the time, the progress and the current item.
+                Section {
+                    NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
+                }
             }
             .toolbar {
                 if total > 0 {
@@ -56,9 +69,6 @@ struct ShopView: View {
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(Text("\(done.count)/\(total)"))
                     }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
                 }
             }
         }

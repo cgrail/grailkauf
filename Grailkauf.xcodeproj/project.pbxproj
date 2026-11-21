@@ -473,6 +473,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/Grailkauf.entitlements;
+				CURRENT_PROJECT_VERSION = 2;
 				INFOPLIST_FILE = "Config/Grailkauf-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Grailkauf;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
@@ -495,6 +496,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Config/Grailkauf.entitlements;
+				CURRENT_PROJECT_VERSION = 2;
 				INFOPLIST_FILE = "Config/Grailkauf-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Grailkauf;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
