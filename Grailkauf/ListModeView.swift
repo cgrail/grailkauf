@@ -44,6 +44,13 @@ struct ListModeView: View {
             }
         }
         .overlay(alignment: .bottom) { repeatedNotice }
+        // An overlay, not a full screen cover: a cover would cancel the finger that holds the dictation button.
+        // It covers the list only. The bar with the button stays visible below it.
+        .overlay {
+            if dictation.isRecording {
+                DictationScreen(dictation: dictation, holding: holding)
+            }
+        }
         .safeAreaInset(edge: .bottom) { if !model.selecting { composer } }
         // While selecting, only the buttons for the selection stay, as in a mail app.
         .navigationTitle(model.selecting ? Text("\(selection.count) selected") : Text(verbatim: ""))
@@ -75,20 +82,19 @@ struct ListModeView: View {
             if dictation.isRecording { finishDictation() }
             stopSelecting()
         }
-        // An overlay, not a full screen cover: a cover would cancel the finger that holds the dictation button.
-        .overlay {
-            if dictation.isRecording {
-                DictationScreen(dictation: dictation, holding: holding)
-            }
-        }
         .toolbarVisibility(dictation.isRecording ? .hidden : .automatic, for: .navigationBar)
 
     }
 
     private var composer: some View {
+        // Only the rows above the button change while dictating, so the button stays under the finger.
         VStack(spacing: 8) {
-            suggestions
-            if model.classifying {
+            if dictation.isRecording {
+                RecordingBar(dictation: dictation)
+            } else {
+                suggestions
+            }
+            if model.classifying, !dictation.isRecording {
                 // The model splits and sorts new items in the background. They can still change.
                 Label {
                     Text("Checking the new items…")
@@ -114,6 +120,8 @@ struct ListModeView: View {
                     .font(.system(size: 44))
                     .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
             }
+            .opacity(dictation.isRecording ? 0 : 1)
+            .disabled(dictation.isRecording)
         }
         .padding()
         .background(.bar)
@@ -169,12 +177,13 @@ struct ListModeView: View {
 
     /// Hold to dictate, let go to add the items.
     private var holdToDictate: some View {
-        Label("Hold to dictate", systemImage: "mic.fill")
+        Label(holding ? "Let go to add" : "Hold to dictate", systemImage: "mic.fill")
             .font(.title3.weight(.semibold))
             .foregroundStyle(.white)
             .padding(.horizontal, 24)
             .padding(.vertical, 14)
             .background(.tint, in: .capsule)
+            .background { if holding { PulseRings(level: dictation.levels.last ?? 0) } }
             .scaleEffect(holding ? 1.1 : 1)
             .animation(.snappy, value: holding)
             // Reports the finger going down and up, also when the system cancels the touch. `perform` never runs.

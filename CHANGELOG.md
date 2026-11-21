@@ -6,6 +6,7 @@
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
 - You can dictate many items at once. Hold "Hold to dictate" above the text field, say the items and let go. After each pause, the screen shows the items of what you said, split into single products and without filler words such as "ähm" or "dann noch". A spinner shows while the app splits. A moving waveform shows the words that the phone hears now, a microphone shows while it waits.
+- While you hold the dictation button, a bar as in a messaging app shows what the app does, a red waveform of your voice and the time. Rings around the button pulse and grow when you speak.
 - A spinner line in list mode shows while the app checks new items.
 - If you add an item that is on the list already, the older copy goes away. A short notice tells you so.
 - Tap an item in list mode to change its text in place, as in a notes app. An emptied item goes away.

@@ -21,6 +21,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Hold "Hold to dictate" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Let go to add the items to the list. With VoiceOver, double tap and hold.
 - After each short pause, the screen shows the items of what you said. A spinner shows while the app splits them into single products. Filler words such as "ähm", "dann" or "noch" go away.
 - The last line shows the words that the phone hears now, next to a moving waveform. A microphone shows while the phone waits for words.
+- While you hold, a bar above the button shows what the app does ("Listening", "Splitting", "Adding"), a red waveform of your voice and the time. Rings around the button grow when you speak.
 - A spinner line above the button shows while the app checks new items. A new item can still split into more items then.
 
 ### Menu and history (iPhone)
