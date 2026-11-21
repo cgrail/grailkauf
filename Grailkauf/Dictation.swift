@@ -10,6 +10,11 @@ final class Dictation {
     private(set) var isRecording = false
     /// What the phone understood so far.
     private(set) var text = ""
+    /// True once the speaker ends with "fertig" or "done".
+    private(set) var heardDone = false
+    /// The items so far, split by "und", "and" and punctuation. The language model splits them better at the end.
+    var items: [String] { ItemName.splitSpoken(spoken) }
+    private var spoken: String { ItemName.beforeDoneWord(text) ?? text }
 
     @ObservationIgnored private let recorder = Recorder()
     @ObservationIgnored private var stopping = false
@@ -21,6 +26,7 @@ final class Dictation {
         // Set at once, so a second tap during the permission prompt starts nothing.
         isRecording = true
         text = ""
+        heardDone = false
         finished = false
         do {
             guard await Self.allowed() else { throw Failure.notAllowed }
@@ -39,14 +45,17 @@ final class Dictation {
         stopping = true
         await recorder.stop()
         if !finished { await withCheckedContinuation { waiting = $0 } }
-        let items = await Self.items(in: text)
+        let items = await Self.items(in: spoken)
         stopping = false
         isRecording = false
         return items
     }
 
     private func update(_ newText: String?, done: Bool) {
-        if let newText { text = newText }
+        if let newText {
+            text = newText
+            if ItemName.beforeDoneWord(newText) != nil { heardDone = true }
+        }
         guard done else { return }
         finished = true
         waiting?.resume()

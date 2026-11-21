@@ -465,6 +465,16 @@
         }
       }
     },
+    "Say “fertig” or “done” to finish." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sag „fertig“ oder „done“, um zu beenden."
+          }
+        }
+      }
+    },
     "Select" : {
       "localizations" : {
         "de" : {

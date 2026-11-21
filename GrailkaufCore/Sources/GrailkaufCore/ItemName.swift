@@ -30,6 +30,13 @@ public enum ItemName {
             of: #"(?<!\d)\.|\.(?!\d)|\s+(?:und|and)\s+"#, with: "\n", options: [.regularExpression, .caseInsensitive]))
     }
 
+    /// "Milch Eier fertig" ends a dictation and leaves "Milch Eier". Nil if the text does not end with "fertig" or "done".
+    public static func beforeDoneWord(_ spoken: String) -> String? {
+        guard let done = spoken.range(of: #"\b(?:fertig|done)\W*$"#, options: [.regularExpression, .caseInsensitive])
+        else { return nil }
+        return spoken[..<done.lowerBound].trimmingCharacters(in: .whitespaces)
+    }
+
     /// "✓ ", "◦ ", "• ", "- ", "* ". A "-" or "*" counts only with a space after it, so "-20%" stays.
     private static let listMark = #"^\s*(?:[✓✔☑☐◦○•▪]|[-*](?=\s))"#
 

@@ -28,4 +28,11 @@ import Testing
         #expect(ItemName.splitSpoken("Milch 1.5% und Eier. Butter, Brot and Salt") ==
             ["Milch 1.5%", "Eier", "Butter", "Brot", "Salt"])
     }
+
+    @Test func doneWordEndsDictation() {
+        #expect(ItemName.beforeDoneWord("Milch 3,5% Eier. Fertig.") == "Milch 3,5% Eier.")
+        #expect(ItemName.beforeDoneWord("Bread and done") == "Bread and")
+        #expect(ItemName.beforeDoneWord("Fertigpizza") == nil)
+        #expect(ItemName.beforeDoneWord("Fertig Pizza") == nil)
+    }
 }

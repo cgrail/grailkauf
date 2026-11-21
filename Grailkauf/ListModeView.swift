@@ -91,6 +91,10 @@ struct ListModeView: View {
             Button("Delete all", role: .destructive) { store.deleteAll() }
         }
         .onDisappear { if dictation.isRecording { finishDictation() } }
+        .fullScreenCover(isPresented: .constant(dictation.isRecording)) {
+            DictationScreen(dictation: dictation, stop: finishDictation)
+        }
+        .onChange(of: dictation.heardDone) { _, done in if done { finishDictation() } }
         .alert("Edit item", isPresented: .constant(editing != nil), presenting: editing) { row in
             TextField("Add item", text: $editedText)
             Button("Save") {
@@ -104,12 +108,12 @@ struct ListModeView: View {
 
     private var composer: some View {
         VStack(spacing: 8) {
-            if dictation.isRecording {
-                Text(dictation.text.isEmpty ? String(localized: "Say your items…") : dictation.text)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
+            HStack {
                 suggestions
+                Spacer(minLength: 0)
+                Button("Dictate", systemImage: "mic.circle.fill", action: startDictation)
+                    .labelStyle(.iconOnly)
+                    .font(.largeTitle)
             }
             HStack(alignment: .bottom) {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
@@ -122,15 +126,6 @@ struct ListModeView: View {
                     .labelStyle(.iconOnly)
                     .font(.title)
                     .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
-                Button(
-                    dictation.isRecording ? "Stop" : "Dictate",
-                    systemImage: dictation.isRecording ? "stop.circle.fill" : "mic.circle.fill"
-                ) {
-                    if dictation.isRecording { finishDictation() } else { startDictation() }
-                }
-                .labelStyle(.iconOnly)
-                .font(.title)
-                .tint(dictation.isRecording ? .red : nil)
             }
         }
         .padding()
