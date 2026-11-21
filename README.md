@@ -27,7 +27,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Sections (iPhone)
 - Tap "Sections" at the top to show the list as tiles, grouped by supermarket section such as "Fruit & vegetables".
-- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above.
+- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above. Each row fills the full width of the screen: a section gets a share for each of its items.
 - Within a section, the tiles are in the learned order, as in shop mode.
 - Tap a tile to change its name, move the item to another section or delete it. Touch and hold a tile does the same from a menu. Later items of the same name go to the new section.
 - If you type an item below the tiles and press Enter, the app adds it and goes to the list. You can then add more items.
@@ -88,7 +88,7 @@ xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf \
 
 If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` before the command.
 
-In the Watch simulator, the Watch starts with a sample list of 30 items, with each section filled, in English or German as the simulator's language. It goes away when the paired iPhone simulator sends its list. Builds for a real Watch never show it.
+In the Watch simulator, the Watch starts with a sample list of 30 items, with each section filled, in English or German as the simulator's language. It goes away when the paired iPhone simulator sends a list with items sorted into sections. A list with no sorted items, as the iPhone simulator often has, does not replace it. Builds for a real Watch never show it.
 
 GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull request and every push to `main`. It builds with no code signing and does not measure coverage.
 

@@ -33,6 +33,8 @@ struct CategoryGrid: View {
                 }
             }
         }
+        // In list mode the scroll view otherwise takes the width of its content, and the sections size to the scroll view.
+        .frame(maxWidth: .infinity)
         // Margins, not padding: the width of a section counts from the scroll view without its margins.
         .contentMargins(.horizontal, 8, for: .scrollContent)
         .sheet(item: $editing) { row in
@@ -43,8 +45,9 @@ struct CategoryGrid: View {
 
     private func packed(_ sections: [(category: GrailkaufCore.Category, rows: [Row])], faded: Bool = false) -> some View {
         ForEach(Grid.rows(sizes: sections.map(\.rows.count), columns: columns), id: \.self) { row in
+            let used = row.reduce(0) { $0 + min(sections[$1].rows.count, columns) }
             HStack(alignment: .top, spacing: gap) {
-                ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows, faded: faded) }
+                ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows, of: used, faded: faded) }
             }
             // The sections of a row get the height of the tallest one.
             .fixedSize(horizontal: false, vertical: true)
@@ -52,7 +55,8 @@ struct CategoryGrid: View {
     }
 
     /// A faded section holds only ticked tiles. Its color and title fade as its tiles do.
-    private func section(_ category: GrailkaufCore.Category, _ rows: [Row], faded: Bool = false) -> some View {
+    /// `used` is the number of columns that the sections of the row take. The row fills the full width.
+    private func section(_ category: GrailkaufCore.Category, _ rows: [Row], of used: Int, faded: Bool = false) -> some View {
         let span = min(rows.count, columns)
         return VStack(alignment: .leading, spacing: 4) {
             Label {
@@ -70,8 +74,8 @@ struct CategoryGrid: View {
             }
         }
         .padding(6)
-        // A section with two items is two of the five columns wide.
-        .containerRelativeFrame(.horizontal, count: columns, span: span, spacing: gap, alignment: .topLeading)
+        // A section with two items next to one with three is two fifths of the row wide.
+        .containerRelativeFrame(.horizontal, count: used, span: span, spacing: gap, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(category.color.opacity(faded ? 0.1 : 0.25), in: .rect(cornerRadius: 12))
     }
