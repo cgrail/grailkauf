@@ -43,6 +43,9 @@ struct MenuView: View {
                 Text("All on the list").font(.caption).foregroundStyle(.secondary)
             } else {
                 Text(missing.joined(separator: ", ")).lineLimit(3)
+                Text("\(missing.count) not on the list, \(trip.items.count - missing.count) already on it")
+                    .font(.caption)
+                    .foregroundStyle(.tint)
             }
         }
     }

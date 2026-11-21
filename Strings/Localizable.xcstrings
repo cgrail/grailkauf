@@ -106,6 +106,16 @@
         }
       }
     },
+    "%lld not on the list, %lld already on it" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld nicht auf der Liste, %2$lld schon drauf"
+          }
+        }
+      }
+    },
     "%lld selected" : {
       "localizations" : {
         "de" : {
