@@ -11,8 +11,11 @@ struct CategoryGrid: View {
     var onTap: ((Row) -> Void)?
     @State private var editing: Row?
     @State private var showsDone = false
+    /// The width of the scroll view, measured. `containerRelativeFrame` sometimes made a section a few points wide.
+    @State private var width: CGFloat = 0
     @Environment(\.dynamicTypeSize) private var typeSize
     private let gap: CGFloat = 4
+    private let margin: CGFloat = 8
 
     /// Five tiles a row fit about 40 items on one screen. Large text gets fewer, wider tiles.
     private var columns: Int { typeSize.isAccessibilitySize ? 3 : 5 }
@@ -33,8 +36,8 @@ struct CategoryGrid: View {
                 }
             }
         }
-        // Margins, not padding: the width of a section counts from the scroll view without its margins.
-        .contentMargins(.horizontal, 8, for: .scrollContent)
+        .contentMargins(.horizontal, margin, for: .scrollContent)
+        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
         .sheet(item: $editing) { row in
             let section = sections.first { $0.rows.contains { $0.id == row.id } }?.category ?? .other
             TileEditor(row: row, section: section, store: store)
@@ -43,8 +46,11 @@ struct CategoryGrid: View {
 
     private func packed(_ sections: [(category: GrailkaufCore.Category, rows: [Row])], faded: Bool = false) -> some View {
         ForEach(Grid.rows(sizes: sections.map(\.rows.count), columns: columns), id: \.self) { row in
+            let widths = Grid.widths(spans: row.map { min(sections[$0].rows.count, columns) }, width: width - 2 * margin, gap: gap)
             HStack(alignment: .top, spacing: gap) {
-                ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows, faded: faded) }
+                ForEach(Array(row.enumerated()), id: \.element) { place, index in
+                    section(sections[index].category, sections[index].rows, width: widths[place], faded: faded)
+                }
             }
             // The sections of a row get the height of the tallest one.
             .fixedSize(horizontal: false, vertical: true)
@@ -52,7 +58,7 @@ struct CategoryGrid: View {
     }
 
     /// A faded section holds only ticked tiles. Its color and title fade as its tiles do.
-    private func section(_ category: GrailkaufCore.Category, _ rows: [Row], faded: Bool = false) -> some View {
+    private func section(_ category: GrailkaufCore.Category, _ rows: [Row], width: CGFloat, faded: Bool = false) -> some View {
         let span = min(rows.count, columns)
         return VStack(alignment: .leading, spacing: 4) {
             Label {
@@ -70,8 +76,8 @@ struct CategoryGrid: View {
             }
         }
         .padding(6)
-        // A section with two items is two of the five columns wide.
-        .containerRelativeFrame(.horizontal, count: columns, span: span, spacing: gap, alignment: .topLeading)
+        // The row fills the screen. A section with two items gets two shares of it.
+        .frame(width: width, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(category.color.opacity(faded ? 0.1 : 0.25), in: .rect(cornerRadius: 12))
     }

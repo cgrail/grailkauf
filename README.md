@@ -27,7 +27,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Sections (iPhone)
 - Tap "Sections" at the top to show the list as tiles, grouped by supermarket section such as "Fruit & vegetables".
-- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above.
+- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above. Each row fills the full width of the screen: a section gets a share for each of its items.
 - Within a section, the tiles are in the learned order, as in shop mode.
 - Tap a tile to change its name, move the item to another section or delete it. Touch and hold a tile does the same from a menu. Later items of the same name go to the new section.
 - If you type an item below the tiles and press Enter, the app adds it and goes to the list. You can then add more items.

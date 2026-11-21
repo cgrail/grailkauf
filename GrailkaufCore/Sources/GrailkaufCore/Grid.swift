@@ -25,6 +25,13 @@ public enum Grid {
         }
         return rows
     }
+
+    /// The widths of the sections of one row. The row fills `width`, and each section gets a share for each column it takes.
+    public static func widths(spans: [Int], width: Double, gap: Double) -> [Double] {
+        let room = max(0, width - gap * Double(spans.count - 1))
+        let total = Double(spans.reduce(0, +))
+        return spans.map { room * Double($0) / total }
+    }
 }
 
 /// The pictures of the grid view. A fixed table with no model involved.

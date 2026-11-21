@@ -22,6 +22,12 @@ import Testing
         #expect(Grid.rows(sizes: [4, 1, 2, 2, 7, 1, 3], columns: 5) == [[0, 1], [2, 3, 5], [4], [6]])
     }
 
+    @Test func aRowFillsTheFullWidth() {
+        #expect(Grid.widths(spans: [1], width: 300, gap: 4) == [300])
+        #expect(Grid.widths(spans: [2, 1], width: 304, gap: 4) == [200, 100])
+        #expect(Grid.widths(spans: [1, 1], width: 0, gap: 4) == [0, 0])
+    }
+
     @Test func emojiTakesTheEndOfACompoundWord() {
         #expect(ItemName.emoji("2 Äpfel") == "🍎")
         #expect(ItemName.emoji("Apfelsaft") == "🧃")
