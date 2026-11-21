@@ -272,8 +272,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AA0000000000000000000017 /* GrailkaufShare */,
 				AA0000000000000000000015 /* Strings */,
+				AA0000000000000000000017 /* GrailkaufShare */,
 			);
 			name = GrailkaufShare;
 			packageProductDependencies = (
