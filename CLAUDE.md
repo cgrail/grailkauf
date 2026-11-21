@@ -33,7 +33,7 @@ A push to `main` releases nothing. The user decides when a version ships. When t
 
 1. Create the branch `release-<version>` from an up-to-date `main`.
 2. Run the checks in README "Build and test". Done when both pass.
-3. Set the version in `Grailkauf.xcodeproj/project.pbxproj`. `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` are set once at project level (Debug and Release), so all targets share them. The Watch app's version must match the iPhone app's.
+3. Set the version in `Config/Version.xcconfig`, the only place that sets `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`. Every target takes them from there, so the Watch app and the extensions match the iPhone app. Never set them on a target, in Xcode's General tab or in `project.pbxproj`: Xcode rejects an extension whose build number differs from its app's.
    - Each upload needs a higher `CURRENT_PROJECT_VERSION`. Always add 1.
    - For a new version, raise `MARKETING_VERSION`. Close the top changelog section: drop `(current)` from it, and open a new `## <new version> (current)` above it.
 4. For every version after 1.0, write `WHATS-NEW.md`: the user-facing cut of the changelog section, in English and German. Write only the changes a user notices. App Store Connect rejects bullets, emoji and typographic dashes or quotes there.
