@@ -136,6 +136,16 @@
         }
       }
     },
+    "A shared shopping list that learns the order of your shop." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine gemeinsame Einkaufsliste, die die Reihenfolge deines Ladens lernt."
+          }
+        }
+      }
+    },
     "Add" : {
       "localizations" : {
         "de" : {
@@ -405,6 +415,16 @@
         }
       }
     },
+    "Commit" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commit"
+          }
+        }
+      }
+    },
     "Cucumber" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -627,6 +647,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Haushalt"
+          }
+        }
+      }
+    },
+    "Info" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
           }
         }
       }
@@ -1330,6 +1360,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktualisiert vor %@"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         }
       }

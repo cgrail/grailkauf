@@ -4,7 +4,6 @@ import SwiftUI
 struct ShopView: View {
     @Environment(WatchModel.self) private var model
     @Environment(\.scenePhase) private var scenePhase
-    @State private var unreachable = false
 
     var body: some View {
         let now = Date.now
@@ -46,14 +45,6 @@ struct ShopView: View {
                         }
                     }
                 }
-                Section {
-                    Button("Refresh", systemImage: "arrow.clockwise") { pull() }
-                } footer: {
-                    VStack(alignment: .leading) {
-                        SyncLabel(lastSync: model.state.lastSync)
-                        if unreachable { Text("iPhone not reachable.") }
-                    }
-                }
             }
             .toolbar {
                 if total > 0 {
@@ -66,10 +57,13 @@ struct ShopView: View {
                             .accessibilityLabel(Text("\(done.count)/\(total)"))
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
+                }
             }
         }
         // The app gets the list from the phone when it opens. The list is then current before the first tick.
-        .onChange(of: scenePhase, initial: true) { if scenePhase == .active { pull() } }
+        .onChange(of: scenePhase, initial: true) { if scenePhase == .active { Task { _ = await model.refresh() } } }
     }
 
     /// An empty box for an open item, a tick for a done one, then the picture of the item or of its section.
@@ -99,10 +93,6 @@ struct ShopView: View {
 
     private func later(_ row: Row) -> some View {
         Button("Later", systemImage: "arrow.uturn.down") { model.later(row.id) }
-    }
-
-    private func pull() {
-        Task { unreachable = !(await model.refresh()) }
     }
 }
 
