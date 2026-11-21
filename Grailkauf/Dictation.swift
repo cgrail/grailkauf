@@ -1,5 +1,4 @@
 import AVFoundation
-import FoundationModels
 import GrailkaufCore
 import Observation
 import Speech
@@ -50,7 +49,7 @@ final class Dictation {
         stopping = true
         await recorder.stop()
         if !finished { await withCheckedContinuation { waiting = $0 } }
-        let items = await Self.items(in: spoken)
+        let items = ItemName.splitSpoken(spoken)
         stopping = false
         isRecording = false
         return items
@@ -78,29 +77,6 @@ final class Dictation {
         return await AVAudioApplication.requestRecordPermission()
     }
 
-    /// The items as the dictation screen shows them: pauses, "und", "and" and punctuation split the text.
-    private static func items(in text: String) async -> [String] {
-        var items: [String] = []
-        for part in ItemName.splitSpoken(text) { items += await split(part) }
-        return items
-    }
-
-    /// A part with no pause can still hold many items: "zwei Liter Milch Eier Butter". The language model splits it.
-    /// The model sometimes adds or drops words, so an answer that changes the words is ignored.
-    private static func split(_ part: String) async -> [String] {
-        guard Classifier.isAvailable, part.split(separator: " ").count >= 3 else { return [part] }
-        let session = LanguageModelSession(instructions: instructions)
-        let options = GenerationOptions(samplingMode: .greedy)
-        let answer = try? await session.respond(to: part, generating: SpokenList.self, options: options).content
-        let items = (answer?.items ?? []).flatMap(ItemName.split)
-        return ItemName.isSplit(items, of: part) ? items : [part]
-    }
-
-    private static let instructions = """
-        You split a spoken grocery shopping list, in German or English, into its items.
-        Keep each item as spoken, with its amount: "zwei Liter Milch". Do not translate, correct or add items.
-        """
-
     enum Failure: LocalizedError {
         case notAllowed, unavailable
 
@@ -111,12 +87,6 @@ final class Dictation {
             }
         }
     }
-}
-
-@Generable
-struct SpokenList {
-    @Guide(description: "The items in the order spoken")
-    var items: [String]
 }
 
 /// The audio part of `Dictation`. It runs off the main thread, because the audio session can block for a while.

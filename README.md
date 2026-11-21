@@ -14,7 +14,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - While you type, the app suggests items that you added before.
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
 - If you add an item that is on the list already, the app removes the older copy and keeps the new one. A notice shows the name for a few seconds.
-- Tap the trash button of an item, or swipe the item, to delete it. Tap an item to change its text.
+- Tap the trash button of an item, or swipe the item, to delete it. Tap the text of an item to change it in place, as in a notes app. Press Enter or tap elsewhere to save. If you empty the text, the item goes away. A comma makes more items.
 - Touch and hold an item, then drag it to a new place.
 - Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
 - The history keeps the items that you bought, also after you delete them from the list.
@@ -28,7 +28,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
 ### Add from another app (iPhone)
-- Share a text, for example a note, and tap "Grailkauf" in the share sheet. Each line becomes one item. List marks such as "✓" or "•" at the start of a line go away.
+- Share a text, for example a note, and tap "Grailkauf" in the share sheet. Each line and each part between commas becomes one item. List marks such as "✓" or "•" at the start of a line go away.
 - If a note in Notes is shared with other people, select "Send Copy" at the top of the share sheet first.
 - The items reach the list when Grailkauf opens on this iPhone, or when the app syncs in the background.
 
@@ -97,5 +97,6 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the Watch gets the list from the iPhone.
 - The position guess for new items needs an iPhone with Apple Intelligence. On other iPhones, new items go to the "New" group.
 - The position guess does not work in the simulator.
-- A pause, "und", "and" and punctuation split a dictated list. If you say many items with no pause, Apple Intelligence splits them. On other iPhones, they stay one item.
+- A pause, "und", "and" and punctuation split a dictated list.
+- With Apple Intelligence, the app splits an entry into the products that a shop sells on their own. "Milch Sprudel" becomes "Milch" and "Sprudel". "saure Sahne" stays one item. On other iPhones, the entry stays as you wrote it.
 - The share extension cannot write to the list, because the list is in the app's own folder. It keeps the text, and the app adds the items when it runs next.

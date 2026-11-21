@@ -136,9 +136,7 @@ final class Store {
         guard let list = activeList(), let store = list.objectID.persistentStore else { return false }
         let now = Date.now
         let texts = ItemName.split(input)
-        let older = state.repeated(by: texts)
-        for row in older { item(row.id).map(context.delete) }
-        if !older.isEmpty { repeated = older.map(\.name).joined(separator: ", ") }
+        removeRepeats(of: texts)
         for (offset, text) in texts.enumerated() {
             let item = Item(context: context)
             context.assign(item, to: store)
@@ -153,11 +151,35 @@ final class Store {
         return save()
     }
 
-    func rename(_ id: UUID, to text: String) {
-        change(id) {
-            $0.text = text
-            $0.category = knownCategory(of: text)
+    /// The item takes the first part. The other parts become new items right after it.
+    func split(_ id: UUID, into parts: [String]) {
+        guard let item = item(id), let first = parts.first, let list = item.list,
+            let store = item.objectID.persistentStore
+        else { return }
+        removeRepeats(of: parts, except: id)
+        let now = Date.now
+        item.text = first
+        item.category = knownCategory(of: first)
+        item.modifiedAt = now
+        for (offset, text) in parts.dropFirst().enumerated() {
+            let part = Item(context: context)
+            context.assign(part, to: store)
+            part.id = UUID()
+            part.text = text
+            part.category = knownCategory(of: text)
+            // A tenth of a second apart, so they stay before the next item, which was added at least a second later.
+            part.createdAt = (item.createdAt ?? now).addingTimeInterval(Double(offset + 1) / 10)
+            part.modifiedAt = now
+            part.list = list
         }
+        save()
+    }
+
+    /// Deletes the open items that `texts` repeat, and says which ones. See `repeated`.
+    private func removeRepeats(of texts: [String], except kept: UUID? = nil) {
+        let older = state.repeated(by: texts).filter { $0.id != kept }
+        for row in older { item(row.id).map(context.delete) }
+        if !older.isEmpty { repeated = older.map(\.name).joined(separator: ", ") }
     }
 
     func setTicked(_ id: UUID, _ ticked: Bool) { change(id) { $0.tickedAt = ticked ? .now : nil } }

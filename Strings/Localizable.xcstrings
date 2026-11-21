@@ -256,16 +256,6 @@
         }
       }
     },
-    "Edit item" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Artikel bearbeiten"
-          }
-        }
-      }
-    },
     "Fill with the usual" : {
       "localizations" : {
         "de" : {
@@ -306,12 +296,12 @@
         }
       }
     },
-    "iPhone not reachable." : {
+    "Item" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iPhone nicht erreichbar."
+            "value" : "Artikel"
           }
         }
       }
@@ -486,12 +476,12 @@
         }
       }
     },
-    "Save" : {
+    "Say your items…" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sichern"
+            "value" : "Sprich deine Artikel…"
           }
         }
       }
@@ -502,16 +492,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sag „fertig“ oder „done“, um zu beenden."
-          }
-        }
-      }
-    },
-    "Say your items…" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprich deine Artikel…"
           }
         }
       }
@@ -682,6 +662,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deine Einkäufe erscheinen hier nach deinem ersten Einkauf."
+          }
+        }
+      }
+    },
+    "iPhone not reachable." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone nicht erreichbar."
           }
         }
       }

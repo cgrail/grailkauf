@@ -6,8 +6,6 @@ import SwiftUI
 struct ListModeView: View {
     @Environment(AppModel.self) private var model
     @State private var draft = ""
-    @State private var editing: Row?
-    @State private var editedText = ""
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @FocusState private var typing: Bool
@@ -23,23 +21,7 @@ struct ListModeView: View {
                     if model.selecting {
                         Text(row.text)
                     } else {
-                        HStack {
-                            Button {
-                                editedText = row.text
-                                editing = row
-                            } label: {
-                                Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
-                            }
-                            .foregroundStyle(.primary)
-                            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
-                                .labelStyle(.iconOnly)
-                                .foregroundStyle(.red)
-                        }
-                        // Each button gets its own tap, not the whole row.
-                        .buttonStyle(.borderless)
-                        .swipeActions {
-                            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
-                        }
+                        ItemRow(row: row, store: store)
                     }
                 }
                 .onMove { from, to in
@@ -96,15 +78,6 @@ struct ListModeView: View {
             DictationScreen(dictation: dictation, stop: finishDictation)
         }
         .onChange(of: dictation.heardDone) { _, done in if done { finishDictation() } }
-        .alert("Edit item", isPresented: .constant(editing != nil), presenting: editing) { row in
-            TextField("Add item", text: $editedText)
-            Button("Save") {
-                let text = editedText.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !text.isEmpty { store.rename(row.id, to: text) }
-                editing = nil
-            }
-            Button("Cancel", role: .cancel) { editing = nil }
-        }
     }
 
     private var composer: some View {
@@ -199,5 +172,54 @@ struct ListModeView: View {
         store.add(text)
         draft = ""
         typing = true
+    }
+}
+
+/// An item that edits in place, as in a notes app. Tap the text to change it. Enter or a tap elsewhere saves.
+/// An emptied item goes away, and commas make more items. Touch and hold still drags the item.
+private struct ItemRow: View {
+    let row: Row
+    let store: Store
+    @State private var editing = false
+    @State private var text = ""
+    @FocusState private var focused: Bool
+
+    var body: some View {
+        HStack {
+            if editing {
+                TextField("Item", text: $text)
+                    .focused($focused)
+                    .submitLabel(.done)
+                    .onSubmit { focused = false }
+                    .onAppear { focused = true }
+                    .onChange(of: focused) { if !focused { save() } }
+            } else {
+                Button {
+                    text = row.text
+                    editing = true
+                } label: {
+                    Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
+                }
+                .foregroundStyle(.primary)
+            }
+            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+                .labelStyle(.iconOnly)
+                .foregroundStyle(.red)
+        }
+        // Each button gets its own tap, not the whole row.
+        .buttonStyle(.borderless)
+        .swipeActions {
+            Button("Delete", systemImage: "trash", role: .destructive) { store.delete([row.id]) }
+        }
+    }
+
+    private func save() {
+        editing = false
+        let parts = ItemName.split(text)
+        if parts.isEmpty {
+            store.delete([row.id])
+        } else if parts != [row.text] {
+            store.split(row.id, into: parts)
+        }
     }
 }

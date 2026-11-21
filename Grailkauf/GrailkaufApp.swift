@@ -63,15 +63,27 @@ final class AppModel {
         if store.add(text) { Inbox.remove(text, from: inbox) }
     }
 
-    /// Gives each open item a category. Shop mode can then place an item that it does not know.
+    /// Splits each new item into the products in it, then gives it a category.
+    /// Shop mode can then place an item that it does not know.
     private func classify() async {
         guard !classifying, Classifier.isAvailable else { return }
         classifying = true
         defer { classifying = false }
-        for entry in store.entries where entry.tickedAt == nil && entry.category == nil && asked.insert(entry.id).inserted {
-            if let category = await Classifier.category(of: ItemName.display(entry.text)) {
-                store.setCategory(entry.id, category.rawValue)
+        func isNew(_ entry: Entry) -> Bool { entry.tickedAt == nil && entry.category == nil && !asked.contains(entry.id) }
+        // Items that arrive while the model works get their turn in the next round.
+        while case let new = store.entries.filter(isNew), !new.isEmpty {
+            for entry in new {
+                asked.insert(entry.id)
+                var text = entry.text
+                if text.split(separator: " ").count > 1, let parts = await Classifier.items(in: text), parts.count > 1 {
+                    store.split(entry.id, into: parts)
+                    text = parts[0]
+                }
+                if let category = await Classifier.category(of: ItemName.display(text)) {
+                    store.setCategory(entry.id, category.rawValue)
+                }
             }
+            store.refresh()
         }
     }
 
