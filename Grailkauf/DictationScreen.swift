@@ -4,6 +4,8 @@ import SwiftUI
 /// Until then, the last row shows what the phone hears, so the speaker sees that it works.
 struct DictationScreen: View {
     let dictation: Dictation
+    /// The finger holds the dictation button. Letting go adds the items, so no stop button shows.
+    let holding: Bool
     let stop: () -> Void
 
     var body: some View {
@@ -23,13 +25,21 @@ struct DictationScreen: View {
                 .foregroundStyle(.secondary)
             }
             .defaultScrollAnchor(.bottom)
-            Text("Say “fertig” or “done” to finish.")
-                .foregroundStyle(.secondary)
-            Button("Stop", systemImage: "stop.circle.fill", action: stop)
-                .labelStyle(.iconOnly)
-                .font(.system(size: 88))
-                .tint(.red)
+            if holding {
+                Text("Let go to add the items.")
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    .padding(.bottom, 40)
+            } else {
+                Button("Stop", systemImage: "stop.circle.fill", action: stop)
+                    .labelStyle(.iconOnly)
+                    .font(.system(size: 88))
+                    .tint(.red)
+            }
         }
         .padding(.bottom)
+        .background(Color(.systemGroupedBackground))
+        // While the finger holds the button below, this screen must not take the touch.
+        .allowsHitTesting(!holding)
     }
 }

@@ -34,11 +34,4 @@ import Testing
         #expect(!ItemName.isSplit(["zwei Eier", "Speck"], of: "Eier Speck"))
         #expect(!ItemName.isSplit(["Butter"], of: "Milch Butter"))
     }
-
-    @Test func doneWordEndsDictation() {
-        #expect(ItemName.beforeDoneWord("Milch 3,5% Eier. Fertig.") == "Milch 3,5% Eier.")
-        #expect(ItemName.beforeDoneWord("Bread and done") == "Bread and")
-        #expect(ItemName.beforeDoneWord("Fertigpizza") == nil)
-        #expect(ItemName.beforeDoneWord("Fertig Pizza") == nil)
-    }
 }

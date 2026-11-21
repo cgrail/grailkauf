@@ -18,7 +18,8 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Touch and hold an item, then drag it to a new place.
 - Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
 - The history keeps the items that you bought, also after you delete them from the list.
-- Tap "Start dictation" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". The screen shows each item on its own line when the phone is sure of it, usually after a short pause. Until then, the last line shows the words that the phone hears, next to a moving waveform. To finish, say "fertig" or "done", or tap the stop button. Each item goes to the list.
+- Hold "Hold to dictate" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". The screen shows each item on its own line when the phone is sure of it, usually after a short pause. Until then, the last line shows the words that the phone hears, next to a moving waveform. Let go to add the items to the list.
+- Tap "Hold to dictate" briefly to dictate hands-free. Tap the stop button to finish. With VoiceOver, a double tap starts this mode.
 
 ### Menu and history (iPhone)
 - Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.

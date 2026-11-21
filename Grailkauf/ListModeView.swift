@@ -8,6 +8,8 @@ struct ListModeView: View {
     @State private var draft = ""
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
+    @GestureState private var holding = false
+    @State private var holdStart = Date.now
     @FocusState private var typing: Bool
 
     private var store: Store { model.store }
@@ -74,18 +76,28 @@ struct ListModeView: View {
             if dictation.isRecording { finishDictation() }
             stopSelecting()
         }
-        .fullScreenCover(isPresented: .constant(dictation.isRecording)) {
-            DictationScreen(dictation: dictation, stop: finishDictation)
+        // An overlay, not a full screen cover: a cover would cancel the finger that holds the dictation button.
+        .overlay {
+            if dictation.isRecording {
+                DictationScreen(dictation: dictation, holding: holding, stop: finishDictation)
+            }
         }
-        .onChange(of: dictation.heardDone) { _, done in if done { finishDictation() } }
+        .toolbarVisibility(dictation.isRecording ? .hidden : .automatic, for: .navigationBar)
+        .onChange(of: holding) { _, down in
+            if down {
+                holdStart = .now
+                startDictation()
+            } else if dictation.isListening, Date.now.timeIntervalSince(holdStart) > 0.5 {
+                finishDictation()
+            }
+            // A short tap, or a hold that ended in the permission prompt, keeps listening hands-free.
+        }
     }
 
     private var composer: some View {
         VStack(spacing: 8) {
             suggestions
-            Button("Start dictation", systemImage: "mic.fill", action: startDictation)
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
+            holdToDictate
             HStack(alignment: .bottom) {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
                 TextField("Add item", text: $draft, axis: .vertical)
@@ -152,6 +164,22 @@ struct ListModeView: View {
     private func stopSelecting() {
         model.selecting = false
         selection = []
+    }
+
+    /// Hold to dictate, let go to add the items. A short tap dictates hands-free, with a stop button.
+    private var holdToDictate: some View {
+        Label("Hold to dictate", systemImage: "mic.fill")
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 14)
+            .background(.tint, in: .capsule)
+            .scaleEffect(holding ? 1.1 : 1)
+            .animation(.snappy, value: holding)
+            .gesture(DragGesture(minimumDistance: 0).updating($holding) { _, state, _ in state = true })
+            // VoiceOver cannot hold. A double tap starts hands-free dictation.
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction { startDictation() }
     }
 
     private func startDictation() {

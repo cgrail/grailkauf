@@ -7,15 +7,14 @@ import Speech
 @MainActor @Observable
 final class Dictation {
     private(set) var isRecording = false
+    /// True once the microphone runs: after the permission prompts.
+    private(set) var isListening = false
     /// What the phone understood so far.
     private(set) var text = ""
-    /// True once the speaker ends with "fertig" or "done".
-    private(set) var heardDone = false
     /// The items up to the last pause, split by "und", "and" and punctuation. The phone is sure of these.
-    var items: [String] { ItemName.splitSpoken(ItemName.beforeDoneWord(earlier) ?? earlier) }
+    var items: [String] { ItemName.splitSpoken(earlier) }
     /// What the phone hears since the last pause. It can still change the words.
     private(set) var hearing = ""
-    private var spoken: String { ItemName.beforeDoneWord(text) ?? text }
 
     @ObservationIgnored private let recorder = Recorder()
     @ObservationIgnored private var stopping = false
@@ -33,13 +32,13 @@ final class Dictation {
         earlier = ""
         hearing = ""
         lastPart = ""
-        heardDone = false
         finished = false
         do {
             guard await Self.allowed() else { throw Failure.notAllowed }
             try await recorder.start { [weak self] text, paused, done in
                 Task { @MainActor in self?.update(text, paused: paused, done: done) }
             }
+            isListening = true
         } catch {
             isRecording = false
             throw error
@@ -52,8 +51,9 @@ final class Dictation {
         stopping = true
         await recorder.stop()
         if !finished { await withCheckedContinuation { waiting = $0 } }
-        let items = ItemName.splitSpoken(spoken)
+        let items = ItemName.splitSpoken(text)
         stopping = false
+        isListening = false
         isRecording = false
         return items
     }
@@ -64,8 +64,7 @@ final class Dictation {
             // A line break per pause: a pause usually ends an item.
             text = earlier.isEmpty ? newText : earlier + "\n" + newText
             if paused { earlier = text; lastPart = newText }
-            hearing = paused ? "" : ItemName.beforeDoneWord(newText) ?? newText
-            if ItemName.beforeDoneWord(newText) != nil { heardDone = true }
+            hearing = paused ? "" : newText
         }
         guard done else { return }
         finished = true

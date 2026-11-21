@@ -286,6 +286,16 @@
         }
       }
     },
+    "Hold to dictate" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Diktieren halten"
+          }
+        }
+      }
+    },
     "Invite" : {
       "localizations" : {
         "de" : {
@@ -342,6 +352,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Später"
+          }
+        }
+      }
+    },
+    "Let go to add the items." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loslassen, um die Artikel hinzuzufügen."
           }
         }
       }
@@ -486,16 +506,6 @@
         }
       }
     },
-    "Say “fertig” or “done” to finish." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sag „fertig“ oder „done“, um zu beenden."
-          }
-        }
-      }
-    },
     "Select" : {
       "localizations" : {
         "de" : {
@@ -562,16 +572,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die Spracherkennung ist gerade nicht verfügbar. Versuche es später noch einmal."
-          }
-        }
-      }
-    },
-    "Start dictation" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Starte Diktiermodus"
           }
         }
       }
