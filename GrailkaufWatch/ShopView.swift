@@ -22,11 +22,6 @@ struct ShopView: View {
                         VStack(alignment: .leading) {
                             if current.isNew {
                                 Text("New").font(.caption2).foregroundStyle(.secondary)
-                            } else if current.guessed {
-                                Image(systemName: "sparkles")
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                                    .accessibilityLabel("Placed by guess")
                             }
                             Text(current.text).font(.title3.bold())
                         }

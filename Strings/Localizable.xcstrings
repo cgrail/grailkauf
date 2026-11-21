@@ -506,16 +506,6 @@
         }
       }
     },
-    "Placed by guess" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geschätzte Position"
-          }
-        }
-      }
-    },
     "Privacy" : {
       "localizations" : {
         "de" : {

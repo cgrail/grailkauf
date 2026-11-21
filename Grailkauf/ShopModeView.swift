@@ -50,11 +50,6 @@ struct ShopModeView: View {
                         .foregroundStyle(ticked ? Color.accentColor : .secondary)
                     Text(row.text)
                     Spacer()
-                    if row.guessed && !ticked {
-                        Image(systemName: "sparkles")
-                            .foregroundStyle(.secondary)
-                            .accessibilityLabel("Placed by guess")
-                    }
                 }
                 .contentShape(.rect)
             }

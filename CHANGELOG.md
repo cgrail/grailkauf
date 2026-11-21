@@ -16,7 +16,7 @@
 - "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly. "Select all" selects the full list. While you select, the other buttons at the top go away.
 - The menu at the top left opens the settings and lists your past shopping trips. Each trip shows its first items and how many are not on the list. Open a trip and tap + to add an item to the list again.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
-- An item that the app does not know yet goes to the "New" group, or to a guessed position.
+- An item that the app does not know yet goes to the "New" group, or next to items of the same kind.
 - The order screen shows the learned order. You can drag an item to correct it.
 - You can invite another person to your list. The list syncs through iCloud.
 - The Apple Watch app shows the current item and the next three items. You tick an item with a tap or with Double Tap.
