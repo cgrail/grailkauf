@@ -1,8 +1,7 @@
 Todo
 
-- [x] from the burger add a new list button on the top. the current list get's archived
-- [x] below the already added items,in the list, suggest items which could be added based on previous lists
-- [x] in list mode, in galery view, allow moving items to other sections. simple touch brings up an edit popup
-- [x] in burger menu, move settings to bottom
-- [x] in gallery mode in list view, add text input to bottom, on enter go back to list view and allow adding items
-- [x] in shopping mode in galery mode, add done items to bottom
+- [x] erledigte items im einkaufs modus in der gallery sollten auch nach kategorie gespeichert sein
+- [ ] wenn ich in der list einen vorschlag hinzufüge, scrollt er hoch, er soll dort bleiben wo er gerade ist
+- [ ] verschiebe gallerie aus der list in einen eigenen tab. beim einkaufen soll es die umschalt möglichkeit noch geben
+- [ ] aus den vorschlägen soll ich vorschläge auch entfernen können z.b. eimmal kauf
+- [ ] wenn ich eine neue liste starte, soll auch der aktuelle einkauf beendet werden und ich soll nicht mehr erledigte items sehen

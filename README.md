@@ -44,7 +44,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
-- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" at the bottom. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. The list view and the grid view share one setting for both modes.
+- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" at the bottom, also grouped by section. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. The list view and the grid view share one setting for both modes.
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch

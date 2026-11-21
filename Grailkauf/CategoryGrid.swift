@@ -5,8 +5,8 @@ import SwiftUI
 struct CategoryGrid: View {
     let store: Store
     let sections: [(category: GrailkaufCore.Category, rows: [Row])]
-    /// Shop mode: the ticked items, at the bottom. A tap brings one back.
-    var done: [Row] = []
+    /// Shop mode: the ticked items by section, at the bottom. A tap brings one back.
+    var done: [(category: GrailkaufCore.Category, rows: [Row])] = []
     /// Shop mode ticks an item with a tap. In list mode, a tap opens the editor.
     var onTap: ((Row) -> Void)?
     @State private var editing: Row?
@@ -19,14 +19,13 @@ struct CategoryGrid: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 6) {
-                ForEach(Grid.rows(sizes: sections.map(\.rows.count), columns: columns), id: \.self) { row in
-                    HStack(alignment: .top, spacing: gap) {
-                        ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows) }
-                    }
-                    // The sections of a row get the height of the tallest one.
-                    .fixedSize(horizontal: false, vertical: true)
+                packed(sections)
+                if !done.isEmpty {
+                    Text("Done (\(done.reduce(0) { $0 + $1.rows.count }))")
+                        .font(.caption.weight(.semibold))
+                        .accessibilityAddTraits(.isHeader)
+                    packed(done)
                 }
-                if !done.isEmpty { doneTiles }
             }
         }
         // Margins, not padding: the width of a section counts from the scroll view without its margins.
@@ -34,6 +33,16 @@ struct CategoryGrid: View {
         .sheet(item: $editing) { row in
             let section = sections.first { $0.rows.contains { $0.id == row.id } }?.category ?? .other
             TileEditor(row: row, section: section, store: store)
+        }
+    }
+
+    private func packed(_ sections: [(category: GrailkaufCore.Category, rows: [Row])]) -> some View {
+        ForEach(Grid.rows(sizes: sections.map(\.rows.count), columns: columns), id: \.self) { row in
+            HStack(alignment: .top, spacing: gap) {
+                ForEach(row.map { sections[$0] }, id: \.category) { section($0.category, $0.rows) }
+            }
+            // The sections of a row get the height of the tallest one.
+            .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -58,20 +67,6 @@ struct CategoryGrid: View {
         .containerRelativeFrame(.horizontal, count: columns, span: span, spacing: gap, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(category.color.opacity(0.25), in: .rect(cornerRadius: 12))
-    }
-
-    private var doneTiles: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Done (\(done.count))")
-                .font(.caption.weight(.semibold))
-                .accessibilityAddTraits(.isHeader)
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: columns), spacing: gap) {
-                ForEach(done) { row in
-                    tile(row, in: GrailkaufCore.Category(rawValue: row.category ?? "") ?? .other)
-                }
-            }
-        }
-        .padding(6)
     }
 
     @ViewBuilder private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
