@@ -270,6 +270,19 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(history.map { $0.items.map(\.text) } == [["2 Milch", "Eier"], ["2 Milch", "Brot"]])
         #expect(history.map { $0.items.map(\.onList) } == [[false, false], [false, true]])
     }
+
+    @Test func newListArchivesTheOpenItemsIntoTheHistory() {
+        let archived = ["Brot", "Eier"].enumerated().map {
+            Entry(text: $1, createdAt: friday - hour + Double($0), archivedAt: friday - 60)
+        }
+        let entries = trip(1, ["Milch", "Brot"]) + archived + [Entry(text: "Eier", createdAt: friday)]
+        #expect(ListState(entries: entries, moves: [], now: friday).todo.map(\.text) == ["Eier"])
+        let history = Suggestions.history(entries: entries)
+        #expect(history.map(\.archived) == [true, false])
+        #expect(history[0].items.map(\.text) == ["Brot", "Eier"])
+        #expect(history[0].items.map(\.onList) == [false, true])
+        #expect(history[1].items.map(\.onList) == [false, false])
+    }
 }
 
 @Suite struct InboxTests {

@@ -187,6 +187,15 @@ final class Store {
 
     func later(_ id: UUID) { change(id) { $0.deferredAt = .now } }
 
+    /// "New list": the open items leave the list together and show in the history as one archived list.
+    func archiveList() {
+        let now = Date.now
+        for row in state.todo {
+            item(row.id).map { $0.archivedAt = now; $0.modifiedAt = now }
+        }
+        save()
+    }
+
     func delete(_ ids: some Sequence<UUID>) {
         for id in ids { item(id).map(context.delete) }
         save()

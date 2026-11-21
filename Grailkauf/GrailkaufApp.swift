@@ -74,7 +74,7 @@ final class AppModel {
         guard !classifying, Classifier.isAvailable else { return }
         classifying = true
         defer { classifying = false }
-        func isNew(_ entry: Entry) -> Bool { entry.tickedAt == nil && entry.category == nil && !asked.contains(entry.id) }
+        func isNew(_ entry: Entry) -> Bool { entry.isOpen && entry.category == nil && !asked.contains(entry.id) }
         // Items that arrive while the model works get their turn in the next round.
         while case let new = store.entries.filter(isNew), !new.isEmpty {
             for entry in new {

@@ -7,14 +7,23 @@ enum Route: Hashable {
     case settings
 }
 
-/// The side menu, as in a mail app: the settings and the past trips, newest first.
+/// The side menu, as in a mail app: a new list, the settings, and the past trips and lists, newest first.
 struct MenuView: View {
     @Environment(AppModel.self) private var model
     let open: (Route) -> Void
+    @State private var confirmNewList = false
 
     var body: some View {
         let trips = Suggestions.history(entries: model.store.entries)
+        let count = model.store.state.todo.count
         List {
+            Button { confirmNewList = true } label: { Label("New list", systemImage: "square.and.pencil") }
+                .disabled(count == 0)
+                .confirmationDialog("Start a new list?", isPresented: $confirmNewList, titleVisibility: .visible) {
+                    Button("New list") { withAnimation { model.store.archiveList() } }
+                } message: {
+                    Text("The current list with \(count) items moves to the history.")
+                }
             Button { open(.settings) } label: { Label("Settings", systemImage: "gearshape") }
             Section("History") {
                 ForEach(trips, id: \.date) { trip in
@@ -34,6 +43,9 @@ struct MenuView: View {
         return VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(trip.date, format: .dateTime.day().month(.wide)).font(.headline)
+                if trip.archived {
+                    Label("Archived list", systemImage: "archivebox").font(.caption).foregroundStyle(.secondary)
+                }
                 Spacer()
                 Text(trip.date, format: .relative(presentation: .named))
                     .font(.caption)

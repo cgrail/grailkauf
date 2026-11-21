@@ -206,6 +206,16 @@
         }
       }
     },
+    "Archived list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Archivierte Liste"
+          }
+        }
+      }
+    },
     "Baby" : {
       "localizations" : {
         "de" : {
@@ -606,6 +616,16 @@
         }
       }
     },
+    "New list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Liste"
+          }
+        }
+      }
+    },
     "Not synced with iCloud yet" : {
       "localizations" : {
         "de" : {
@@ -836,6 +856,16 @@
         }
       }
     },
+    "Start a new list?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Liste beginnen?"
+          }
+        }
+      }
+    },
     "Starting…" : {
       "localizations" : {
         "de" : {
@@ -852,6 +882,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Süßwaren & Snacks"
+          }
+        }
+      }
+    },
+    "The current list with %lld items moves to the history." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die aktuelle Liste mit %lld Artikeln kommt in den Verlauf."
           }
         }
       }

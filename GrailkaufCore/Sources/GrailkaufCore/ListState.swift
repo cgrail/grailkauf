@@ -9,11 +9,13 @@ public struct Entry: Equatable, Sendable {
     public var modifiedAt: Date
     public var tickedAt: Date?
     public var deferredAt: Date?
+    /// Set by "New list": the item leaves the list without a purchase and stays in the history.
+    public var archivedAt: Date?
     public let key: String
 
     public init(
         id: UUID = UUID(), text: String, category: String? = nil, createdAt: Date, modifiedAt: Date? = nil,
-        tickedAt: Date? = nil, deferredAt: Date? = nil
+        tickedAt: Date? = nil, deferredAt: Date? = nil, archivedAt: Date? = nil
     ) {
         self.id = id
         self.text = text
@@ -22,8 +24,12 @@ public struct Entry: Equatable, Sendable {
         self.modifiedAt = modifiedAt ?? createdAt
         self.tickedAt = tickedAt
         self.deferredAt = deferredAt
+        self.archivedAt = archivedAt
         self.key = ItemName.key(text)
     }
+
+    /// On the list and not bought yet.
+    public var isOpen: Bool { tickedAt == nil && archivedAt == nil }
 
     /// True if the item was moved back with "later" and bought after that. Its tick then says nothing about the route.
     var wasDeferred: Bool {
@@ -111,7 +117,9 @@ public struct ListState: Codable, Equatable, Sendable {
         let tripStart = Self.openTripStart(ticks: entries.compactMap(\.tickedAt), now: now)
         self.lastSync = lastSync
         self.rows = entries
-            .filter { entry in entry.tickedAt.map { tick in tripStart.map { tick >= $0 } ?? false } ?? true }
+            .filter { entry in
+                entry.archivedAt == nil && entry.tickedAt.map { tick in tripStart.map { tick >= $0 } ?? false } ?? true
+            }
             .map { entry in
                 let placement = place(entry)
                 var row = Row(entry, sort: placement.sort, guessed: placement.guessed)
