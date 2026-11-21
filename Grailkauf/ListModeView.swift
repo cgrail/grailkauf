@@ -116,12 +116,15 @@ struct ListModeView: View {
                 // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
                 TextField("Add item", text: $draft, axis: .vertical)
                     .lineLimit(1...4)
-                    .textFieldStyle(.roundedBorder)
+                    .font(.title3)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(.background, in: .rect(cornerRadius: 24))
                     .focused($typing)
                     .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
                 Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
                     .labelStyle(.iconOnly)
-                    .font(.title)
+                    .font(.system(size: 44))
                     .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
