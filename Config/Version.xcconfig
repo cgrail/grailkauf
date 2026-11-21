@@ -1,4 +1,4 @@
 // The one place for the version. Every target (iPhone, Watch, widgets, share) takes it from here.
 // Each App Store Connect upload needs a higher build number: add 1.
 MARKETING_VERSION = 1.0
-CURRENT_PROJECT_VERSION = 28
+CURRENT_PROJECT_VERSION = 29
