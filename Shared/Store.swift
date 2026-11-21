@@ -16,6 +16,8 @@ final class Store {
     /// Last successful import from iCloud on this device.
     private(set) var lastSync = UserDefaults.standard.object(forKey: "lastSync") as? Date
     var problem: String?
+    /// The names of items that the last `add` had on the list already. The older copies are gone.
+    var repeated: String?
 
     @ObservationIgnored var onChange: () -> Void = {}
     @ObservationIgnored let container: NSPersistentCloudKitContainer
@@ -128,11 +130,16 @@ final class Store {
     // MARK: Changes
 
     /// Adds one item per line or comma-separated part, in the order typed. False if nothing was saved.
+    /// An item that is on the list already moves to the end with its new text.
     @discardableResult
     func add(_ input: String) -> Bool {
         guard let list = activeList(), let store = list.objectID.persistentStore else { return false }
         let now = Date.now
-        for (offset, text) in ItemName.split(input).enumerated() {
+        let texts = ItemName.split(input)
+        let older = state.repeated(by: texts)
+        for row in older { item(row.id).map(context.delete) }
+        if !older.isEmpty { repeated = older.map(\.name).joined(separator: ", ") }
+        for (offset, text) in texts.enumerated() {
             let item = Item(context: context)
             context.assign(item, to: store)
             item.id = UUID()
@@ -161,8 +168,6 @@ final class Store {
         for id in ids { item(id).map(context.delete) }
         save()
     }
-
-    /// List mode: empties the list. Ticked items stay, so the history and the order keep them.
 
     /// List mode: a drag gives the item a new place. See `ListState.reordered`.
     func move(_ id: UUID, toCreatedAt date: Date) { change(id) { $0.createdAt = date } }

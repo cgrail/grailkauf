@@ -155,6 +155,12 @@ public struct ListState: Codable, Equatable, Sendable {
         rows.filter { $0.tickedAt == nil }.sorted { $0.createdAt < $1.createdAt }
     }
 
+    /// The open rows that `texts` would add a second time. "2 Milch" repeats "Milch".
+    public func repeated(by texts: [String]) -> [Row] {
+        let keys = Set(texts.map(ItemName.key))
+        return todo.filter { keys.contains(ItemName.key($0.text)) }
+    }
+
     /// List mode: a drag moves the row at `source` to `destination`, counted as SwiftUI's `onMove` counts.
     /// The row gets a `createdAt` between its new neighbours, so `todo` keeps the new order. Nil if nothing moves.
     // shortcut: iCloud keeps dates to the millisecond, so many drags into one gap can tie two rows. Add a stored

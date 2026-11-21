@@ -60,6 +60,7 @@ struct ListModeView: View {
                 if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
             }
         }
+        .overlay(alignment: .bottom) { repeatedNotice }
         .safeAreaInset(edge: .bottom) { if !model.selecting { composer } }
         // While selecting, only the buttons for the selection stay, as in a mail app.
         .navigationTitle(model.selecting ? Text("\(selection.count) selected") : Text(verbatim: ""))
@@ -130,6 +131,22 @@ struct ListModeView: View {
         }
         .padding()
         .background(.bar)
+    }
+
+    /// Shows for a few seconds after an add replaced items that were on the list already.
+    @ViewBuilder private var repeatedNotice: some View {
+        if let names = store.repeated {
+            Label("Already on the list: \(names)", systemImage: "info.circle")
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.thinMaterial, in: .capsule)
+                .padding(.bottom, 8)
+                .task(id: names) {
+                    AccessibilityNotification.Announcement(String(localized: "Already on the list: \(names)")).post()
+                    try? await Task.sleep(for: .seconds(3))
+                    withAnimation { store.repeated = nil }
+                }
+        }
     }
 
     /// While typing: past items that match. Otherwise: what the household is due to buy again.

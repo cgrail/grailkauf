@@ -6,6 +6,7 @@
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
 - You can dictate many items at once. Tap "Start dictation" above the text field and say the items. All items stay on the screen, also after a pause. The screen shows each item on its own line. Say "fertig" or "done", or tap the big stop button, to finish.
+- If you add an item that is on the list already, the older copy goes away. A short notice tells you so.
 - Each item in list mode has a trash button.
 - You can drag the items in list mode into a new order.
 - "Select" in list mode lets you select many items and delete them at once. Slide a finger down the circles to select many items quickly. "Select all" selects the full list. While you select, the other buttons at the top go away.
