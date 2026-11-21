@@ -25,7 +25,7 @@ struct RootView: View {
                 }
             }
         }
-        .overlay(alignment: .leading) { menu }
+        .overlay { menu }
         // Time alone changes the picture: a trip ends four hours after its last tick.
         .onChange(of: scenePhase) { if scenePhase == .active { model.store.refresh() } }
         // The Live Activity links here.
@@ -50,22 +50,26 @@ struct RootView: View {
     }
 
     /// Slides in from the left. A tap next to it closes it.
-    @ViewBuilder private var menu: some View {
-        if menuOpen {
-            Color.black.opacity(0.3)
-                .ignoresSafeArea()
-                .onTapGesture(perform: closeMenu)
-                .accessibilityHidden(true)
-                .transition(.opacity)
-            MenuView { route in
-                closeMenu()
-                path.append(route)
+    private var menu: some View {
+        // An explicit stack: the stack of an overlay centers its views, and a centered menu does not slide out fully.
+        ZStack(alignment: .leading) {
+            if menuOpen {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture(perform: closeMenu)
+                    .accessibilityHidden(true)
+                    .transition(.opacity)
+                MenuView { route in
+                    closeMenu()
+                    path.append(route)
+                }
+                .containerRelativeFrame(.horizontal) { width, _ in min(width * 0.85, 360) }
+                .accessibilityAddTraits(.isModal)
+                .accessibilityAction(.escape, closeMenu)
+                .transition(.move(edge: .leading))
             }
-            .containerRelativeFrame(.horizontal) { width, _ in min(width * 0.85, 360) }
-            .accessibilityAddTraits(.isModal)
-            .accessibilityAction(.escape, closeMenu)
-            .transition(.move(edge: .leading))
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 
     private func closeMenu() { withAnimation { menuOpen = false } }
