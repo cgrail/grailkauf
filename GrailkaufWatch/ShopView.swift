@@ -17,7 +17,7 @@ struct ShopView: View {
                         Section {
                             ForEach(section.rows) { row in
                                 if row.id == current.id {
-                                    Button { model.tick(row.id) } label: { item(row).font(.title3.bold()) }
+                                    Button { model.tick(row.id) } label: { item(row).font(.headline) }
                                         .handGestureShortcut(.primaryAction)
                                         .swipeActions { later(row) }
                                 } else {
@@ -59,6 +59,9 @@ struct ShopView: View {
                     NavigationLink { InfoView() } label: { Label("Info", systemImage: "info.circle") }
                 }
             }
+            // Small text and low rows, so more than two items fit on one screen.
+            .font(.footnote)
+            .environment(\.defaultMinListRowHeight, 32)
             .toolbar {
                 if total > 0 {
                     // Small, in the corner across from the time, so the current item is on the first screen.

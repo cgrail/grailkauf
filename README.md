@@ -58,6 +58,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Apple Watch
 - The Watch shows the current item at the top, below the name of its supermarket section. A ring with a count in the top left corner, in the size of the time and level with it, shows the progress.
 - Each open item has an empty circle and a picture of the kind of item. A ticked item has a check mark.
+- The items are in small text in low rows, so more than two fit on one screen. The current item is in bold.
 - Tap the current item, or use the Double Tap gesture, to tick it.
 - Swipe an item and tap "Later" to move it to the end of the trip.
 - Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items.
