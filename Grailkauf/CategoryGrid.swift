@@ -155,7 +155,7 @@ private struct TileEditor: View {
     }
 }
 
-/// Switches between the list and the grid. One setting for list mode and shop mode.
+/// Shop mode: switches between the list and the grid.
 struct GridToggle: View {
     @AppStorage("grid") private var grid = false
 

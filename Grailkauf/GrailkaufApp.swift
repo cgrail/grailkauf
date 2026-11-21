@@ -13,8 +13,9 @@ struct GrailkaufApp: App {
     }
 }
 
+/// Stored under `mode`. An older build reads "sections" as list mode.
 enum Mode: String {
-    case list, shop
+    case list, sections, shop
 }
 
 @MainActor @Observable

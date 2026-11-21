@@ -16,6 +16,7 @@ Devices update at different times, and an older App Store build must read what a
 
 - The Core Data model (`makeModel()` in `Shared/Model.swift`) only grows: add entities and optional attributes. Rename, retype or delete nothing. CloudKit's Production schema cannot drop a field.
 - These saved keys keep their names and meaning: `UserDefaults` `lastSync`, `mode`, `grid` (iPhone), `phone` (Watch), and `inbox` in the App Group `group.de.grails.grailkauf` (share extension to app).
+- `mode` holds `list`, `sections` or `shop`. An older build reads `sections` as `list`. `grid` is the list or grid view of shop mode only.
 
 ## Privacy
 

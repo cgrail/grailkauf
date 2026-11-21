@@ -756,6 +756,16 @@
         }
       }
     },
+    "Sections" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abteilungen"
+          }
+        }
+      }
+    },
     "Select" : {
       "localizations" : {
         "de" : {

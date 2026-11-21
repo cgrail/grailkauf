@@ -18,13 +18,19 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Tap the trash button of an item, or swipe the item, to delete it. Tap the text of an item to change it in place, as in a notes app. Press Enter or tap elsewhere to save. If you empty the text, the item goes away. A comma makes more items.
 - Touch and hold an item, then drag it to a new place.
 - Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
-- Tap the grid button at the top to show the items as tiles, grouped by supermarket section such as "Fruit & vegetables". The sections follow the route through a typical supermarket. If you type an item below the grid and press Enter, the app adds it and goes back to the list. You can then add more items. Small sections fill the gaps in the rows above. Within a section, the tiles are in the learned order, as in shop mode. Tap a tile to change its name, move the item to another section or delete it. Touch and hold a tile does the same from a menu. Later items of the same name go to the new section. Tap the list button to go back.
 - The history keeps the items that you bought, also after you delete them from the list.
 - Hold "Hold to dictate" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Let go to add the items to the list. With VoiceOver, double tap and hold.
 - After each short pause, the screen shows the items of what you said. A spinner shows while the app splits them into single products. Filler words such as "ähm", "dann" or "noch" go away.
 - The last line shows the words that the phone hears now, next to a moving waveform. A microphone shows while the phone waits for words.
 - While you hold, a bar above the button shows what the app does ("Listening", "Splitting", "Adding"), a red waveform of your voice and the time. Rings around the button grow when you speak.
 - A spinner line above the button shows while the app checks new items. A new item can still split into more items then.
+
+### Sections (iPhone)
+- Tap "Sections" at the top to show the list as tiles, grouped by supermarket section such as "Fruit & vegetables".
+- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above.
+- Within a section, the tiles are in the learned order, as in shop mode.
+- Tap a tile to change its name, move the item to another section or delete it. Touch and hold a tile does the same from a menu. Later items of the same name go to the new section.
+- If you type an item below the tiles and press Enter, the app adds it and goes to the list. You can then add more items.
 
 ### Menu and history (iPhone)
 - Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.
@@ -44,7 +50,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
-- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" at the bottom, also grouped by section. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. The list view and the grid view share one setting for both modes.
+- Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" at the bottom, also grouped by section. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. Shop mode keeps the view that you chose last.
 - While shop mode is open, the Lock Screen shows the progress, the current item and the next three items.
 
 ### Apple Watch

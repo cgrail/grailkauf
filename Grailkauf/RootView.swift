@@ -10,7 +10,8 @@ struct RootView: View {
         NavigationStack(path: $path) {
             Group {
                 switch model.mode {
-                case .list: ListModeView()
+                // One view for both tabs: after an add in "Sections", the keyboard stays up in the list.
+                case .list, .sections: ListModeView(grid: model.mode == .sections)
                 case .shop: ShopModeView()
                 }
             }
@@ -79,10 +80,11 @@ struct RootView: View {
         ToolbarItem(placement: .principal) {
             Picker("Mode", selection: $model.mode) {
                 Text("List").tag(Mode.list)
+                Text("Sections").tag(Mode.sections)
                 Text("Shop").tag(Mode.shop)
             }
             .pickerStyle(.segmented)
-            .frame(maxWidth: 240)
+            .frame(maxWidth: 320)
         }
         ToolbarItem(placement: .topBarLeading) {
             Button("Menu", systemImage: "line.3.horizontal") { withAnimation { menuOpen = true } }

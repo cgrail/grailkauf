@@ -9,8 +9,8 @@ struct ListModeView: View {
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @State private var holding = false
-    /// Shows the items as tiles by supermarket section. Kept for the next launch.
-    @AppStorage("grid") private var grid = false
+    /// The "Sections" tab: the items as tiles by supermarket section.
+    let grid: Bool
     @FocusState private var typing: Bool
     /// A tap on a suggestion below the list adds an item without the scroll to it, so the next suggestion stays under the finger.
     @State private var stayPut = false
@@ -96,12 +96,9 @@ struct ListModeView: View {
                     }
                     .disabled(selection.isEmpty)
                 }
-            } else if !items.isEmpty {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    GridToggle()
-                    if !grid {
-                        Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
-                    }
+            } else if !items.isEmpty, !grid {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
                 }
             }
         }
@@ -251,11 +248,11 @@ struct ListModeView: View {
         }
     }
 
-    /// The grid goes back to the list: the new item shows at the end, and the keyboard stays for the next one.
+    /// The "Sections" tab goes to the list: the new item shows at the end, and the keyboard stays for the next one.
     private func add(_ text: String) {
         store.add(text)
         draft = ""
         typing = true
-        if grid { withAnimation { grid = false } }
+        if grid { withAnimation { model.mode = .list } }
     }
 }
