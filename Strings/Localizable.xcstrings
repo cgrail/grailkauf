@@ -206,6 +206,17 @@
         }
       }
     },
+    "Apples" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äpfel"
+          }
+        }
+      }
+    },
     "Archived list" : {
       "localizations" : {
         "de" : {
@@ -236,12 +247,34 @@
         }
       }
     },
+    "Bananas" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bananen"
+          }
+        }
+      }
+    },
     "Beer, wine & spirits" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bier, Wein & Spirituosen"
+          }
+        }
+      }
+    },
+    "Bread" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brot"
           }
         }
       }
@@ -302,6 +335,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Käse"
+          }
+        }
+      }
+    },
+    "Coffee" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaffee"
           }
         }
       }
@@ -382,6 +426,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artikel bearbeiten"
+          }
+        }
+      }
+    },
+    "Eggs" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eier"
           }
         }
       }
@@ -472,6 +527,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Einladen"
+          }
+        }
+      }
+    },
+    "iPhone not reachable." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone nicht erreichbar."
           }
         }
       }
@@ -572,6 +637,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Menü"
+          }
+        }
+      }
+    },
+    "Milk" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Milch"
           }
         }
       }
@@ -1042,16 +1118,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Deine Einkäufe erscheinen hier nach deinem ersten Einkauf."
-          }
-        }
-      }
-    },
-    "iPhone not reachable." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone nicht erreichbar."
           }
         }
       }
