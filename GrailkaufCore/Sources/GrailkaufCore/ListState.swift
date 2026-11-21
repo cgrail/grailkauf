@@ -47,6 +47,8 @@ public struct Row: Identifiable, Codable, Equatable, Sendable {
     public var sort: Double
     /// Placed by its guessed category, not by experience.
     public var guessed: Bool
+    /// The raw value of a `Category`. Nil until the language model sorts the item.
+    public var category: String?
 
     public var isNew: Bool { sort < 0 }
 
@@ -60,6 +62,7 @@ public struct Row: Identifiable, Codable, Equatable, Sendable {
         deferredAt = entry.deferredAt
         self.sort = sort
         self.guessed = guessed
+        category = entry.category
     }
 
     public func isDeferred(now: Date) -> Bool {
@@ -111,7 +114,9 @@ public struct ListState: Codable, Equatable, Sendable {
             .filter { entry in entry.tickedAt.map { tick in tripStart.map { tick >= $0 } ?? false } ?? true }
             .map { entry in
                 let placement = place(entry)
-                return Row(entry, sort: placement.sort, guessed: placement.guessed)
+                var row = Row(entry, sort: placement.sort, guessed: placement.guessed)
+                row.category = entry.category ?? categoryOf[entry.key]
+                return row
             }
     }
 
@@ -153,6 +158,12 @@ public struct ListState: Codable, Equatable, Sendable {
     /// List mode: open items in the order they were added.
     public var todo: [Row] {
         rows.filter { $0.tickedAt == nil }.sorted { $0.createdAt < $1.createdAt }
+    }
+
+    /// The grid view: open items by section, in the order of `Category`. Unsorted items go to `.other`.
+    public var sections: [(category: Category, rows: [Row])] {
+        let groups = Dictionary(grouping: todo) { Category(rawValue: $0.category ?? "") ?? .other }
+        return Category.allCases.compactMap { category in groups[category].map { (category, $0) } }
     }
 
     /// The open rows that `texts` would add a second time. "2 Milch" repeats "Milch".
@@ -240,10 +251,11 @@ public struct ListState: Codable, Equatable, Sendable {
     }
 }
 
-/// Hidden groups. They only place an item that the learned order does not know yet.
+/// Supermarket sections. They place an item that the learned order does not know yet, and group the grid view.
+/// The cases follow the route through a typical supermarket. The grid view shows the sections in this order.
 public enum Category: String, CaseIterable, Sendable {
-    case produce, bakery, meat, fish, cheese, dairy, frozen, tins, pasta, baking, spices, breakfast, sweets
-    case softDrinks, alcohol, toiletries, household, baby, pets, other
+    case produce, spices, tins, household, toiletries, baby, sweets, meat, fish, breakfast, bakery, frozen
+    case baking, pasta, cheese, dairy, pets, softDrinks, alcohol, other
 
     /// Reads the answer of the language model. An answer that is not on the list is `.other`.
     public init(answer: String) {

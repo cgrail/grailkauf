@@ -9,38 +9,46 @@ struct ListModeView: View {
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
     @State private var holding = false
+    /// Shows the items as tiles by supermarket section. Kept for the next launch.
+    @AppStorage("grid") private var grid = false
     @FocusState private var typing: Bool
 
     private var store: Store { model.store }
 
     var body: some View {
         let items = store.state.todo
-        ScrollViewReader { scroll in
-            // In select mode, slide a finger down the circles to select many items, as in Photos.
-            List(selection: $selection) {
-                ForEach(items) { row in
-                    if model.selecting {
-                        Text(row.text)
-                    } else {
-                        ItemRow(row: row, store: store)
+        Group {
+            if grid {
+                CategoryGrid(store: store)
+            } else {
+                ScrollViewReader { scroll in
+                    // In select mode, slide a finger down the circles to select many items, as in Photos.
+                    List(selection: $selection) {
+                        ForEach(items) { row in
+                            if model.selecting {
+                                Text(row.text)
+                            } else {
+                                ItemRow(row: row, store: store)
+                            }
+                        }
+                        .onMove { from, to in
+                            if let source = from.first, let change = store.state.reordered(from: source, to: to) {
+                                store.move(change.id, toCreatedAt: change.createdAt)
+                            }
+                        }
                     }
-                }
-                .onMove { from, to in
-                    if let source = from.first, let change = store.state.reordered(from: source, to: to) {
-                        store.move(change.id, toCreatedAt: change.createdAt)
+                    .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
+                    .onChange(of: items.last?.id) { _, newest in
+                        if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
                     }
                 }
             }
-            .environment(\.editMode, .constant(model.selecting ? .active : .inactive))
-            .overlay {
-                if items.isEmpty {
-                    ContentUnavailableView(
-                        "The list is empty", systemImage: "cart",
-                        description: Text("Type below to add the first item."))
-                }
-            }
-            .onChange(of: items.last?.id) { _, newest in
-                if let newest { withAnimation { scroll.scrollTo(newest, anchor: .bottom) } }
+        }
+        .overlay {
+            if items.isEmpty {
+                ContentUnavailableView(
+                    "The list is empty", systemImage: "cart",
+                    description: Text("Type below to add the first item."))
             }
         }
         .overlay(alignment: .bottom) { repeatedNotice }
@@ -73,8 +81,16 @@ struct ListModeView: View {
                     .disabled(selection.isEmpty)
                 }
             } else if !items.isEmpty {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button(
+                        grid ? "Show as list" : "Show by section",
+                        systemImage: grid ? "list.bullet" : "square.grid.2x2"
+                    ) {
+                        withAnimation { grid.toggle() }
+                    }
+                    if !grid {
+                        Button("Select", systemImage: "checkmark.circle") { model.selecting = true }
+                    }
                 }
             }
         }

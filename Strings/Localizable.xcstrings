@@ -206,6 +206,56 @@
         }
       }
     },
+    "Baby" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Baby"
+          }
+        }
+      }
+    },
+    "Baking" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backartikel"
+          }
+        }
+      }
+    },
+    "Beer, wine & spirits" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bier, Wein & Spirituosen"
+          }
+        }
+      }
+    },
+    "Bread & pastries" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backwaren"
+          }
+        }
+      }
+    },
+    "Breakfast, coffee & tea" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frühstück, Kaffee & Tee"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "de" : {
@@ -216,12 +266,42 @@
         }
       }
     },
+    "Care & hygiene" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hygiene & Pflege"
+          }
+        }
+      }
+    },
     "Checking the new items…" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Prüfe neue Artikel…"
+          }
+        }
+      }
+    },
+    "Cheese" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käse"
+          }
+        }
+      }
+    },
+    "Dairy & eggs" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Milchprodukte & Eier"
           }
         }
       }
@@ -296,6 +376,36 @@
         }
       }
     },
+    "Fish" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fisch"
+          }
+        }
+      }
+    },
+    "Frozen food" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiefkühlkost"
+          }
+        }
+      }
+    },
+    "Fruit & vegetables" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Obst & Gemüse"
+          }
+        }
+      }
+    },
     "Grailkauf collects no data. Your iCloud stores the list. Only the people you invite can see it." : {
       "localizations" : {
         "de" : {
@@ -322,6 +432,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zum Diktieren halten"
+          }
+        }
+      }
+    },
+    "Household" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haushalt"
           }
         }
       }
@@ -416,6 +536,16 @@
         }
       }
     },
+    "Meat & sausage" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fleisch & Wurst"
+          }
+        }
+      }
+    },
     "Menu" : {
       "localizations" : {
         "de" : {
@@ -496,12 +626,42 @@
         }
       }
     },
+    "Other" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sonstiges"
+          }
+        }
+      }
+    },
     "Other devices get them when Grailkauf opens on this iPhone." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Andere Geräte erhalten sie, wenn Grailkauf auf diesem iPhone öffnet."
+          }
+        }
+      }
+    },
+    "Pasta & rice" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nudeln & Reis"
+          }
+        }
+      }
+    },
+    "Pet food" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiernahrung"
           }
         }
       }
@@ -586,6 +746,26 @@
         }
       }
     },
+    "Show as list" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als Liste zeigen"
+          }
+        }
+      }
+    },
+    "Show by section" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Abteilung zeigen"
+          }
+        }
+      }
+    },
     "Something went wrong" : {
       "localizations" : {
         "de" : {
@@ -606,6 +786,16 @@
         }
       }
     },
+    "Spices & sauces" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewürze & Soßen"
+          }
+        }
+      }
+    },
     "Splitting…" : {
       "localizations" : {
         "de" : {
@@ -622,6 +812,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Starte…"
+          }
+        }
+      }
+    },
+    "Sweets & snacks" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Süßwaren & Snacks"
           }
         }
       }
@@ -666,6 +866,16 @@
         }
       }
     },
+    "Tins & ready meals" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konserven & Fertiggerichte"
+          }
+        }
+      }
+    },
     "Type below to add the first item." : {
       "localizations" : {
         "de" : {
@@ -682,6 +892,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aktualisiert vor %@"
+          }
+        }
+      }
+    },
+    "Water & juices" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wasser & Säfte"
           }
         }
       }
