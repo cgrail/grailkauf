@@ -8,7 +8,7 @@ struct ListModeView: View {
     @State private var draft = ""
     @State private var selection = Set<Row.ID>()
     @State private var dictation = Dictation()
-    @GestureState private var holding = false
+    @State private var holding = false
     @State private var holdStart = Date.now
     @FocusState private var typing: Bool
 
@@ -83,15 +83,7 @@ struct ListModeView: View {
             }
         }
         .toolbarVisibility(dictation.isRecording ? .hidden : .automatic, for: .navigationBar)
-        .onChange(of: holding) { _, down in
-            if down {
-                holdStart = .now
-                startDictation()
-            } else if dictation.isListening, Date.now.timeIntervalSince(holdStart) > 0.5 {
-                finishDictation()
-            }
-            // A short tap, or a hold that ended in the permission prompt, keeps listening hands-free.
-        }
+
     }
 
     private var composer: some View {
@@ -176,10 +168,22 @@ struct ListModeView: View {
             .background(.tint, in: .capsule)
             .scaleEffect(holding ? 1.1 : 1)
             .animation(.snappy, value: holding)
-            .gesture(DragGesture(minimumDistance: 0).updating($holding) { _, state, _ in state = true })
+            // Reports the finger going down and up, also when the system cancels the touch. `perform` never runs.
+            .onLongPressGesture(minimumDuration: 3600, maximumDistance: 10_000, perform: {}, onPressingChanged: hold)
             // VoiceOver cannot hold. A double tap starts hands-free dictation.
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { startDictation() }
+    }
+
+    private func hold(_ down: Bool) {
+        holding = down
+        if down {
+            holdStart = .now
+            startDictation()
+        } else if dictation.isListening, Date.now.timeIntervalSince(holdStart) > 0.5 {
+            finishDictation()
+        }
+        // A short tap, or a hold that ended in the permission prompt, keeps listening hands-free.
     }
 
     private func startDictation() {
