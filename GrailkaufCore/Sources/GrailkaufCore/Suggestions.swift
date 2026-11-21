@@ -30,12 +30,15 @@ public enum Suggestions {
 
     /// Items of past trips and archived lists that are not on the list now. The item in the most lists comes first.
     /// Each item has the text of its newest list. If two items are in as many lists, the more recent one comes first.
-    public static func fromPastLists(entries: [Entry], limit: Int = 10) -> [String] {
+    /// `removed` holds the key of each item that the user removed, and when. A later list brings the item back.
+    public static func fromPastLists(entries: [Entry], removed: [String: Date] = [:], limit: Int = 10) -> [String] {
         var seen: [String: (text: String, count: Int, rank: Int)] = [:]
         for list in history(entries: entries) {
             var counted = Set<String>()
             for item in list.items where !item.onList && counted.insert(ItemName.key(item.text)).inserted {
                 let key = ItemName.key(item.text)
+                // The history is newest first: the first list with the item tells if the removal still holds.
+                if seen[key] == nil, let date = removed[key], list.date <= date { continue }
                 let old = seen[key]
                 seen[key] = (old?.text ?? item.text, (old?.count ?? 0) + 1, old?.rank ?? seen.count)
             }

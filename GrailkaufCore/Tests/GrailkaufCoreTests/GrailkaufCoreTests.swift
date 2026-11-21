@@ -279,6 +279,14 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(Suggestions.fromPastLists(entries: entries, limit: 1) == ["2 Milch"])
     }
 
+    @Test func aRemovedSuggestionComesBackWithALaterList() {
+        let entries = trip(2, ["Grill", "Brot"]) + trip(1, ["Brot"])
+        let removed = [ItemName.key("Grill"): friday - week]
+        #expect(Suggestions.fromPastLists(entries: entries, removed: removed) == ["Brot"])
+        let again = entries + trip(0.5, ["Grill"])
+        #expect(Suggestions.fromPastLists(entries: again, removed: removed) == ["Grill", "Brot"])
+    }
+
     @Test func newListArchivesTheOpenItemsIntoTheHistory() {
         let archived = ["Brot", "Eier"].enumerated().map {
             Entry(text: $1, createdAt: friday - hour + Double($0), archivedAt: friday - 60)

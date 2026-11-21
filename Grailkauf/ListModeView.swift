@@ -46,6 +46,12 @@ struct ListModeView: View {
                                     Button { stayPut = store.add(text) } label: {
                                         Label(text, systemImage: "plus.circle").foregroundStyle(.secondary)
                                     }
+                                    // For a thing bought once. It comes back if a later trip or list has it.
+                                    .swipeActions {
+                                        Button("Remove", systemImage: "xmark", role: .destructive) {
+                                            model.removedSuggestions[ItemName.key(text)] = .now
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -203,7 +209,8 @@ struct ListModeView: View {
     /// Below the items: what the past lists had, without the due items that the bar above the text field shows.
     private var pastSuggestions: [String] {
         let due = Set(Suggestions.due(entries: store.entries, now: .now))
-        return Suggestions.fromPastLists(entries: store.entries).filter { !due.contains($0) }
+        return Suggestions.fromPastLists(entries: store.entries, removed: model.removedSuggestions)
+            .filter { !due.contains($0) }
     }
 
     private func stopSelecting() {
