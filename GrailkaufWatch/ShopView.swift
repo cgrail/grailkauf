@@ -59,16 +59,11 @@ struct ShopView: View {
                 if total > 0 {
                     // Small, in the corner across from the time, so the current item is on the first screen.
                     ToolbarItem(placement: .topBarLeading) {
-                        HStack(spacing: 4) {
-                            ProgressView(value: Double(done.count), total: Double(total))
-                                .progressViewStyle(.circular)
-                                .frame(width: 16, height: 16)
-                            Text("\(done.count)/\(total)").font(.footnote).monospacedDigit()
-                        }
-                        // shortcut: the toolbar row sits lower than the time; a fixed nudge lifts it level. Recheck on a new watchOS.
-                        .offset(y: -11)
-                        .accessibilityElement(children: .ignore)
-                        .accessibilityLabel(Text("\(done.count)/\(total)"))
+                        Progress(done: done.count, total: total)
+                            // shortcut: the toolbar row sits lower than the time; a fixed nudge lifts it level. Recheck on a new watchOS.
+                            .offset(y: -10)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(Text("\(done.count)/\(total)"))
                     }
                 }
             }
@@ -108,5 +103,26 @@ struct ShopView: View {
 
     private func pull() {
         Task { unreachable = !(await model.refresh()) }
+    }
+}
+
+/// A ring and a count in the font of the time, as tall as its digits, so both read as one line with the time.
+private struct Progress: View {
+    let done: Int
+    let total: Int
+    private let font = UIFont.systemFont(ofSize: 17, weight: .medium)
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 4) {
+            ZStack {
+                Circle().inset(by: 1).stroke(.secondary, lineWidth: 2)
+                Circle().inset(by: 1).trim(from: 0, to: Double(done) / Double(total))
+                    .stroke(.primary, style: StrokeStyle(lineWidth: 2, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
+            }
+            .frame(width: font.capHeight, height: font.capHeight)
+            .alignmentGuide(.firstTextBaseline) { $0[.bottom] }
+            Text("\(done)/\(total)").font(Font(font)).monospacedDigit()
+        }
     }
 }
