@@ -1,4 +1,4 @@
 Todo
 
-- [x] after creating new list, go directly to the new list. currently the menu still stays open
-- [x] also show categories on iphone for einkaufen mode. currently it's only for watch.
+- [x] enable export to notes app with todo style - similar to import with the option to include and exclude categories. export is not that important and can be moved to settings or so
+- [x] option to delete archived lists

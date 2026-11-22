@@ -604,6 +604,16 @@
         }
       }
     },
+    "Export" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exportieren"
+          }
+        }
+      }
+    },
     "Fill with the usual" : {
       "localizations" : {
         "de" : {
@@ -702,6 +712,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Haushalt"
+          }
+        }
+      }
+    },
+    "In Notes, select the text and tap the checklist button. Each item then gets a circle to tick." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle in Notizen den Text aus und tippe auf die Taste für Checklisten. Jeder Artikel bekommt dann einen Kreis zum Abhaken."
           }
         }
       }
@@ -1153,6 +1173,16 @@
         }
       }
     },
+    "Send the list to Notes or another app, without the sections that you switch off." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sende die Liste an Notizen oder eine andere App, ohne die Abteilungen, die du ausschaltest."
+          }
+        }
+      }
+    },
     "Settings" : {
       "localizations" : {
         "de" : {
@@ -1170,6 +1200,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shampoo"
+          }
+        }
+      }
+    },
+    "Share" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teilen"
           }
         }
       }

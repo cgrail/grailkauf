@@ -8,6 +8,8 @@ public struct PastTrip: Sendable {
     public var archived = false
     /// The texts of the bought items in tick order, each with its latest text. True if it is on the list now.
     public var items: [(text: String, onList: Bool)]
+    /// The items of an archived list, so the user can delete it. Empty for a shopping trip: the order learns from it.
+    public var ids: [UUID] = []
 }
 
 public enum Suggestions {
@@ -21,9 +23,9 @@ public enum Suggestions {
             PastTrip(date: trip.date, items: trip.keys.map { (latest[$0]!, onList.contains($0)) })
         }
         let archived = Dictionary(grouping: entries.filter { $0.archivedAt != nil && $0.tickedAt == nil }, by: \.archivedAt!).map { date, list in
-            PastTrip(
-                date: date, archived: true,
-                items: list.sorted { $0.createdAt < $1.createdAt }.map { ($0.text, onList.contains($0.key)) })
+            let sorted = list.sorted { $0.createdAt < $1.createdAt }
+            return PastTrip(
+                date: date, archived: true, items: sorted.map { ($0.text, onList.contains($0.key)) }, ids: sorted.map(\.id))
         }
         return (trips + archived).sorted { $0.date > $1.date }
     }

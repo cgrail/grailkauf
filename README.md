@@ -38,6 +38,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - "New list" also ends the shop in progress. The ticked items leave the list at once, and the app goes to list mode.
 - The menu shows each past shopping trip and archived list, newest first. "Settings" is at the bottom of the menu.
 - Each trip shows its date and the items that are not on the list now. These are the items that your list can miss. A line below counts the items that are not on the list and the items that are already on it.
+- Swipe an archived list to delete it. Its items no longer show in the suggestions. Shopping trips stay, because the order learns from them.
 - Tap a trip or an archived list to open it. Tap + to add an item to the list again. Tap "Add all" at the top to add all items that are not on the list.
 - Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
@@ -71,6 +72,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
 - **Sections** shows the supermarket sections. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - **Show details** shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles. A sparkle marks a guessed position. "–" shows an item with no position, "?" an item with no section yet.
+- **Export** sends the open items as text to Notes or another app, one item per line, in shop order. Switch off a section to leave its items out. In Notes, select the text and tap the checklist button to get a circle for each item.
 - **Invite** sends a link. The person who opens the link joins your list.
 - **Privacy Policy** opens the privacy policy on the web.
 - **Upload iCloud schema** shows in Debug builds only. It sends every entity and field to the Development schema in iCloud.
