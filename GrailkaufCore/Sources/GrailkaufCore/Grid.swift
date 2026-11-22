@@ -7,6 +7,15 @@ public enum Grid {
         return Category.allCases.compactMap { category in groups[category].map { (category, $0) } }
     }
 
+    /// Shop mode: the sections of `rows`, but the section of the first row goes first, so the current item is on top.
+    public static func shopSections(_ rows: [Row]) -> [(category: Category, rows: [Row])] {
+        var sections = sections(rows)
+        if let index = sections.firstIndex(where: { $0.rows.first?.id == rows.first?.id }) {
+            sections.insert(sections.remove(at: index), at: 0)
+        }
+        return sections
+    }
+
     /// Puts each section in the first row with room for it, so small sections fill the gaps further up.
     /// A section takes one column for each item, and a full row if it has more items than the row has columns.
     /// - Returns: the indices of `sizes` for each row.

@@ -51,7 +51,14 @@ struct ShopModeView: View {
             if open.contains(where: \.isNew) {
                 Section("New") { rows(open.filter(\.isNew)) }
             }
-            Section { rows(open.filter { !$0.isNew }) }
+            // By section, as on the Watch.
+            ForEach(Grid.shopSections(open.filter { !$0.isNew }), id: \.category) { section in
+                Section {
+                    rows(section.rows)
+                } header: {
+                    Label { Text(section.category.title) } icon: { Text(section.category.emoji) }
+                }
+            }
             if !done.isEmpty {
                 Section {
                     DisclosureGroup("Done (\(done.count))") { rows(done) }

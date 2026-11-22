@@ -47,7 +47,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The items reach the list when Grailkauf opens on this iPhone, or when the app syncs in the background.
 
 ### Shop mode (iPhone)
-- The list is in the learned order. Tap an item to tick it.
+- The list is in the learned order, grouped by supermarket section as on the Watch. The section of the current item is at the top. Tap an item to tick it.
 - A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
