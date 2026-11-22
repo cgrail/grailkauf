@@ -15,7 +15,7 @@ What goes into App Store Connect, in English and German. Each text field is plai
 ## App Review notes
 
 ```
-Grailkauf needs no account. To try it: type an item in the text field and press Enter, or hold "Hold to dictate" and say several items. Tap the cart button to switch to shop mode and tick items. The order of shop mode comes from the order of the ticks of earlier trips. Splitting entries into single products and guessing the position of new items need an iPhone with Apple Intelligence; on other iPhones the entry stays as typed and new items go to the New group. Invite in Settings shares the list with another iCloud account. The Apple Watch app shows the shop mode of the paired iPhone.
+Grailkauf needs no account. To try it: type an item in the text field and press Enter, or hold the microphone button next to the text field and say several items. Tap the cart button to switch to shop mode and tick items. The order of shop mode comes from the order of the ticks of earlier trips. Splitting entries into single products and guessing the position of new items need an iPhone with Apple Intelligence; on other iPhones the entry stays as typed and new items go to the New group. Invite in Settings shares the list with another iCloud account. The Apple Watch app shows the shop mode of the paired iPhone.
 ```
 
 ## English
