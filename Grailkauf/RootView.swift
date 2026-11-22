@@ -60,10 +60,10 @@ struct RootView: View {
                     .onTapGesture(perform: closeMenu)
                     .accessibilityHidden(true)
                     .transition(.opacity)
-                MenuView { route in
+                MenuView(open: { route in
                     closeMenu()
                     path.append(route)
-                }
+                }, close: closeMenu)
                 .containerRelativeFrame(.horizontal) { width, _ in min(width * 0.85, 360) }
                 .accessibilityAddTraits(.isModal)
                 .accessibilityAction(.escape, closeMenu)

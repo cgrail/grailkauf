@@ -11,6 +11,7 @@ enum Route: Hashable {
 struct MenuView: View {
     @Environment(AppModel.self) private var model
     let open: (Route) -> Void
+    let close: () -> Void
 
     var body: some View {
         let trips = Suggestions.history(entries: model.store.entries)
@@ -24,6 +25,7 @@ struct MenuView: View {
                     // The shop ends with the old list. The Live Activity then goes away.
                     model.mode = .list
                 }
+                close()
             } label: { Label("New list", systemImage: "square.and.pencil") }
                 .disabled(count + ticked == 0)
             Section("History") {

@@ -33,6 +33,6 @@
 - The Smart Stack on the Apple Watch shows the progress and the current item of your shop, also when the Watch app is closed.
 - You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.
-- "New list" at the top of the menu starts an empty list at once, with no question. The old list goes to the history as an archived list, and "Add all" there brings its items back. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.
+- "New list" at the top of the menu starts an empty list at once, with no question, and the menu closes on it. The old list goes to the history as an archived list, and "Add all" there brings its items back. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.
 - Below the items in list mode, "Suggestions" shows the items of your past trips and lists that are not on the list now. Tap one to add it. The list stays where it is. Swipe one to remove it, for example a thing that you bought once. It comes back if you buy it again.
 - In the "Sections" tab, tap a tile to change the name of the item, move it to another section or delete it.
