@@ -31,6 +31,13 @@ struct MenuView: View {
             Section("History") {
                 ForEach(trips, id: \.date) { trip in
                     Button { open(.trip(trip.date)) } label: { row(trip) }
+                        .swipeActions {
+                            if trip.archived {
+                                Button("Delete", systemImage: "trash", role: .destructive) {
+                                    withAnimation { model.store.delete(trip.ids) }
+                                }
+                            }
+                        }
                 }
                 if trips.isEmpty {
                     Text("Your shopping trips appear here after your first shop.").foregroundStyle(.secondary)

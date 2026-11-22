@@ -324,6 +324,8 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         let history = Suggestions.history(entries: [ticked, open])
         #expect(history.map(\.archived) == [true, false])
         #expect(history.map { $0.items.map(\.text) } == [["Brot"], ["Milch"]])
+        // Deleting the archived list deletes "Brot" only: "Milch" stays in the trip.
+        #expect(history.map(\.ids) == [[open.id], []])
     }
 }
 
