@@ -5,6 +5,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @State private var sharing: Sharing?
+    @AppStorage("details") private var details = false
 
     private struct Sharing: Identifiable {
         let id = UUID()
@@ -16,6 +17,10 @@ struct SettingsView: View {
         List {
             Section {
                 NavigationLink("Order") { OrderView() }
+                NavigationLink("Sections") { SectionOrderView() }
+                Toggle("Show details", isOn: $details)
+            } footer: {
+                Text("Details show the position of each item in the order and the picture of its section.")
             }
             Section {
                 Button("Invite", systemImage: "person.badge.plus") {
@@ -103,5 +108,37 @@ struct OrderView: View {
             }
         }
         .navigationTitle("Order")
+    }
+}
+
+/// The sections in the order of the user's shop. A drag applies at once, on this iPhone and its Watch.
+struct SectionOrderView: View {
+    @Environment(AppModel.self) private var model
+
+    var body: some View {
+        let store = model.store
+        let order = store.state.sectionOrder
+        List {
+            Section {
+                ForEach(order, id: \.self) { section in
+                    Label { Text(section.title) } icon: { Text(section.emoji) }
+                }
+                .onMove { from, to in
+                    var moved = order
+                    moved.move(fromOffsets: from, toOffset: to)
+                    store.sections = moved.map(\.rawValue)
+                }
+            } footer: {
+                Text("Drag the sections into the order of your shop. Shop mode then goes through them in this order.")
+            }
+        }
+        .environment(\.editMode, .constant(.active))
+        .toolbar {
+            // Back to the route of a typical supermarket, and to the learned order alone in shop mode.
+            if store.sections != nil {
+                Button("Reset") { store.sections = nil }
+            }
+        }
+        .navigationTitle("Sections")
     }
 }

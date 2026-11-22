@@ -30,6 +30,26 @@ import Testing
         #expect(sections[0].rows.map(\.text) == ["Milch", "Joghurt"])
     }
 
+    @Test func savedSectionOrderComesFirstAndKeepsEverySection() {
+        let order = Category.ordered(["dairy", "unknown", "produce", "dairy"])
+        #expect(Array(order.prefix(3)) == [.dairy, .produce, .spices])
+        #expect(Set(order) == Set(Category.allCases) && order.count == Category.allCases.count)
+        #expect(Category.ordered(nil) == Category.allCases)
+    }
+
+    @Test func shopWalksTheSectionOrderThatTheUserSet() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        var state = ListState(entries: [
+            Entry(text: "Milch", category: "dairy", createdAt: now - 3),
+            Entry(text: "Äpfel", category: "produce", createdAt: now - 2),
+            Entry(text: "Joghurt", category: "dairy", createdAt: now - 1),
+        ], order: ["joghurt", "äpfel", "milch"], now: now)
+        #expect(state.shop(now: now).map(\.text) == ["Joghurt", "Äpfel", "Milch"])
+        state.sections = ["dairy"]
+        #expect(state.shop(now: now).map(\.text) == ["Joghurt", "Milch", "Äpfel"])
+        #expect(Grid.sections(state.todo, order: state.sectionOrder).map(\.category) == [.dairy, .produce])
+    }
+
     @Test func smallSectionsFillTheGapsFurtherUp() {
         #expect(Grid.rows(sizes: [4, 1, 2, 2, 7, 1, 3], columns: 5) == [[0, 1], [2, 3, 5], [4], [6]])
     }

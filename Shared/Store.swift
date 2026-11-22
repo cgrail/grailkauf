@@ -15,6 +15,14 @@ final class Store {
     private(set) var order: [String] = []
     /// Last successful import from iCloud on this device.
     private(set) var lastSync = UserDefaults.standard.object(forKey: "lastSync") as? Date
+    /// The section order that the user set, as raw values of `Category`. On this iPhone only. The Watch gets it with the list.
+    // shortcut: not in iCloud, so an invited person sets their own. Store it in the model if a household asks.
+    var sections = UserDefaults.standard.stringArray(forKey: "sectionOrder") {
+        didSet {
+            UserDefaults.standard.set(sections, forKey: "sectionOrder")
+            refresh()
+        }
+    }
     var problem: String?
     /// The names of items that the last `add` had on the list already. The older copies are gone.
     var repeated: String?
@@ -95,7 +103,8 @@ final class Store {
         let entries = (list?.items ?? []).compactMap(\.entry)
         let moves = (list?.moves ?? []).compactMap(\.move)
         let order = ListState.order(entries: entries, moves: moves, now: now)
-        let state = ListState(entries: entries, order: order, lastSync: lastSync, now: now)
+        var state = ListState(entries: entries, order: order, lastSync: lastSync, now: now)
+        state.sections = sections
         if entries != self.entries { self.entries = entries }
         if order != self.order { self.order = order }
         if state != self.state { self.state = state }

@@ -27,7 +27,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Sections (iPhone)
 - Tap "Sections" at the top to show the list as tiles, grouped by supermarket section such as "Fruit & vegetables".
-- The sections follow the route through a typical supermarket. Small sections fill the gaps in the rows above. Each row fills the full width of the screen: a section gets a share for each of its items.
+- The sections follow the route through a typical supermarket, or the order that you set in Settings. Small sections fill the gaps in the rows above. Each row fills the full width of the screen: a section gets a share for each of its items.
 - Within a section, the tiles are in the learned order, as in shop mode.
 - Tap a tile to change its name, move the item to another section or delete it. Touch and hold a tile does the same from a menu. Later items of the same name go to the new section.
 - If you type an item below the tiles and press Enter, the app adds it and goes to the list. You can then add more items.
@@ -69,6 +69,8 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
 - Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
+- **Sections** shows the supermarket sections. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. The order stays on this iPhone and its Watch.
+- **Show details** shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles. A sparkle marks a guessed position. "–" shows an item with no position, "?" an item with no section yet.
 - **Invite** sends a link. The person who opens the link joins your list.
 - **Privacy Policy** opens the privacy policy on the web.
 

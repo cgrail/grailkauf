@@ -94,6 +94,7 @@ struct CategoryGrid: View {
             Text(row.text)
                 .font(.caption2)
                 .lineLimit(1)
+            RowDetails(row: row)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 4)

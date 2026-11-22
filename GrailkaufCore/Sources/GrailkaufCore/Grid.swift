@@ -1,15 +1,15 @@
 /// The grid view: tiles in rows of a fixed width, grouped by section.
 public enum Grid {
-    /// The rows by section, in the order of `Category`. Each section keeps the order of `rows`.
+    /// The rows by section, in the order of `order`. Each section keeps the order of `rows`.
     /// Unsorted items go to `.other`.
-    public static func sections(_ rows: [Row]) -> [(category: Category, rows: [Row])] {
+    public static func sections(_ rows: [Row], order: [Category] = Category.allCases) -> [(category: Category, rows: [Row])] {
         let groups = Dictionary(grouping: rows) { Category(rawValue: $0.category ?? "") ?? .other }
-        return Category.allCases.compactMap { category in groups[category].map { (category, $0) } }
+        return order.compactMap { category in groups[category].map { (category, $0) } }
     }
 
     /// Shop mode: the sections of `rows`, but the section of the first row goes first, so the current item is on top.
-    public static func shopSections(_ rows: [Row]) -> [(category: Category, rows: [Row])] {
-        var sections = sections(rows)
+    public static func shopSections(_ rows: [Row], order: [Category] = Category.allCases) -> [(category: Category, rows: [Row])] {
+        var sections = sections(rows, order: order)
         if let index = sections.firstIndex(where: { $0.rows.first?.id == rows.first?.id }) {
             sections.insert(sections.remove(at: index), at: 0)
         }
