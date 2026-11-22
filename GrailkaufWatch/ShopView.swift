@@ -26,7 +26,7 @@ struct ShopView: View {
                                 }
                             }
                         } header: {
-                            Label { Text(section.category.title) } icon: { Text(section.category.emoji) }
+                            section.category.label
                         }
                     }
                 } else if !model.hasData {
@@ -44,12 +44,16 @@ struct ShopView: View {
                     }
                 }
                 if !done.isEmpty {
+                    // By section, as the open items. Within a section, the most recent tick is first.
                     Section("Done") {
-                        ForEach(done) { row in
-                            Button {
-                                model.untick(row.id)
-                            } label: {
-                                item(row, ticked: true).strikethrough().foregroundStyle(.secondary)
+                        ForEach(Grid.sections(done), id: \.category) { section in
+                            section.category.label.foregroundStyle(.secondary)
+                            ForEach(section.rows) { row in
+                                Button {
+                                    model.untick(row.id)
+                                } label: {
+                                    item(row, ticked: true).strikethrough().foregroundStyle(.secondary)
+                                }
                             }
                         }
                     }

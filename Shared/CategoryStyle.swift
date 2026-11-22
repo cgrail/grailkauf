@@ -28,6 +28,9 @@ extension GrailkaufCore.Category {
         }
     }
 
+    /// The header of a section in a list.
+    var label: some View { Label { Text(title) } icon: { Text(emoji) }.accessibilityAddTraits(.isHeader) }
+
     /// Neighbouring sections of a store map often share a color, so some colors repeat.
     var color: Color {
         switch self {

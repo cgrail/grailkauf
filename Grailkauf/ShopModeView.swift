@@ -56,12 +56,17 @@ struct ShopModeView: View {
                 Section {
                     rows(section.rows)
                 } header: {
-                    Label { Text(section.category.title) } icon: { Text(section.category.emoji) }
+                    section.category.label
                 }
             }
             if !done.isEmpty {
                 Section {
-                    DisclosureGroup("Done (\(done.count))") { rows(done) }
+                    DisclosureGroup("Done (\(done.count))") {
+                        ForEach(Grid.sections(done), id: \.category) { section in
+                            section.category.label.font(.footnote).foregroundStyle(.secondary)
+                            rows(section.rows)
+                        }
+                    }
                 }
             }
         }
