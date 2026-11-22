@@ -6,6 +6,8 @@ struct SettingsView: View {
     @Environment(AppModel.self) private var model
     @State private var sharing: Sharing?
     @AppStorage("details") private var details = false
+    /// The schema upload: nil before it, false while it runs, true when it is done.
+    @State private var schemaUploaded: Bool?
 
     private struct Sharing: Identifiable {
         let id = UUID()
@@ -50,6 +52,30 @@ struct SettingsView: View {
                     }
                 }
             }
+            #if DEBUG
+            // Only a Debug build talks to the Development environment of iCloud.
+            Section {
+                Button("Upload iCloud schema", systemImage: "icloud.and.arrow.up") {
+                    schemaUploaded = false
+                    Task {
+                        do {
+                            try await model.store.uploadSchema()
+                            schemaUploaded = true
+                        } catch {
+                            schemaUploaded = nil
+                            model.store.problem = error.localizedDescription
+                        }
+                    }
+                }
+                .disabled(schemaUploaded == false)
+            } footer: {
+                if schemaUploaded == true {
+                    Text("Uploaded. Deploy the schema to Production in the CloudKit Console.")
+                } else {
+                    Text("Debug builds only. Sends every entity and field to the Development schema in iCloud.")
+                }
+            }
+            #endif
             Section("Privacy") {
                 Text("Grailkauf collects no data. Your iCloud stores the list. Only the people you invite can see it.")
                     .font(.footnote)
@@ -111,7 +137,7 @@ struct OrderView: View {
     }
 }
 
-/// The sections in the order of the user's shop. A drag applies at once, on this iPhone and its Watch.
+/// The sections in the order of the user's shop. A drag applies at once, for everyone who shares the list.
 struct SectionOrderView: View {
     @Environment(AppModel.self) private var model
 
@@ -126,7 +152,7 @@ struct SectionOrderView: View {
                 .onMove { from, to in
                     var moved = order
                     moved.move(fromOffsets: from, toOffset: to)
-                    store.sections = moved.map(\.rawValue)
+                    store.setSections(moved)
                 }
             } footer: {
                 Text("Drag the sections into the order of your shop. Shop mode then goes through them in this order.")
@@ -135,8 +161,8 @@ struct SectionOrderView: View {
         .environment(\.editMode, .constant(.active))
         .toolbar {
             // Back to the route of a typical supermarket, and to the learned order alone in shop mode.
-            if store.sections != nil {
-                Button("Reset") { store.sections = nil }
+            if store.state.sections != nil {
+                Button("Reset") { store.setSections(nil) }
             }
         }
         .navigationTitle("Sections")
