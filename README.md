@@ -68,6 +68,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
+- Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
 - **Invite** sends a link. The person who opens the link joins your list.
 - **Privacy Policy** opens the privacy policy on the web.
 

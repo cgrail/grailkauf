@@ -20,7 +20,7 @@
 - The menu at the top left lists your past shopping trips and has the settings at the bottom. Each trip shows the items that are not on the list now, so you see what your list can miss. A line below counts them and the items that are already on the list. Open a trip and tap + to add an item to the list again, or tap "Add all" to add all of its missing items at once.
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks.
 - An item that the app does not know yet goes to the "New" group, or next to items of the same kind.
-- The order screen shows the learned order. You can drag an item to correct it.
+- The order screen shows the learned order. You can drag an item to correct it. The items on the list that the order does not know yet are below it, so you can put a new list in order before your first shop.
 - You can invite another person to your list. The list syncs through iCloud.
 - The Apple Watch app shows the current item on top and the rest of the list below it, grouped by supermarket section. You tick an item with a tap or with Double Tap.
 - The iPhone and the Watch sync over Bluetooth, also with no internet.
