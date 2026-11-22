@@ -160,6 +160,16 @@
         }
       }
     },
+    "Add all" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle eintragen"
+          }
+        }
+      }
+    },
     "Add item" : {
       "localizations" : {
         "de" : {

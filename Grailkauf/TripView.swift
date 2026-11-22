@@ -8,14 +8,15 @@ struct TripView: View {
 
     var body: some View {
         let trip = Suggestions.history(entries: model.store.entries).first { $0.date == date }
+        let missing = trip?.items.filter { !$0.onList }.map(\.text) ?? []
         List {
             if let trip {
                 Section {
-                    ForEach(trip.items.filter { !$0.onList }, id: \.text) { item in
+                    ForEach(missing, id: \.self) { text in
                         HStack {
-                            Text(item.text)
+                            Text(text)
                             Spacer()
-                            Button("Add", systemImage: "plus.circle") { model.store.add(item.text) }
+                            Button("Add", systemImage: "plus.circle") { model.store.add(text) }
                                 .labelStyle(.iconOnly)
                         }
                     }
@@ -32,5 +33,10 @@ struct TripView: View {
             }
         }
         .navigationTitle(Text(date, format: .dateTime.day().month(.wide)))
+        .toolbar {
+            if !missing.isEmpty {
+                Button("Add all") { withAnimation { model.store.add(missing.joined(separator: "\n")) } }
+            }
+        }
     }
 }

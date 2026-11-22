@@ -38,7 +38,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - "New list" also ends the shop in progress. The ticked items leave the list at once, and the app goes to list mode.
 - The menu shows each past shopping trip and archived list, newest first. "Settings" is at the bottom of the menu.
 - Each trip shows its date and the items that are not on the list now. These are the items that your list can miss. A line below counts the items that are not on the list and the items that are already on it.
-- Tap a trip or an archived list to open it. Tap + to add an item to the list again.
+- Tap a trip or an archived list to open it. Tap + to add an item to the list again. Tap "Add all" at the top to add all items that are not on the list.
 - Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
 ### Add from another app (iPhone)
