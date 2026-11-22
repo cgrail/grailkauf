@@ -9,6 +9,7 @@ struct ShopModeView: View {
     @AppStorage("grid") private var grid = false
 
     private var store: Store { model.store }
+    private var order: [GrailkaufCore.Category] { store.state.sectionOrder }
 
     var body: some View {
         let now = Date.now
@@ -19,7 +20,7 @@ struct ShopModeView: View {
         Group {
             if grid {
                 // Each section keeps the learned order. A ticked tile fades out as a ticked row does.
-                CategoryGrid(store: store, sections: Grid.sections(open), done: Grid.sections(done), onTap: toggle)
+                CategoryGrid(store: store, sections: Grid.sections(open, order: order), done: Grid.sections(done, order: order), onTap: toggle)
             } else {
                 list(open: open, done: done, left: left, total: total)
             }
@@ -52,7 +53,7 @@ struct ShopModeView: View {
                 Section("New") { rows(open.filter(\.isNew)) }
             }
             // By section, as on the Watch.
-            ForEach(Grid.shopSections(open.filter { !$0.isNew }), id: \.category) { section in
+            ForEach(Grid.shopSections(open.filter { !$0.isNew }, order: order), id: \.category) { section in
                 Section {
                     rows(section.rows)
                 } header: {
@@ -62,7 +63,7 @@ struct ShopModeView: View {
             if !done.isEmpty {
                 Section {
                     DisclosureGroup("Done (\(done.count))") {
-                        ForEach(Grid.sections(done), id: \.category) { section in
+                        ForEach(Grid.sections(done, order: order), id: \.category) { section in
                             section.category.label.font(.footnote).foregroundStyle(.secondary)
                             rows(section.rows)
                         }
@@ -83,6 +84,7 @@ struct ShopModeView: View {
                         .foregroundStyle(ticked ? Color.accentColor : .secondary)
                     Text(row.text)
                     Spacer()
+                    RowDetails(row: row)
                 }
                 .contentShape(.rect)
             }

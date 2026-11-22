@@ -82,6 +82,9 @@ public struct ListState: Codable, Equatable, Sendable {
     public var rows: [Row] = []
     /// Last successful iCloud sync of the device this state came from.
     public var lastSync: Date?
+    /// The order of the sections that the user set on the iPhone, as raw values of `Category`.
+    /// Nil: the route of a typical supermarket, and shop mode follows the learned order alone.
+    public var sections: [String]?
 
     public init(rows: [Row] = [], lastSync: Date? = nil) {
         self.rows = rows
@@ -194,14 +197,20 @@ public struct ListState: Codable, Equatable, Sendable {
         }
     }
 
+    /// The sections in the order that the user set, then the others in the order of `Category`.
+    public var sectionOrder: [Category] { Category.ordered(sections) }
+
     /// Shop mode: "New" items first, then the learned order, items pushed back with "later" last.
+    /// If the user set a section order, the sections come first: the user knows the shop better than the ticks.
     /// `lingering` keeps just-ticked rows in place while they fade out.
     public func shop(now: Date, lingering: Set<UUID> = []) -> [Row] {
-        rows.filter { $0.tickedAt == nil || lingering.contains($0.id) }.sorted { a, b in
+        let rank = sections == nil ? [:] : Dictionary(uniqueKeysWithValues: sectionOrder.enumerated().map { ($1, $0) })
+        func section(_ row: Row) -> Int { rank[Category(rawValue: row.category ?? "") ?? .other] ?? 0 }
+        return rows.filter { $0.tickedAt == nil || lingering.contains($0.id) }.sorted { a, b in
             let aLater = a.isDeferred(now: now), bLater = b.isDeferred(now: now)
             if aLater != bLater { return bLater }
             if aLater { return a.deferredAt! < b.deferredAt! }
-            return (a.sort, a.createdAt) < (b.sort, b.createdAt)
+            return (section(a), a.sort, a.createdAt) < (section(b), b.sort, b.createdAt)
         }
     }
 
@@ -237,6 +246,8 @@ public struct ListState: Codable, Equatable, Sendable {
             merged = (own ?? ListState()).updated(from: phone?.rows ?? [])
         }
         merged.lastSync = [phone?.lastSync, own?.lastSync].compactMap(\.self).max()
+        // Only the phone knows the section order.
+        merged.sections = phone?.sections
         return merged
     }
 
@@ -251,25 +262,5 @@ public struct ListState: Codable, Equatable, Sendable {
             return newer
         }
         return result
-    }
-}
-
-/// Supermarket sections. They place an item that the learned order does not know yet, and group the grid view.
-/// The cases follow the route through a typical supermarket. The grid view shows the sections in this order.
-public enum Category: String, CaseIterable, Sendable {
-    case produce, spices, tins, household, toiletries, baby, sweets, meat, fish, breakfast, bakery, frozen
-    case baking, pasta, cheese, dairy, pets, softDrinks, alcohol, other
-
-    /// Reads the answer of the language model. An answer that is not on the list is `.other`.
-    public init(answer: String) {
-        let word = answer.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters)).lowercased()
-        self = Self.allCases.first { $0.rawValue.lowercased() == word } ?? .other
-    }
-
-    /// The section of an item that the model sorts wrong, or nil. The model puts the vegetable "Paprika" in spices.
-    public static func fixed(_ name: String) -> Category? {
-        let words = ItemName.key(name).split(separator: " ")
-        let spice: Set<Substring> = ["pulver", "powder", "gewürz", "edelsüß", "rosenscharf", "geräuchert"]
-        return words.contains("paprika") && spice.isDisjoint(with: words) ? .produce : nil
     }
 }

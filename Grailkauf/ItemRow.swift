@@ -24,7 +24,12 @@ struct ItemRow: View {
                     text = row.text
                     editing = true
                 } label: {
-                    Text(row.text).frame(maxWidth: .infinity, alignment: .leading).contentShape(.rect)
+                    HStack {
+                        Text(row.text)
+                        Spacer()
+                        RowDetails(row: row)
+                    }
+                    .contentShape(.rect)
                 }
                 .foregroundStyle(.primary)
             }
@@ -42,5 +47,27 @@ struct ItemRow: View {
     private func save() {
         editing = false
         store.edit(row, to: text)
+    }
+}
+
+/// Settings, "Show details": the position of the item in the learned order and the picture of its section.
+/// So the user can check what the app learned. A sparkle marks a guessed position, "?" an item with no section yet.
+struct RowDetails: View {
+    let row: Row
+    @AppStorage("details") private var details = false
+
+    var body: some View {
+        if details {
+            let position = row.isNew ? "–" : (row.sort + 1).formatted()
+            HStack(spacing: 2) {
+                Text(verbatim: position).monospacedDigit()
+                if row.guessed { Image(systemName: "sparkles") }
+                Text(verbatim: row.category.flatMap(GrailkaufCore.Category.init(rawValue:))?.emoji ?? "?")
+            }
+            .font(.caption2)
+            .foregroundStyle(.secondary)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Position \(position)"))
+        }
     }
 }

@@ -220,6 +220,13 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(shown.rows[0].tickedAt != nil)
     }
 
+    @Test func watchTakesTheSectionOrderFromThePhone() {
+        var phone = list([milk], syncedAt: friday - hour)
+        phone.sections = ["dairy"]
+        let shown = ListState.onWatch(phone: phone, own: list([milk], syncedAt: friday), ownVersions: [])
+        #expect(shown.sections == ["dairy"])
+    }
+
     @Test func emptyWatchStoreShowsThePhoneList() {
         let phone = list([milk], syncedAt: nil)
         #expect(ListState.onWatch(phone: phone, own: nil, ownVersions: []).rows.map(\.name) == ["Milch"])

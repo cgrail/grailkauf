@@ -13,7 +13,7 @@ struct ShopView: View {
         NavigationStack {
             List {
                 if let current = open.first {
-                    ForEach(Grid.shopSections(open), id: \.category) { section in
+                    ForEach(Grid.shopSections(open, order: model.state.sectionOrder), id: \.category) { section in
                         Section {
                             ForEach(section.rows) { row in
                                 if row.id == current.id {
@@ -46,7 +46,7 @@ struct ShopView: View {
                 if !done.isEmpty {
                     // By section, as the open items. Within a section, the most recent tick is first.
                     Section("Done") {
-                        ForEach(Grid.sections(done), id: \.category) { section in
+                        ForEach(Grid.sections(done, order: model.state.sectionOrder), id: \.category) { section in
                             section.category.label.foregroundStyle(.secondary)
                             ForEach(section.rows) { row in
                                 Button {
