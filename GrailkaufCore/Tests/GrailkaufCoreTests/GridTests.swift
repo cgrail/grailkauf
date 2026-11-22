@@ -18,6 +18,16 @@ import Testing
         #expect(sections[1].rows.map(\.text) == ["Milch", "Joghurt"])
     }
 
+    @Test func exportLeavesOutTheExcludedSections() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let state = ListState(entries: [
+            Entry(text: "2 Milch", category: "dairy", createdAt: now - 3),
+            Entry(text: "Spülmittel", category: "household", createdAt: now - 2),
+            Entry(text: "Äpfel", category: "produce", createdAt: now - 1),
+        ], order: [], now: now)
+        #expect(Grid.text(Grid.sections(state.todo), without: [.household]) == "Äpfel\n2 Milch")
+    }
+
     @Test func shopPutsTheSectionOfTheCurrentItemFirst() {
         let now = Date(timeIntervalSince1970: 1_800_000_000)
         let state = ListState(entries: [

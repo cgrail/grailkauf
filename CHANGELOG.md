@@ -38,3 +38,4 @@
 - "New list" at the top of the menu starts an empty list at once, with no question, and the menu closes on it. The old list goes to the history as an archived list, and "Add all" there brings its items back. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.
 - Below the items in list mode, "Suggestions" shows the items of your past trips and lists that are not on the list now. Tap one to add it. The list stays where it is. Swipe one to remove it, for example a thing that you bought once. It comes back if you buy it again.
 - In the "Sections" tab, tap a tile to change the name of the item, move it to another section or delete it.
+- "Export" in Settings sends the open items to Notes or another app, one item per line, in the order of your shop. Switch off a section to leave its items out.

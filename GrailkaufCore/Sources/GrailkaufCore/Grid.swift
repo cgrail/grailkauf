@@ -16,6 +16,11 @@ public enum Grid {
         return sections
     }
 
+    /// The export to a notes app: one item per line, as typed, without the sections in `excluded`.
+    public static func text(_ sections: [(category: Category, rows: [Row])], without excluded: Set<Category>) -> String {
+        sections.filter { !excluded.contains($0.category) }.flatMap(\.rows).map(\.text).joined(separator: "\n")
+    }
+
     /// Puts each section in the first row with room for it, so small sections fill the gaps further up.
     /// A section takes one column for each item, and a full row if it has more items than the row has columns.
     /// - Returns: the indices of `sizes` for each row.

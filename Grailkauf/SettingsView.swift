@@ -25,6 +25,11 @@ struct SettingsView: View {
                 Text("Details show the position of each item in the order and the picture of its section.")
             }
             Section {
+                NavigationLink("Export") { ExportView() }
+            } footer: {
+                Text("Send the list to Notes or another app, without the sections that you switch off.")
+            }
+            Section {
                 Button("Invite", systemImage: "person.badge.plus") {
                     Task {
                         do {

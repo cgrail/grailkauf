@@ -71,6 +71,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
 - **Sections** shows the supermarket sections. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - **Show details** shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles. A sparkle marks a guessed position. "–" shows an item with no position, "?" an item with no section yet.
+- **Export** sends the open items as text to Notes or another app, one item per line, in shop order. Switch off a section to leave its items out. In Notes, select the text and tap the checklist button to get a circle for each item.
 - **Invite** sends a link. The person who opens the link joins your list.
 - **Privacy Policy** opens the privacy policy on the web.
 - **Upload iCloud schema** shows in Debug builds only. It sends every entity and field to the Development schema in iCloud.
