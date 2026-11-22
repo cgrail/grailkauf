@@ -1215,16 +1215,6 @@
         }
       }
     },
-    "Start a new list?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neue Liste beginnen?"
-          }
-        }
-      }
-    },
     "Starting…" : {
       "localizations" : {
         "de" : {
@@ -1251,16 +1241,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Süßwaren & Snacks"
-          }
-        }
-      }
-    },
-    "The current list with %lld items moves to the history." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die aktuelle Liste mit %lld Artikeln kommt in den Verlauf."
           }
         }
       }
@@ -1301,16 +1281,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die geteilte Liste ersetzt deine eigene Liste mit %lld Artikeln."
-          }
-        }
-      }
-    },
-    "The ticked items leave the list." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die abgehakten Artikel verlassen die Liste."
           }
         }
       }
