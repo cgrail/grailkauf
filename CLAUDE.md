@@ -6,6 +6,7 @@ A shared shopping list for iPhone and Apple Watch that learns the order of a sho
 
 - Work on a branch, push it, and open a pull request. Commit nothing to `main`.
 - The checks in README "Build and test" must be green before each commit.
+- Each commit raises `CURRENT_PROJECT_VERSION` in `Config/Version.xcconfig` by 1, in the same commit. `MARKETING_VERSION` changes only for a release.
 - A change a user would notice gets an entry in [CHANGELOG.md](CHANGELOG.md) under `## <MARKETING_VERSION> (current)`, in the same commit. Say what the app does now.
 - A new or changed feature, control or setting updates the README in the same commit.
 - UI text is in English and German. Add each new string with its German text to `Strings/Localizable.xcstrings`.

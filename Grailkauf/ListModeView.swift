@@ -120,7 +120,7 @@ struct ListModeView: View {
         // Only the rows above the button change while dictating, so the button stays under the finger.
         VStack(spacing: 8) {
             if dictation.isRecording {
-                RecordingBar(dictation: dictation)
+                RecordingStatus(dictation: dictation)
             } else if !grid {
                 suggestions
             }
@@ -134,8 +134,11 @@ struct ListModeView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             }
-            holdToDictate
-            textField
+            // One line, as in a chat app: the text field, and the microphone on the right.
+            HStack(alignment: .bottom) {
+                textField
+                holdToDictate
+            }
         }
         // Without the text field, the bar would shrink to the width of the dictation button.
         .frame(maxWidth: .infinity)
@@ -144,23 +147,19 @@ struct ListModeView: View {
     }
 
     private var textField: some View {
-        HStack(alignment: .bottom) {
-            // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
-            TextField("Add item", text: $draft, axis: .vertical)
-                .lineLimit(1...4)
-                .font(.title3)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(.background, in: .rect(cornerRadius: 24))
-                .focused($typing)
-                .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
-            Button("Add", systemImage: "arrow.up.circle.fill") { add(draft) }
-                .labelStyle(.iconOnly)
-                .font(.system(size: 44))
-                .disabled(draft.trimmingCharacters(in: .whitespaces).isEmpty)
-        }
-        .opacity(dictation.isRecording ? 0 : 1)
-        .disabled(dictation.isRecording)
+        // A vertical field keeps the lines of pasted text. Enter arrives as a line break and adds the item.
+        TextField("Add item", text: $draft, axis: .vertical)
+            .lineLimit(1...4)
+            .font(.title3)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.background, in: .rect(cornerRadius: 24))
+            .focused($typing)
+            .onChange(of: draft) { if draft.contains(where: \.isNewline) { add(draft) } }
+            .opacity(dictation.isRecording ? 0 : 1)
+            .disabled(dictation.isRecording)
+            // An overlay keeps the height of the line, so the button stays under the finger.
+            .overlay { if dictation.isRecording { RecordingBar(dictation: dictation) } }
     }
 
     /// Shows for a few seconds after an add replaced items that were on the list already.
@@ -218,16 +217,18 @@ struct ListModeView: View {
         selection = []
     }
 
-    /// Hold to dictate, let go to add the items.
+    /// Hold to dictate, let go to add the items. While held, the button is red and glows.
     private var holdToDictate: some View {
         Label(holding ? "Let go to add" : "Hold to dictate", systemImage: "mic.fill")
+            .labelStyle(.iconOnly)
             .font(.title3.weight(.semibold))
             .foregroundStyle(.white)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 14)
-            .background(.tint, in: .capsule)
+            .frame(width: 50, height: 50)
+            .background(.tint, in: .circle)
             .background { if holding { PulseRings(level: dictation.levels.last ?? 0) } }
-            .scaleEffect(holding ? 1.1 : 1)
+            .shadow(color: .red.opacity(holding ? 0.7 : 0), radius: 12)
+            .tint(holding ? .red : nil)
+            .scaleEffect(holding ? 1.15 : 1)
             .animation(.snappy, value: holding)
             // Reports the finger going down and up, also when the system cancels the touch. `perform` never runs.
             .onLongPressGesture(minimumDuration: 3600, maximumDistance: 10_000, perform: {}, onPressingChanged: hold)

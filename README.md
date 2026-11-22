@@ -9,7 +9,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ## What the app does
 
 ### List mode (iPhone)
-- Type an item and press Enter. The item goes to the end of the list.
+- Type an item and press Enter. The item goes to the end of the list. The text field and the microphone button are in one line, as in a chat app.
 - A comma or a pasted text with many lines adds many items at once.
 - While you type, the app suggests items that you added before.
 - If the text field is empty, the app shows the items that are due again. "Fill with the usual" adds all of them.
@@ -19,10 +19,10 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - Touch and hold an item, then drag it to a new place.
 - Tap "Select" to select items. Slide a finger down the circles to select many items quickly, or tap "Select all". Tap the trash button at the bottom to delete the selected items. Tap the X to stop.
 - The history keeps the items that you bought, also after you delete them from the list.
-- Hold "Hold to dictate" above the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Let go to add the items to the list. With VoiceOver, double tap and hold.
+- Hold the microphone button to the right of the text field and say your items, for example "Milch, zwei Liter Apfelsaft und Brot". Let go to add the items to the list. With VoiceOver, double tap and hold.
 - After each short pause, the screen shows the items of what you said. A spinner shows while the app splits them into single products. Filler words such as "ähm", "dann" or "noch" go away.
 - The last line shows the words that the phone hears now, next to a moving waveform. A microphone shows while the phone waits for words.
-- While you hold, a bar above the button shows what the app does ("Listening", "Splitting", "Adding"), a red waveform of your voice and the time. Rings around the button grow when you speak.
+- While you hold, a line above shows what the app does ("Listening", "Splitting", "Adding"). In place of the text field, a red waveform of your voice and the time show. The button turns red and glows, and rings around it grow when you speak.
 - A spinner line above the button shows while the app checks new items. A new item can still split into more items then.
 
 ### Sections (iPhone)

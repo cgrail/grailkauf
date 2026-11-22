@@ -48,40 +48,24 @@ struct DictationScreen: View {
     }
 }
 
-/// The bar above the held button, as in a messaging app: what the app does, the loudness and the time.
-struct RecordingBar: View {
+/// The line above the composer while the finger holds the button: what the app does.
+struct RecordingStatus: View {
     let dictation: Dictation
 
     var body: some View {
-        VStack(spacing: 8) {
-            HStack {
-                status
-                Spacer()
-                if dictation.status == .listening, dictation.pending > 0 {
-                    Label {
-                        Text("Splitting…")
-                    } icon: {
-                        ProgressView()
-                    }
+        HStack {
+            status
+            Spacer()
+            if dictation.status == .listening, dictation.pending > 0 {
+                Label {
+                    Text("Splitting…")
+                } icon: {
+                    ProgressView()
                 }
             }
-            .font(.subheadline.weight(.medium))
-            .foregroundStyle(.secondary)
-            HStack(spacing: 12) {
-                Image(systemName: "circle.fill")
-                    .font(.caption)
-                    .symbolEffect(.pulse, isActive: dictation.status == .listening)
-                    .accessibilityHidden(true)
-                waveform
-                if let since = dictation.listeningSince {
-                    Text(since, style: .timer).monospacedDigit()
-                }
-            }
-            .foregroundStyle(.red)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(.background, in: .capsule)
         }
+        .font(.subheadline.weight(.medium))
+        .foregroundStyle(.secondary)
     }
 
     @ViewBuilder private var status: some View {
@@ -91,6 +75,28 @@ struct RecordingBar: View {
         case .splitting: Label { Text("Splitting…") } icon: { ProgressView() }
         case .adding, nil: Label { Text("Adding…") } icon: { ProgressView() }
         }
+    }
+}
+
+/// In place of the text field while the finger holds the button: a red waveform of the voice and the time.
+struct RecordingBar: View {
+    let dictation: Dictation
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "circle.fill")
+                .font(.caption)
+                .symbolEffect(.pulse, isActive: dictation.status == .listening)
+                .accessibilityHidden(true)
+            waveform
+            if let since = dictation.listeningSince {
+                Text(since, style: .timer).monospacedDigit()
+            }
+        }
+        .foregroundStyle(.red)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(.background, in: .capsule)
     }
 
     /// One bar per moment, newest on the right.
