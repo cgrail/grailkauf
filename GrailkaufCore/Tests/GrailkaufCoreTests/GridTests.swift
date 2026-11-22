@@ -18,6 +18,18 @@ import Testing
         #expect(sections[1].rows.map(\.text) == ["Milch", "Joghurt"])
     }
 
+    @Test func shopPutsTheSectionOfTheCurrentItemFirst() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let state = ListState(entries: [
+            Entry(text: "Milch", category: "dairy", createdAt: now - 3),
+            Entry(text: "Äpfel", category: "produce", createdAt: now - 2),
+            Entry(text: "Joghurt", category: "dairy", createdAt: now - 1),
+        ], order: ["Milch", "Äpfel", "Joghurt"], now: now)
+        let sections = Grid.shopSections(state.shop(now: now))
+        #expect(sections.map(\.category) == [.dairy, .produce])
+        #expect(sections[0].rows.map(\.text) == ["Milch", "Joghurt"])
+    }
+
     @Test func smallSectionsFillTheGapsFurtherUp() {
         #expect(Grid.rows(sizes: [4, 1, 2, 2, 7, 1, 3], columns: 5) == [[0, 1], [2, 3, 5], [4], [6]])
     }

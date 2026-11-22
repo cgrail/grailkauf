@@ -34,7 +34,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Menu and history (iPhone)
 - Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.
-- Tap "New list" at the top of the menu to start an empty list. The app does not ask first. The current list moves to the history as an archived list. It does not count as a purchase.
+- Tap "New list" at the top of the menu to start an empty list. The app does not ask first. The menu closes and shows the empty list. The current list moves to the history as an archived list. It does not count as a purchase.
 - "New list" also ends the shop in progress. The ticked items leave the list at once, and the app goes to list mode.
 - The menu shows each past shopping trip and archived list, newest first. "Settings" is at the bottom of the menu.
 - Each trip shows its date and the items that are not on the list now. These are the items that your list can miss. A line below counts the items that are not on the list and the items that are already on it.
@@ -47,8 +47,8 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The items reach the list when Grailkauf opens on this iPhone, or when the app syncs in the background.
 
 ### Shop mode (iPhone)
-- The list is in the learned order. Tap an item to tick it.
-- A ticked item fades and moves to "Done" after two seconds. Tap it there to bring it back.
+- The list is in the learned order, grouped by supermarket section as on the Watch. The section of the current item is at the top. Tap an item to tick it.
+- A ticked item fades and moves to "Done" after two seconds. "Done" is grouped by section too. Tap an item there to bring it back.
 - An item that the order does not know yet is in the "New" group at the top, or at a guessed position with a sparkle mark.
 - The top shows the progress and the time of the last sync.
 - Tap the grid button at the top to see the items as tiles by section. Tap a tile to tick it. Ticked tiles move to "Done" below a line at the bottom, grouped by faded sections. Tap "Done" to show or hide them. Tap a tile there to bring it back. Within a section, the tiles are in the learned order. Shop mode keeps the view that you chose last.
@@ -61,7 +61,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The items are in small text in low rows, with little space between the sections, so more than two fit on one screen. The current item is in bold.
 - Tap the current item, or use the Double Tap gesture, to tick it.
 - Swipe an item and tap "Later" to move it to the end of the trip.
-- Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items.
+- Below it, the rest of the list, grouped by supermarket section as in "Sections", then the ticked items, also by section.
 - Tap "Info" at the end of the list for the info screen. It shows the time of the last sync, the version and the commit of the app. "Refresh" there gets the list from the iPhone.
 - When you tick the last item, the Watch shows a big 🎉 and "All done.".
 - The Watch and the iPhone sync over Bluetooth. This works with no internet.
