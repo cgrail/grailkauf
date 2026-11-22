@@ -136,6 +136,16 @@
         }
       }
     },
+    "Debug builds only. Sends every entity and field to the Development schema in iCloud." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur in Debug-Builds. Sendet jede Entität und jedes Feld an das Development-Schema in iCloud."
+          }
+        }
+      }
+    },
     "Details show the position of each item in the order and the picture of its section." : {
       "localizations" : {
         "de" : {
@@ -182,6 +192,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Details zeigen"
+          }
+        }
+      }
+    },
+    "Upload iCloud schema" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud-Schema hochladen"
+          }
+        }
+      }
+    },
+    "Uploaded. Deploy the schema to Production in the CloudKit Console." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hochgeladen. Übertrage das Schema in der CloudKit Console nach Production."
           }
         }
       }

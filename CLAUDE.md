@@ -45,7 +45,7 @@ A push to `main` releases nothing. The user decides when a version ships. When t
 
 ### Steps only the user can do
 
-- If the Core Data model changed: run a Debug build on a device, create a record of each new entity and attribute so they reach the Development schema, then deploy the schema to Production in the CloudKit Console. Without this, App Store builds cannot send changes to iCloud. Before submitting, check that "Deploy Schema Changes" lists nothing.
+- If the Core Data model changed: run a Debug build on a device and tap "Upload iCloud schema" in Settings. This sends every entity and attribute to the Development schema. Then deploy the schema to Production in the CloudKit Console. Without this, App Store builds cannot send changes to iCloud. Before submitting, check that "Deploy Schema Changes" lists nothing.
 - Merge the pull request. If GitHub Pages is off, switch it on: repository Settings, Pages, branch `main`, folder `/docs`.
 - In Xcode, select Product, Archive with the Grailkauf scheme, then Distribute App, App Store Connect.
 - In App Store Connect, paste the texts from APP-STORE.md (and WHATS-NEW.md), and add screenshots: 6.9-inch iPhone and Apple Watch, each in English and German. Then select the build and submit for review.

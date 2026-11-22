@@ -69,10 +69,11 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
 - Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
-- **Sections** shows the supermarket sections. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. The order stays on this iPhone and its Watch.
+- **Sections** shows the supermarket sections. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - **Show details** shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles. A sparkle marks a guessed position. "–" shows an item with no position, "?" an item with no section yet.
 - **Invite** sends a link. The person who opens the link joins your list.
 - **Privacy Policy** opens the privacy policy on the web.
+- **Upload iCloud schema** shows in Debug builds only. It sends every entity and field to the Development schema in iCloud.
 
 ## How the order learns
 - A trip is a run of ticks with no gap longer than four hours. Four hours after the last tick, the ticked items leave the list.
@@ -119,7 +120,7 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - If Xcode reports that the container is missing, add it under Signing & Capabilities.
 - You cannot rename or delete this container later.
 - Xcode also registers the App Group `group.de.grails.grailkauf`. The share extension gives the shared text to the app through this group.
-- Before a public release, deploy the iCloud schema to production in the CloudKit Console.
+- Before a public release, deploy the iCloud schema to production in the CloudKit Console. If the model changed, first tap "Upload iCloud schema" in Settings of a Debug build. The schema in the Development environment then has every new field.
 
 ## Limits
 - The app cannot force an iCloud sync, because the system gives apps no command for that. The iPhone syncs when the app opens and when a change arrives. "Refresh" on the info screen of the Watch gets the list from the iPhone.

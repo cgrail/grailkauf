@@ -82,7 +82,7 @@ public struct ListState: Codable, Equatable, Sendable {
     public var rows: [Row] = []
     /// Last successful iCloud sync of the device this state came from.
     public var lastSync: Date?
-    /// The order of the sections that the user set on the iPhone, as raw values of `Category`.
+    /// The order of the sections that the user set, as raw values of `Category`. It syncs with the list.
     /// Nil: the route of a typical supermarket, and shop mode follows the learned order alone.
     public var sections: [String]?
 
@@ -246,8 +246,6 @@ public struct ListState: Codable, Equatable, Sendable {
             merged = (own ?? ListState()).updated(from: phone?.rows ?? [])
         }
         merged.lastSync = [phone?.lastSync, own?.lastSync].compactMap(\.self).max()
-        // Only the phone knows the section order.
-        merged.sections = phone?.sections
         return merged
     }
 

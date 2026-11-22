@@ -6,6 +6,8 @@ import GrailkaufCore
     @NSManaged var createdAt: Date?
     @NSManaged var items: Set<Item>?
     @NSManaged var moves: Set<OrderMove>?
+    /// The section order that the user set: raw values of `Category`, separated by commas. Nil: the default route.
+    @NSManaged var sections: String?
 }
 
 /// A line of the list. A ticked item stays in the store. The order and the suggestions learn from it.
@@ -74,7 +76,7 @@ func makeModel() -> NSManagedObjectModel {
         list.properties.append(toMany)
         children.properties.append(toOne)
     }
-    let list = entity("ShoppingList", [("id", .uuid), ("createdAt", .date)])
+    let list = entity("ShoppingList", [("id", .uuid), ("createdAt", .date), ("sections", .string)])
     let item = entity("Item", [
         ("id", .uuid), ("text", .string), ("category", .string), ("createdAt", .date), ("modifiedAt", .date),
         ("tickedAt", .date), ("deferredAt", .date), ("archivedAt", .date),
