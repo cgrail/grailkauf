@@ -74,6 +74,14 @@ private func trip(_ weeksAgo: Double, _ names: [String]) -> [Entry] {
         #expect(OrderLearning.move(in: order, from: 9, to: 0, at: friday) == nil)
     }
 
+    @Test func dragAfterANameThatTheOrderLacksPlacesBoth() {
+        let history = trips(["a", "b"])
+        let date = history[0].date + hour
+        // The screen shows a, b, x, y. Drag a below y.
+        let moves = OrderLearning.moves(order: ["a", "b"], new: ["x", "y"], from: 0, to: 4, at: date)
+        #expect(OrderLearning.order(trips: history, moves: moves) == ["b", "x", "y", "a"])
+    }
+
     @Test func ticksGroupIntoTripsByGap() {
         let ticks: [(key: String, at: Date)] = [
             ("a", friday), ("b", friday + 60), ("a", friday + 120), ("c", friday + 5 * hour),

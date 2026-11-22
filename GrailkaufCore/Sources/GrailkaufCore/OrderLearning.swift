@@ -110,6 +110,22 @@ public enum OrderLearning {
         return Move(date: date, key: order[source], after: landed > 0 ? others[landed - 1] : nil)
     }
 
+    /// Translates a drag on the order screen, which shows `order` and then `new`, the names the order lacks.
+    /// The new names down to the drop place join the order first, so the moved item has its neighbour there.
+    public static func moves(order: [String], new: [String], from source: Int, to destination: Int, at date: Date) -> [Move] {
+        let shown = order + new
+        guard let move = move(in: shown, from: source, to: destination, at: date) else { return [] }
+        let end = move.after.flatMap(shown.firstIndex(of:)).map { $0 + 1 } ?? 0
+        let joining = shown[order.count..<max(order.count, end)].filter { $0 != move.key }
+        // A second apart and before the drag: the order applies moves by date.
+        var after = order.last
+        let joins = joining.enumerated().map { offset, key in
+            defer { after = key }
+            return Move(date: date - Double(joining.count - offset), key: key, after: after)
+        }
+        return joins + [move]
+    }
+
     static func median(_ values: [Double]) -> Double? {
         guard !values.isEmpty else { return nil }
         let sorted = values.sorted()

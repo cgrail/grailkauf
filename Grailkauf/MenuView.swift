@@ -11,30 +11,21 @@ enum Route: Hashable {
 struct MenuView: View {
     @Environment(AppModel.self) private var model
     let open: (Route) -> Void
-    @State private var confirmNewList = false
 
     var body: some View {
         let trips = Suggestions.history(entries: model.store.entries)
         let count = model.store.state.todo.count
         let ticked = model.store.state.rows.count - count
         List {
-            Button { confirmNewList = true } label: { Label("New list", systemImage: "square.and.pencil") }
-                .disabled(count + ticked == 0)
-                .confirmationDialog("Start a new list?", isPresented: $confirmNewList, titleVisibility: .visible) {
-                    Button("New list") {
-                        withAnimation {
-                            model.store.archiveList()
-                            // The shop ends with the old list. The Live Activity then goes away.
-                            model.mode = .list
-                        }
-                    }
-                } message: {
-                    if count > 0 {
-                        Text("The current list with \(count) items moves to the history.")
-                    } else {
-                        Text("The ticked items leave the list.")
-                    }
+            // No question first: the old list stays in the history, and "Add all" there brings it back.
+            Button {
+                withAnimation {
+                    model.store.archiveList()
+                    // The shop ends with the old list. The Live Activity then goes away.
+                    model.mode = .list
                 }
+            } label: { Label("New list", systemImage: "square.and.pencil") }
+                .disabled(count + ticked == 0)
             Section("History") {
                 ForEach(trips, id: \.date) { trip in
                     Button { open(.trip(trip.date)) } label: { row(trip) }

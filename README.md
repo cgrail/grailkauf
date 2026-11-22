@@ -34,11 +34,11 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Menu and history (iPhone)
 - Tap the menu button at the top left. The menu slides in from the left. Tap next to it to close it.
-- Tap "New list" at the top of the menu to start an empty list. The current list moves to the history as an archived list. It does not count as a purchase.
+- Tap "New list" at the top of the menu to start an empty list. The app does not ask first. The current list moves to the history as an archived list. It does not count as a purchase.
 - "New list" also ends the shop in progress. The ticked items leave the list at once, and the app goes to list mode.
 - The menu shows each past shopping trip and archived list, newest first. "Settings" is at the bottom of the menu.
 - Each trip shows its date and the items that are not on the list now. These are the items that your list can miss. A line below counts the items that are not on the list and the items that are already on it.
-- Tap a trip or an archived list to open it. Tap + to add an item to the list again.
+- Tap a trip or an archived list to open it. Tap + to add an item to the list again. Tap "Add all" at the top to add all items that are not on the list.
 - Below the items, a line counts the items of that trip that are already on the list. Tap the line to show them.
 
 ### Add from another app (iPhone)
@@ -68,6 +68,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
+- Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
 - **Invite** sends a link. The person who opens the link joins your list.
 - **Privacy Policy** opens the privacy policy on the web.
 

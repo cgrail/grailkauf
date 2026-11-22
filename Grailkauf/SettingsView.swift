@@ -58,28 +58,37 @@ struct SettingsView: View {
     }
 }
 
-/// The learned order, numbered. Dragging an item corrects it at once; later trips keep teaching it.
+/// The learned order, numbered, then the items on the list that it lacks.
+/// Dragging an item places it at once, also before the first trip; later trips keep teaching it.
 struct OrderView: View {
     @Environment(AppModel.self) private var model
 
     var body: some View {
         let order = model.store.order
-        let names = Dictionary(
-            model.store.entries.sorted { $0.createdAt < $1.createdAt }.map { ($0.key, ItemName.display($0.text)) },
-            uniquingKeysWith: { _, latest in latest })
-        List {
+        let entries = model.store.entries.sorted { $0.createdAt < $1.createdAt }
+        let names = Dictionary(entries.map { ($0.key, ItemName.display($0.text)) }, uniquingKeysWith: { _, latest in latest })
+        let known = Set(order)
+        var new: [String] = []
+        for entry in entries where entry.isOpen && !known.contains(entry.key) && !new.contains(entry.key) {
+            new.append(entry.key)
+        }
+        return List {
             Section {
-                ForEach(Array(order.enumerated()), id: \.element) { index, key in
+                ForEach(Array((order + new).enumerated()), id: \.element) { index, key in
                     HStack {
-                        Text("\(index + 1)").monospacedDigit().foregroundStyle(.secondary)
+                        if index < order.count {
+                            Text("\(index + 1)").monospacedDigit().foregroundStyle(.secondary)
+                        } else {
+                            Image(systemName: "sparkles").foregroundStyle(.secondary).accessibilityLabel("New")
+                        }
                         Text(names[key] ?? key)
                     }
                 }
                 .onMove { from, to in
-                    guard let source = from.first,
-                          let move = OrderLearning.move(in: order, from: source, to: to, at: .now)
-                    else { return }
-                    model.store.record(move)
+                    guard let source = from.first else { return }
+                    for move in OrderLearning.moves(order: order, new: new, from: source, to: to, at: .now) {
+                        model.store.record(move)
+                    }
                 }
             } footer: {
                 Text("Drag an item to where you pick it up. The order keeps learning from your shopping.")
@@ -87,10 +96,10 @@ struct OrderView: View {
         }
         .environment(\.editMode, .constant(.active))
         .overlay {
-            if order.isEmpty {
+            if order.isEmpty && new.isEmpty {
                 ContentUnavailableView(
                     "Order", systemImage: "list.number",
-                    description: Text("The order appears after your first shopping trip."))
+                    description: Text("Add items to the list. Then drag them into the order of your shop."))
             }
         }
         .navigationTitle("Order")

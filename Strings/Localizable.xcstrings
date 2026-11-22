@@ -160,12 +160,32 @@
         }
       }
     },
+    "Add all" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle eintragen"
+          }
+        }
+      }
+    },
     "Add item" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Artikel hinzufügen"
+          }
+        }
+      }
+    },
+    "Add items to the list. Then drag them into the order of your shop." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trage Artikel in die Liste ein. Ziehe sie dann in die Reihenfolge deines Ladens."
           }
         }
       }
@@ -1205,16 +1225,6 @@
         }
       }
     },
-    "Start a new list?" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neue Liste beginnen?"
-          }
-        }
-      }
-    },
     "Starting…" : {
       "localizations" : {
         "de" : {
@@ -1245,16 +1255,6 @@
         }
       }
     },
-    "The current list with %lld items moves to the history." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die aktuelle Liste mit %lld Artikeln kommt in den Verlauf."
-          }
-        }
-      }
-    },
     "The list is empty" : {
       "localizations" : {
         "de" : {
@@ -1275,32 +1275,12 @@
         }
       }
     },
-    "The order appears after your first shopping trip." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die Reihenfolge erscheint nach deinem ersten Einkauf."
-          }
-        }
-      }
-    },
     "The shared list replaces your own list with %lld items." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Die geteilte Liste ersetzt deine eigene Liste mit %lld Artikeln."
-          }
-        }
-      }
-    },
-    "The ticked items leave the list." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Die abgehakten Artikel verlassen die Liste."
           }
         }
       }
