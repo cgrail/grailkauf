@@ -59,14 +59,16 @@ final class Store {
             [weak self] _ in
             MainActor.assumeIsolated { self?.queueRefresh() }
         }
+        // Not on the main queue: CloudKit waits for the observer, and calls such as `share` make the main thread
+        // wait for CloudKit. An observer on the main queue then freezes the app.
         center.addObserver(
-            forName: NSPersistentCloudKitContainer.eventChangedNotification, object: container, queue: .main
+            forName: NSPersistentCloudKitContainer.eventChangedNotification, object: container, queue: nil
         ) { [weak self] note in
             let key = NSPersistentCloudKitContainer.eventNotificationUserInfoKey
             guard let event = note.userInfo?[key] as? NSPersistentCloudKitContainer.Event,
                   event.type == .import, event.succeeded, let finished = event.endDate
             else { return }
-            MainActor.assumeIsolated { self?.synced(at: finished) }
+            Task { @MainActor in self?.synced(at: finished) }
         }
     }
 
