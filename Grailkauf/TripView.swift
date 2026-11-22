@@ -35,7 +35,7 @@ struct TripView: View {
         .navigationTitle(Text(date, format: .dateTime.day().month(.wide)))
         .toolbar {
             if !missing.isEmpty {
-                Button("Add all") { withAnimation { model.store.add(missing.joined(separator: "\n")) } }
+                Button("Add all") { withAnimation { _ = model.store.add(missing.joined(separator: "\n")) } }
             }
         }
     }
