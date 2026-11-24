@@ -1,9 +1,16 @@
 # Changelog
 
-## 1.0 (current)
+## 1.1 (current)
 
-- The sections follow a new default route: fruit and vegetables, tins, spices, baking, bread, breakfast, pasta, sweets, cheese, dairy, fish, meat, care, baby, pet food, household, drinks with alcohol, water and juices, frozen food, other. If you set your own order, it stays.
 - A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them by their handle into a new place. "Sections" shows the items as tiles by supermarket section, as on the iPhone: drag a tile to a new place or into another section. "Order" and "Section order" put the items and the supermarket sections in the order of your shop, as in Settings on the iPhone. Drag a row by its handle. "Section order" numbers the sections. iCloud brings the changes to the iPhone and the Watch.
+- In Settings, "Sections" shows a number for the place of each section.
+- The sections follow a new default route: fruit and vegetables, tins, spices, baking, bread, breakfast, pasta, sweets, cheese, dairy, fish, meat, care, baby, pet food, household, drinks with alcohol, water and juices, frozen food, other. If you set your own order, it stays.
+- "Export" in Settings sends the open items to Notes or another app, one item per line, in the order of your shop. Switch off a section to leave its items out.
+- Swipe an archived list in the menu to delete it. Its items then leave the suggestions too.
+- The history in the menu is easier to read. An archived list shows a box icon next to its date. Each row shows its items in two short lines, and the lines between the rows all start at the same place. The menu is white, as in a chat app, with the large title "History" at the top. "New list" and "Settings" stay at the bottom, below a thin line.
+
+## 1.0
+
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
@@ -23,7 +30,7 @@
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks. The list is grouped by supermarket section, as on the Watch, with the section of the current item at the top. The ticked items under "Done" are grouped by section too, on the iPhone and the Watch.
 - An item that the app does not know yet goes to the "New" group, or next to items of the same kind.
 - The order screen shows the learned order. You can drag an item to correct it. The items on the list that the order does not know yet are below it, so you can put a new list in order before your first shop.
-- Settings has "Sections": drag the supermarket sections into the order of your shop. A number shows the place of each section. The tiles, shop mode and the Watch show the sections in this order, and shop mode goes through them in this order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
+- Settings has "Sections": drag the supermarket sections into the order of your shop. The tiles, shop mode and the Watch show the sections in this order, and shop mode goes through them in this order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - "Show details" in Settings shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles.
 - You can invite another person to your list. The list syncs through iCloud.
 - The Apple Watch app shows the current item on top and the rest of the list below it, grouped by supermarket section. You tick an item with a tap or with Double Tap.
@@ -37,9 +44,6 @@
 - The Smart Stack on the Apple Watch shows the progress and the current item of your shop, also when the Watch app is closed.
 - You can share a text from another app, for example a note, to Grailkauf. Each line and each part between commas becomes one item, without checklist marks. The app does not split a shared line into more items: "String cheese" stays one item. After you share, Grailkauf opens on the list.
 - The app is in English and German.
-- "New list" at the bottom of the menu starts an empty list at once, with no question, and the menu closes on it. The old list goes to the history as an archived list, and "Add all" there brings its items back. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.
+- "New list" at the top of the menu starts an empty list at once, with no question, and the menu closes on it. The old list goes to the history as an archived list, and "Add all" there brings its items back. It also ends the shop in progress: the ticked items leave the list, and the app goes to list mode.
 - Below the items in list mode, "Suggestions" shows the items of your past trips and lists that are not on the list now. Tap one to add it. The list stays where it is. Swipe one to remove it, for example a thing that you bought once. It comes back if you buy it again.
 - In the "Sections" tab, tap a tile to change the name of the item, move it to another section or delete it.
-- "Export" in Settings sends the open items to Notes or another app, one item per line, in the order of your shop. Switch off a section to leave its items out.
-- Swipe an archived list in the menu to delete it. Its items then leave the suggestions too.
-- The history in the menu is easier to read. An archived list shows a box icon next to its date. Each row shows its items in two short lines, and the lines between the rows all start at the same place. The menu is white, as in a chat app, with the large title "History" at the top. "New list" and "Settings" stay at the bottom, below a thin line.

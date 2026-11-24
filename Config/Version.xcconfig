@@ -1,4 +1,4 @@
 // The one place for the version. Every target (iPhone, Watch, widgets, share) takes it from here.
 // Each commit adds 1 to the build number, so each upload has a higher one.
 MARKETING_VERSION = 1.1
-CURRENT_PROJECT_VERSION = 54
+CURRENT_PROJECT_VERSION = 55
