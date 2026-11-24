@@ -57,25 +57,35 @@ struct MenuView: View {
     /// The date and the items that are not on the list now: those are the ones the list can miss.
     private func row(_ trip: PastTrip) -> some View {
         let missing = trip.items.filter { !$0.onList }.map(\.text)
-        return VStack(alignment: .leading, spacing: 4) {
-            HStack {
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
                 Text(trip.date, format: .dateTime.day().month(.wide)).font(.headline)
+                // An icon, not a text: the text broke into three lines next to the date.
                 if trip.archived {
-                    Label("Archived list", systemImage: "archivebox").font(.caption).foregroundStyle(.secondary)
+                    Image(systemName: "archivebox")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel("Archived list")
                 }
                 Spacer()
-                Text(trip.date, format: .relative(presentation: .named))
+                Text(trip.date, format: .relative(presentation: .named, unitsStyle: .abbreviated))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             if missing.isEmpty {
                 Text("All on the list").font(.caption).foregroundStyle(.secondary)
             } else {
-                Text(missing.joined(separator: ", ")).lineLimit(3)
+                Text(missing.joined(separator: ", "))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
                 Text("\(missing.count) not on the list, \(trip.items.count - missing.count) already on it")
                     .font(.caption)
                     .foregroundStyle(.tint)
             }
         }
+        .padding(.vertical, 4)
+        // Each separator starts at the same place, whatever the row shows.
+        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
     }
 }
