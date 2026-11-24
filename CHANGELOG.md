@@ -2,6 +2,7 @@
 
 ## 1.0 (current)
 
+- A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them into a new place. "Sections" shows the items as tiles by supermarket section, as on the iPhone: drag a tile to a new place or into another section. "Order" and "Section order" put the items and the supermarket sections in the order of your shop, as in Settings on the iPhone. iCloud brings the changes to the iPhone and the Watch.
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.

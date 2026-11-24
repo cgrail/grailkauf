@@ -13,6 +13,7 @@
 		AA0000000000000000000084 /* GrailkaufWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000023 /* GrailkaufWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AA0000000000000000000085 /* GrailkaufCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000000C4 /* GrailkaufCore */; };
 		AA0000000000000000000086 /* GrailkaufShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000024 /* GrailkaufShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AA0000000000000000000087 /* GrailkaufCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000000C5 /* GrailkaufCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +71,18 @@
 		AA0000000000000000000022 /* GrailkaufWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GrailkaufWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000023 /* GrailkaufWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GrailkaufWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA0000000000000000000024 /* GrailkaufShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GrailkaufShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA0000000000000000000025 /* Grailkauf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grailkauf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA00000000000000000000E1 /* Exceptions for "Shared" folder in "GrailkaufMac" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Link.swift,
+			);
+			target = AA0000000000000000000035 /* GrailkaufMac */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AA0000000000000000000010 /* Grailkauf */ = {
@@ -90,6 +102,9 @@
 		};
 		AA0000000000000000000013 /* Shared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AA00000000000000000000E1 /* Exceptions for "Shared" folder in "GrailkaufMac" target */,
+			);
 			path = Shared;
 			sourceTree = "<group>";
 		};
@@ -111,6 +126,16 @@
 		AA0000000000000000000017 /* GrailkaufShare */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = GrailkaufShare;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000018 /* GrailkaufMac */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GrailkaufMac;
+			sourceTree = "<group>";
+		};
+		AA0000000000000000000019 /* Editing */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Editing;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -147,6 +172,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AA0000000000000000000055 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA0000000000000000000087 /* GrailkaufCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -157,7 +190,9 @@
 				AA0000000000000000000011 /* GrailkaufWatch */,
 				AA0000000000000000000012 /* GrailkaufWidgets */,
 				AA0000000000000000000017 /* GrailkaufShare */,
+				AA0000000000000000000018 /* GrailkaufMac */,
 				AA0000000000000000000013 /* Shared */,
+				AA0000000000000000000019 /* Editing */,
 				AA0000000000000000000014 /* Activity */,
 				AA0000000000000000000015 /* Strings */,
 				AA0000000000000000000016 /* Config */,
@@ -172,6 +207,7 @@
 				AA0000000000000000000022 /* GrailkaufWatch.app */,
 				AA0000000000000000000023 /* GrailkaufWidgets.appex */,
 				AA0000000000000000000024 /* GrailkaufShare.appex */,
+				AA0000000000000000000025 /* Grailkauf.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,6 +237,7 @@
 				AA0000000000000000000013 /* Shared */,
 				AA0000000000000000000014 /* Activity */,
 				AA0000000000000000000015 /* Strings */,
+				AA0000000000000000000019 /* Editing */,
 			);
 			name = Grailkauf;
 			packageProductDependencies = (
@@ -284,6 +321,32 @@
 			productReference = AA0000000000000000000024 /* GrailkaufShare.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		AA0000000000000000000035 /* GrailkaufMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA00000000000000000000B5 /* Build configuration list for PBXNativeTarget "GrailkaufMac" */;
+			buildPhases = (
+				AA0000000000000000000045 /* Sources */,
+				AA0000000000000000000055 /* Frameworks */,
+				AA0000000000000000000065 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AA0000000000000000000013 /* Shared */,
+				AA0000000000000000000015 /* Strings */,
+				AA0000000000000000000018 /* GrailkaufMac */,
+				AA0000000000000000000019 /* Editing */,
+			);
+			name = GrailkaufMac;
+			packageProductDependencies = (
+				AA00000000000000000000C5 /* GrailkaufCore */,
+			);
+			productName = GrailkaufMac;
+			productReference = AA0000000000000000000025 /* Grailkauf.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -316,6 +379,7 @@
 				AA0000000000000000000032 /* GrailkaufWatch */,
 				AA0000000000000000000033 /* GrailkaufWidgets */,
 				AA0000000000000000000034 /* GrailkaufShare */,
+				AA0000000000000000000035 /* GrailkaufMac */,
 			);
 		};
 /* End PBXProject section */
@@ -343,6 +407,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA0000000000000000000064 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000000000000000000065 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -393,6 +464,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA0000000000000000000044 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA0000000000000000000045 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -634,6 +712,48 @@
 			};
 			name = Release;
 		};
+		AA00000000000000000000AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/Mac.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Grailkauf;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.grails.grailkauf;
+				PRODUCT_NAME = Grailkauf;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		AA00000000000000000000AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/Mac.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Grailkauf;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.grails.grailkauf;
+				PRODUCT_NAME = Grailkauf;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -682,6 +802,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		AA00000000000000000000B5 /* Build configuration list for PBXNativeTarget "GrailkaufMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA00000000000000000000AA /* Debug */,
+				AA00000000000000000000AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -701,6 +830,10 @@
 			productName = GrailkaufCore;
 		};
 		AA00000000000000000000C4 /* GrailkaufCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GrailkaufCore;
+		};
+		AA00000000000000000000C5 /* GrailkaufCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GrailkaufCore;
 		};

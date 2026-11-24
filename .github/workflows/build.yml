@@ -14,7 +14,7 @@ defaults:
   run:
     shell: bash # with pipefail, so a failure before `| tee` fails the step
 
-# Two jobs, so the tests and the app build run at the same time.
+# Three jobs, so the tests and the app builds run at the same time.
 # A failed check posts the end of its log as an annotation, so the run's summary shows why without a login.
 jobs:
   test:
@@ -41,3 +41,13 @@ jobs:
       - name: Build iPhone, watch, Lock Screen and share extensions
         run: |
           xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf -destination 'generic/platform=iOS Simulator' ARCHS=arm64 CODE_SIGNING_ALLOWED=NO build 2>&1 | tee check.log || { .github/annotate.sh check.log; exit 1; }
+  mac:
+    runs-on: xcode-27
+    steps:
+      - uses: actions/checkout@v5
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Build the Mac app
+        run: |
+          xcodebuild -project Grailkauf.xcodeproj -scheme GrailkaufMac -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build 2>&1 | tee check.log || { .github/annotate.sh check.log; exit 1; }

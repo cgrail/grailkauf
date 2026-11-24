@@ -9,13 +9,24 @@ struct CategoryGrid: View {
     var done: [(category: GrailkaufCore.Category, rows: [Row])] = []
     /// Shop mode ticks an item with a tap. In list mode, a tap opens the editor.
     var onTap: ((Row) -> Void)?
+    /// The Mac moves a tile with a drag: the item lands in the section, before the given tile or at the end.
+    /// Nil: no drag. On the iPhone, touch and hold opens the menu of the tile.
+    var onDrop: ((_ id: UUID, _ section: GrailkaufCore.Category, _ before: Row?) -> Void)?
     @State private var editing: Row?
     @State private var showsDone = false
+    /// The tile or section under a dragged tile, by `id` or section name.
+    @State private var target: String?
     @Environment(\.dynamicTypeSize) private var typeSize
     private let gap: CGFloat = 4
 
-    /// Five tiles a row fit about 40 items on one screen. Large text gets fewer, wider tiles.
-    private var columns: Int { typeSize.isAccessibilitySize ? 3 : 5 }
+    /// Five tiles a row fit about 40 items on one screen. Large text gets fewer, wider tiles. A Mac window is wider.
+    private var columns: Int {
+        #if os(macOS)
+        8
+        #else
+        typeSize.isAccessibilitySize ? 3 : 5
+        #endif
+    }
 
     var body: some View {
         ScrollView {
@@ -78,12 +89,29 @@ struct CategoryGrid: View {
         .containerRelativeFrame(.horizontal, count: used, span: span, spacing: gap, alignment: .topLeading)
         .frame(maxHeight: .infinity, alignment: .top)
         .background(category.color.opacity(faded ? 0.1 : 0.25), in: .rect(cornerRadius: 12))
+        .overlay {
+            if target == category.rawValue { RoundedRectangle(cornerRadius: 12).stroke(.tint, lineWidth: 2) }
+        }
+        .droppable(onDrop != nil && !faded, key: category.rawValue, target: $target) { drop($0, in: category, before: nil) }
+    }
+
+    /// False if the item is dropped on itself.
+    private func drop(_ id: String, in section: GrailkaufCore.Category, before row: Row?) -> Bool {
+        guard let id = UUID(uuidString: id), id != row?.id else { return false }
+        onDrop?(id, section, row)
+        return true
     }
 
     @ViewBuilder private func tile(_ row: Row, in category: GrailkaufCore.Category) -> some View {
+        let key = row.id.uuidString
         Button { if let onTap { onTap(row) } else { editing = row } } label: { picture(row, in: category) }
             .buttonStyle(.plain)
             .accessibilityAddTraits(row.tickedAt != nil ? .isSelected : [])
+            // A line before the tile shows where the dragged item lands.
+            .overlay(alignment: .leading) {
+                if target == key { Capsule().fill(.tint).frame(width: 3).offset(x: -(gap + 3) / 2) }
+            }
+            .droppable(onDrop != nil && row.tickedAt == nil, key: key, dragged: key, target: $target) { drop($0, in: category, before: row) }
     }
 
     private func picture(_ row: Row, in category: GrailkaufCore.Category) -> some View {
@@ -150,7 +178,9 @@ private struct TileEditor: View {
                 }
             }
             .navigationTitle("Edit item")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel", systemImage: "xmark") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) { Button("Done", systemImage: "checkmark", action: save) }
@@ -167,13 +197,22 @@ private struct TileEditor: View {
     }
 }
 
-/// Shop mode: switches between the list and the grid.
-struct GridToggle: View {
-    @AppStorage("grid") private var grid = false
-
-    var body: some View {
-        Button(grid ? "Show as list" : "Show by section", systemImage: grid ? "list.bullet" : "square.grid.2x2") {
-            withAnimation { grid.toggle() }
+extension View {
+    /// Drag and drop of tiles, if `enabled`. A tile drags its item ID as `dragged`.
+    /// `target` names the view under the pointer by `key`. `perform` gets the dropped item ID.
+    @ViewBuilder func droppable(
+        _ enabled: Bool, key: String, dragged: String? = nil, target: Binding<String?>,
+        perform: @escaping (String) -> Bool
+    ) -> some View {
+        if enabled {
+            let drop = dropDestination(for: String.self) { ids, _ in
+                ids.first.map(perform) ?? false
+            } isTargeted: { over in
+                if over { target.wrappedValue = key } else if target.wrappedValue == key { target.wrappedValue = nil }
+            }
+            if let dragged { drop.draggable(dragged) } else { drop }
+        } else {
+            self
         }
     }
 }

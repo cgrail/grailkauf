@@ -24,7 +24,7 @@ Devices update at different times, and an older App Store build must read what a
 Three things must agree, or App Review rejects the build: what the app does, `docs/privacy-policy.html`, and the App Privacy answers in [APP-STORE.md](APP-STORE.md).
 
 - If a change touches new data, a new framework, or a network call, update the privacy policy and its "Last updated" date in the same change.
-- Each target that runs code has its own `PrivacyInfo.xcprivacy` (`Grailkauf/`, `GrailkaufWatch/`, `GrailkaufShare/`). If a target starts to use a required-reason API (`UserDefaults`, file timestamps, disk space, system boot time), declare it in that target's manifest. `UserDefaults.standard` is `CA92.1`; the App Group suite is `1C8F.1`.
+- Each target that runs code has its own `PrivacyInfo.xcprivacy` (`Grailkauf/`, `GrailkaufWatch/`, `GrailkaufShare/`, `GrailkaufMac/`). If a target starts to use a required-reason API (`UserDefaults`, file timestamps, disk space, system boot time), declare it in that target's manifest. `UserDefaults.standard` is `CA92.1`; the App Group suite is `1C8F.1`.
 - `ITSAppUsesNonExemptEncryption` is `NO` in `Config/Grailkauf-Info.plist`. That holds while the app uses only Apple's encryption (HTTPS, CloudKit). Encryption of our own means revisiting it.
 - GitHub Pages serves `docs/` from `main` at https://grails.de/grailkauf/. Settings links to the privacy policy there.
 
@@ -47,6 +47,6 @@ A push to `main` releases nothing. The user decides when a version ships. When t
 
 - If the Core Data model changed: run a Debug build on a device and tap "Upload iCloud schema" in Settings. This sends every entity and attribute to the Development schema. Then deploy the schema to Production in the CloudKit Console. Without this, App Store builds cannot send changes to iCloud. Before submitting, check that "Deploy Schema Changes" lists nothing.
 - Merge the pull request. If GitHub Pages is off, switch it on: repository Settings, Pages, branch `main`, folder `/docs`.
-- In Xcode, select Product, Archive with the Grailkauf scheme, then Distribute App, App Store Connect.
-- In App Store Connect, paste the texts from APP-STORE.md (and WHATS-NEW.md), and add screenshots: 6.9-inch iPhone and Apple Watch, each in English and German. Then select the build and submit for review.
+- In Xcode, select Product, Archive with the Grailkauf scheme, then Distribute App, App Store Connect. Do the same with the GrailkaufMac scheme for the Mac app.
+- In App Store Connect, paste the texts from APP-STORE.md (and WHATS-NEW.md), and add screenshots: 6.9-inch iPhone, Apple Watch and Mac, each in English and German. Then select the build and submit for review.
 - Test on a device before submitting: dictation, Apple Intelligence split, invite with a second iCloud account, Watch over Bluetooth with no internet, sharing a note, the Live Activity, and the privacy policy link in Settings.

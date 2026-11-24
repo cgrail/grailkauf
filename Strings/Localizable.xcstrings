@@ -1143,6 +1143,16 @@
         }
       }
     },
+    "Section order" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abteilungsreihenfolge"
+          }
+        }
+      }
+    },
     "Sections" : {
       "localizations" : {
         "de" : {
