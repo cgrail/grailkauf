@@ -2,7 +2,7 @@
 
 ## 1.0 (current)
 
-- A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them by their handle into a new place. "Sections" shows the items as tiles by supermarket section, as on the iPhone: drag a tile to a new place or into another section. "Order" and "Section order" put the items and the supermarket sections in the order of your shop, as in Settings on the iPhone. iCloud brings the changes to the iPhone and the Watch.
+- A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them by their handle into a new place. "Sections" shows the items as tiles by supermarket section, as on the iPhone: drag a tile to a new place or into another section. "Order" and "Section order" put the items and the supermarket sections in the order of your shop, as in Settings on the iPhone. Drag a row by its handle. "Section order" numbers the sections. iCloud brings the changes to the iPhone and the Watch.
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.
@@ -22,7 +22,7 @@
 - Shop mode sorts the list in the order in which you pick up your items. The app learns this order from your ticks. The list is grouped by supermarket section, as on the Watch, with the section of the current item at the top. The ticked items under "Done" are grouped by section too, on the iPhone and the Watch.
 - An item that the app does not know yet goes to the "New" group, or next to items of the same kind.
 - The order screen shows the learned order. You can drag an item to correct it. The items on the list that the order does not know yet are below it, so you can put a new list in order before your first shop.
-- Settings has "Sections": drag the supermarket sections into the order of your shop. The tiles, shop mode and the Watch show the sections in this order, and shop mode goes through them in this order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
+- Settings has "Sections": drag the supermarket sections into the order of your shop. A number shows the place of each section. The tiles, shop mode and the Watch show the sections in this order, and shop mode goes through them in this order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - "Show details" in Settings shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles.
 - You can invite another person to your list. The list syncs through iCloud.
 - The Apple Watch app shows the current item on top and the rest of the list below it, grouped by supermarket section. You tick an item with a tap or with Double Tap.

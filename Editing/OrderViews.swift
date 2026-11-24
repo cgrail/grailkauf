@@ -19,6 +19,7 @@ struct OrderView: View {
             Section {
                 ForEach(Array((order + new).enumerated()), id: \.element) { index, key in
                     HStack {
+                        DragHandle()
                         if index < order.count {
                             Text("\(index + 1)").monospacedDigit().foregroundStyle(.secondary)
                         } else {
@@ -59,8 +60,12 @@ struct SectionOrderView: View {
         let order = store.state.sectionOrder
         List {
             Section {
-                ForEach(order, id: \.self) { section in
-                    Label { Text(section.title) } icon: { Text(section.emoji) }
+                ForEach(Array(order.enumerated()), id: \.element) { index, section in
+                    HStack {
+                        DragHandle()
+                        Text("\(index + 1)").monospacedDigit().foregroundStyle(.secondary)
+                        Label { Text(section.title) } icon: { Text(section.emoji) }
+                    }
                 }
                 .onMove { from, to in
                     var moved = order
