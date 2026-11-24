@@ -120,3 +120,14 @@ struct AllDone: View {
         .padding(.vertical)
     }
 }
+
+/// Shop mode: switches between the list and the grid.
+struct GridToggle: View {
+    @AppStorage("grid") private var grid = false
+
+    var body: some View {
+        Button(grid ? "Show as list" : "Show by section", systemImage: grid ? "list.bullet" : "square.grid.2x2") {
+            withAnimation { grid.toggle() }
+        }
+    }
+}

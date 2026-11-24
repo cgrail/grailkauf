@@ -12,7 +12,7 @@ struct GrailkaufMacApp: App {
 }
 
 private enum Page: Hashable {
-    case list, order, sections
+    case list, sections, order, sectionOrder
 }
 
 struct MacRootView: View {
@@ -26,6 +26,7 @@ struct MacRootView: View {
                 Label("List", systemImage: "list.bullet").tag(Page.list)
                 Label("Sections", systemImage: "square.grid.2x2").tag(Page.sections)
                 Label("Order", systemImage: "list.number").tag(Page.order)
+                Label("Section order", systemImage: "arrow.up.arrow.down").tag(Page.sectionOrder)
             }
             .safeAreaInset(edge: .bottom) {
                 SyncLabel(lastSync: store.lastSync).font(.footnote).foregroundStyle(.secondary).padding()
@@ -34,9 +35,12 @@ struct MacRootView: View {
             switch page {
             case .order: OrderView(store: store)
             case .sections: MacSectionsView(store: store)
+            case .sectionOrder: SectionOrderView(store: store)
             case .list, nil: MacListView(store: store)
             }
         }
+        // The grid fits eight tiles in a row.
+        .frame(minWidth: 760, minHeight: 480)
         .task { store.refresh() }
         // Time alone changes the list: a trip ends four hours after its last tick.
         .onChange(of: scenePhase) { if scenePhase == .active { store.refresh() } }
