@@ -12,6 +12,15 @@ struct ItemRow: View {
 
     var body: some View {
         HStack {
+            #if os(macOS)
+            // The text is a button that fills the row, and a click on it does not drag. A drag starts here.
+            Image(systemName: "line.3.horizontal")
+                .foregroundStyle(.secondary)
+                .frame(width: 24, height: 24)
+                .contentShape(.rect)
+                .pointerStyle(.grabIdle)
+                .accessibilityHidden(true)
+            #endif
             if editing {
                 TextField("Item", text: $text)
                     .focused($focused)

@@ -81,7 +81,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The Mac app writes the list and puts it in order. You shop with the iPhone and the Watch.
 - Sign in to the same iCloud account as on your iPhone. iCloud then syncs the list both ways.
 - "List" shows the open items. Type an item at the bottom and press Enter. A comma or a pasted text with many lines adds many items at once.
-- Click the text of an item to change it. Press Enter or click elsewhere to save. Click the trash button to delete an item. Drag an item to a new place.
+- Click the text of an item to change it. Press Enter or click elsewhere to save. Click the trash button to delete an item. Drag the handle at the left of an item to move it to a new place.
 - "Order" shows the learned order. Drag an item to correct its position, as in Settings on the iPhone. The items with a sparkle are on the list, but the order does not know them yet.
 - "Sections" shows the items as tiles by supermarket section, as on the iPhone. Within a section, the tiles are in the learned order.
 - Drag a tile onto another tile to put the item before it, also in another section. Drag a tile onto the free space of a section to put it at the end. A line or a frame shows where the item goes. Later items of the same name go to the new section.
