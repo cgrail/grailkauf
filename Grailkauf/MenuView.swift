@@ -45,11 +45,15 @@ struct MenuView: View {
             }
         }
         // Pinned to the bottom, as in a mail app: a long history does not push it out of reach.
-        .safeAreaInset(edge: .bottom) {
-            Button { open(.settings) } label: { Label("Settings", systemImage: "gearshape") }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
-                .background(.bar)
+        // A glass bar, as wide as the cards above it, so it floats over the list and does not sit in a corner.
+        .safeAreaBar(edge: .bottom) {
+            Button { open(.settings) } label: {
+                Label("Settings", systemImage: "gearshape")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 8)
+            }
+            .buttonStyle(.glass)
+            .padding(.horizontal)
         }
         .foregroundStyle(.primary)
     }

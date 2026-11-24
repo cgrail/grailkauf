@@ -40,4 +40,4 @@
 - In the "Sections" tab, tap a tile to change the name of the item, move it to another section or delete it.
 - "Export" in Settings sends the open items to Notes or another app, one item per line, in the order of your shop. Switch off a section to leave its items out.
 - Swipe an archived list in the menu to delete it. Its items then leave the suggestions too.
-- The history in the menu is easier to read. An archived list shows a box icon next to its date. Each row shows its items in two short lines, and the lines between the rows all start at the same place.
+- The history in the menu is easier to read. An archived list shows a box icon next to its date. Each row shows its items in two short lines, and the lines between the rows all start at the same place. "Settings" floats at the bottom of the menu as a glass bar, as wide as the list.
