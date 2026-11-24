@@ -70,7 +70,7 @@ The list learns the order in which you pick up your items, and sorts itself in t
 ### Settings (iPhone)
 - **Order** shows the learned order with numbers. Drag an item to correct its position.
 - Below, with a sparkle, are the items on the list that the order does not know yet. Drag one to its place, also before your first shop. Shop mode then sorts it there.
-- **Sections** shows the supermarket sections. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
+- **Sections** shows the supermarket sections with numbers. Drag a section to its place in your shop. "Sections", shop mode and the Watch then show the sections in this order. Shop mode goes through the sections in this order, and through the items of each section in the learned order. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - **Show details** shows the position of each item in the order and the picture of its section, in the list, in shop mode and on the tiles. A sparkle marks a guessed position. "–" shows an item with no position, "?" an item with no section yet.
 - **Export** sends the open items as text to Notes or another app, one item per line, in shop order. Switch off a section to leave its items out. In Notes, select the text and tap the checklist button to get a circle for each item.
 - **Invite** sends a link. The person who opens the link joins your list.
@@ -81,12 +81,12 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - The Mac app writes the list and puts it in order. You shop with the iPhone and the Watch.
 - Sign in to the same iCloud account as on your iPhone. iCloud then syncs the list both ways.
 - "List" shows the open items. Type an item at the bottom and press Enter. A comma or a pasted text with many lines adds many items at once.
-- Click the text of an item to change it. Press Enter or click elsewhere to save. Click the trash button to delete an item. Drag an item to a new place.
-- "Order" shows the learned order. Drag an item to correct its position, as in Settings on the iPhone. The items with a sparkle are on the list, but the order does not know them yet.
+- Click the text of an item to change it. Press Enter or click elsewhere to save. Click the trash button to delete an item. Drag the handle at the left of an item to move it to a new place.
+- "Order" shows the learned order. Drag the handle of an item to correct its position, as in Settings on the iPhone. The items with a sparkle are on the list, but the order does not know them yet.
 - "Sections" shows the items as tiles by supermarket section, as on the iPhone. Within a section, the tiles are in the learned order.
 - Drag a tile onto another tile to put the item before it, also in another section. Drag a tile onto the free space of a section to put it at the end. A line or a frame shows where the item goes. Later items of the same name go to the new section.
 - Click a tile to change its name, move it to another section or delete it. Right-click a tile does the same from a menu. Use the menu for a section with no items yet.
-- "Section order" shows the supermarket sections. Drag a section to its place in your shop. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
+- "Section order" shows the supermarket sections with numbers. Drag the handle of a section to its place in your shop. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
 - The bottom of the sidebar shows the time of the last sync.
 
 ## How the order learns

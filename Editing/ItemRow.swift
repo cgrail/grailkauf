@@ -12,6 +12,8 @@ struct ItemRow: View {
 
     var body: some View {
         HStack {
+            // The text is a button that fills the row, and a click on it does not drag.
+            DragHandle()
             if editing {
                 TextField("Item", text: $text)
                     .focused($focused)
@@ -69,5 +71,19 @@ struct RowDetails: View {
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Text("Position \(position)"))
         }
+    }
+}
+
+/// The Mac: a drag of a list row starts here. On the iPhone it is empty: touch and hold drags the row.
+struct DragHandle: View {
+    var body: some View {
+        #if os(macOS)
+        Image(systemName: "line.3.horizontal")
+            .foregroundStyle(.secondary)
+            .frame(width: 24, height: 24)
+            .contentShape(.rect)
+            .pointerStyle(.grabIdle)
+            .accessibilityHidden(true)
+        #endif
     }
 }

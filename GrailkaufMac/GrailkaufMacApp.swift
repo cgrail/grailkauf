@@ -31,6 +31,8 @@ struct MacRootView: View {
             .safeAreaInset(edge: .bottom) {
                 SyncLabel(lastSync: store.lastSync).font(.footnote).foregroundStyle(.secondary).padding()
             }
+            // Wide enough for "Section order".
+            .navigationSplitViewColumnWidth(min: 200, ideal: 220)
         } detail: {
             switch page {
             case .order: OrderView(store: store)
