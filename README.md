@@ -3,7 +3,7 @@
 
 Smarte Einkaufsliste
 
-A shared shopping list for one household, for iPhone and Apple Watch.
+A shared shopping list for one household, for iPhone and Apple Watch, with a Mac app to write the list.
 The list learns the order in which you pick up your items, and sorts itself in that order.
 
 ## What the app does
@@ -77,6 +77,15 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - **Privacy Policy** opens the privacy policy on the web.
 - **Upload iCloud schema** shows in Debug builds only. It sends every entity and field to the Development schema in iCloud.
 
+### Mac
+- The Mac app writes the list and puts it in order. You shop with the iPhone and the Watch.
+- Sign in to the same iCloud account as on your iPhone. iCloud then syncs the list both ways.
+- "List" shows the open items. Type an item at the bottom and press Enter. A comma or a pasted text with many lines adds many items at once.
+- Click the text of an item to change it. Press Enter or click elsewhere to save. Click the trash button to delete an item. Drag an item to a new place.
+- "Order" shows the learned order. Drag an item to correct its position, as in Settings on the iPhone. The items with a sparkle are on the list, but the order does not know them yet.
+- "Sections" shows the supermarket sections. Drag a section to its place in your shop. "Reset" goes back to the route of a typical supermarket.
+- The bottom of the sidebar shows the time of the last sync.
+
 ## How the order learns
 - A trip is a run of ticks with no gap longer than four hours. Four hours after the last tick, the ticked items leave the list.
 - The order comes from the last five trips that contain an item. One chaotic trip changes nothing.
@@ -94,22 +103,28 @@ cd GrailkaufCore && swift test --enable-code-coverage
 # Compile the iPhone app, the Watch app, the Lock Screen extension and the share extension
 xcodebuild -project Grailkauf.xcodeproj -scheme Grailkauf \
   -destination 'generic/platform=iOS Simulator' build
+
+# Compile the Mac app
+xcodebuild -project Grailkauf.xcodeproj -scheme GrailkaufMac \
+  -destination 'generic/platform=macOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
 If `xcodebuild` reports that it needs Xcode, put `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` before the command.
 
 In the Watch simulator, the Watch starts with a sample list of 30 items, with each section filled, in English or German as the simulator's language. It goes away when the paired iPhone simulator sends a list with items sorted into sections. A list with no sorted items, as the iPhone simulator often has, does not replace it. Builds for a real Watch never show it.
 
-GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull request and every push to `main`. It runs them as two parallel jobs, builds with no code signing for arm64 simulators only, and does not measure coverage.
+GitHub Actions (`.github/workflows/build.yml`) runs the three checks on every pull request and every push to `main`. It runs them as three parallel jobs and builds with no code signing. It builds the iPhone apps for arm64 simulators only, and does not measure coverage.
 
 ## Project layout
 
 | Folder | Content |
 | --- | --- |
 | `GrailkaufCore/` | Swift package with all logic and its unit tests: item names, order learning, list placement, suggestions |
-| `Shared/` | Code for both apps: the store (Core Data with iCloud sync) and the Bluetooth link. Also the asset catalog with the app icon |
+| `Shared/` | Code for all apps: the store (Core Data with iCloud sync) and the Bluetooth link (not on the Mac). Also the asset catalog with the app icon |
+| `Editing/` | Views to write the list and put it in order, for the iPhone and the Mac: the item row, the order and the sections |
 | `Grailkauf/` | The iPhone app |
 | `GrailkaufWatch/` | The Watch app |
+| `GrailkaufMac/` | The Mac app: write the list, the order and the sections |
 | `GrailkaufWidgets/`, `Activity/` | The Lock Screen Live Activity |
 | `GrailkaufShare/` | The share extension: "Grailkauf" in the share sheet |
 | `Strings/` | The texts in English and German |
@@ -120,6 +135,7 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 ## Before the first run on a device
 - Open the project in Xcode and select your team. Xcode then registers the app and the iCloud container `iCloud.de.grails.grailkauf`.
 - If Xcode reports that the container is missing, add it under Signing & Capabilities.
+- The Mac app has the bundle ID of the iPhone app, so both are one app in the App Store. Select your team for the `GrailkaufMac` target too.
 - You cannot rename or delete this container later.
 - Xcode also registers the App Group `group.de.grails.grailkauf`. The share extension gives the shared text to the app through this group.
 - Before a public release, deploy the iCloud schema to production in the CloudKit Console. If the model changed, first tap "Upload iCloud schema" in Settings of a Debug build. The schema in the Development environment then has every new field.
@@ -130,4 +146,6 @@ GitHub Actions (`.github/workflows/build.yml`) runs both checks on every pull re
 - The position guess does not work in the simulator.
 - A pause, "und", "and" and punctuation split a dictated list.
 - With Apple Intelligence, the app splits an entry into the products that a shop sells on their own. "Milch Sprudel" becomes "Milch" and "Sprudel". "saure Sahne" stays one item. On other iPhones, the entry stays as you wrote it.
+- The Mac app has no shop mode, dictation, history, suggestions or invite. Invite people on the iPhone.
+- A new item from the Mac gets its section, and its split into single products, when the iPhone opens next.
 - The share extension cannot write to the list, because the list is in the app's own folder. It keeps the text and opens the app with `grailkauf://list`. The app then adds the items.
