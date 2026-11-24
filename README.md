@@ -3,6 +3,8 @@
 
 Smarte Einkaufsliste
 
+[Download on the App Store](https://apps.apple.com/de/app/grailkauf/id6835442264)
+
 A shared shopping list for one household, for iPhone and Apple Watch, with a Mac app to write the list.
 The list learns the order in which you pick up your items, and sorts itself in that order.
 
