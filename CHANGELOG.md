@@ -2,7 +2,7 @@
 
 ## 1.0 (current)
 
-- A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them into a new place. "Order" and "Sections" put the learned order and the supermarket sections in order, as in Settings on the iPhone. iCloud brings the changes to the iPhone and the Watch.
+- A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them into a new place. "Sections" shows the items by supermarket section: drag an item to a new place or into another section, and drag a section header to move the section. "Order" corrects the learned order, as in Settings on the iPhone. iCloud brings the changes to the iPhone and the Watch.
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.
 - "Fill with the usual" adds all due items at once.

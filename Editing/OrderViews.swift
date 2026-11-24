@@ -50,36 +50,3 @@ struct OrderView: View {
         .navigationTitle("Order")
     }
 }
-
-/// The sections in the order of the user's shop. A drag applies at once, for everyone who shares the list.
-struct SectionOrderView: View {
-    let store: Store
-
-    var body: some View {
-        let order = store.state.sectionOrder
-        List {
-            Section {
-                ForEach(order, id: \.self) { section in
-                    Label { Text(section.title) } icon: { Text(section.emoji) }
-                }
-                .onMove { from, to in
-                    var moved = order
-                    moved.move(fromOffsets: from, toOffset: to)
-                    store.setSections(moved)
-                }
-            } footer: {
-                Text("Drag the sections into the order of your shop. Shop mode then goes through them in this order.")
-            }
-        }
-        #if os(iOS)
-        .environment(\.editMode, .constant(.active))
-        #endif
-        .toolbar {
-            // Back to the route of a typical supermarket, and to the learned order alone in shop mode.
-            if store.state.sections != nil {
-                Button("Reset") { store.setSections(nil) }
-            }
-        }
-        .navigationTitle("Sections")
-    }
-}

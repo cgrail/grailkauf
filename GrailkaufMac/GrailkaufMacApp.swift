@@ -24,8 +24,8 @@ struct MacRootView: View {
         NavigationSplitView {
             List(selection: $page) {
                 Label("List", systemImage: "list.bullet").tag(Page.list)
-                Label("Order", systemImage: "list.number").tag(Page.order)
                 Label("Sections", systemImage: "square.grid.2x2").tag(Page.sections)
+                Label("Order", systemImage: "list.number").tag(Page.order)
             }
             .safeAreaInset(edge: .bottom) {
                 SyncLabel(lastSync: store.lastSync).font(.footnote).foregroundStyle(.secondary).padding()
@@ -33,7 +33,7 @@ struct MacRootView: View {
         } detail: {
             switch page {
             case .order: OrderView(store: store)
-            case .sections: SectionOrderView(store: store)
+            case .sections: MacSectionsView(store: store)
             case .list, nil: MacListView(store: store)
             }
         }

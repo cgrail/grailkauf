@@ -83,7 +83,10 @@ The list learns the order in which you pick up your items, and sorts itself in t
 - "List" shows the open items. Type an item at the bottom and press Enter. A comma or a pasted text with many lines adds many items at once.
 - Click the text of an item to change it. Press Enter or click elsewhere to save. Click the trash button to delete an item. Drag an item to a new place.
 - "Order" shows the learned order. Drag an item to correct its position, as in Settings on the iPhone. The items with a sparkle are on the list, but the order does not know them yet.
-- "Sections" shows the supermarket sections. Drag a section to its place in your shop. "Reset" goes back to the route of a typical supermarket.
+- "Sections" shows each supermarket section, with the items of the list below it in the learned order. Empty sections show too.
+- Drag an item to a new place in its section. Drag it below another header to move it to that section. Later items of the same name go to that section.
+- Drag a section header to put the section in its place in your shop. "Reset" goes back to the route of a typical supermarket. Everyone who shares the list gets the same order.
+- Right-click an item to move it to another section or to delete it.
 - The bottom of the sidebar shows the time of the last sync.
 
 ## How the order learns
@@ -121,10 +124,10 @@ GitHub Actions (`.github/workflows/build.yml`) runs the three checks on every pu
 | --- | --- |
 | `GrailkaufCore/` | Swift package with all logic and its unit tests: item names, order learning, list placement, suggestions |
 | `Shared/` | Code for all apps: the store (Core Data with iCloud sync) and the Bluetooth link (not on the Mac). Also the asset catalog with the app icon |
-| `Editing/` | Views to write the list and put it in order, for the iPhone and the Mac: the item row, the order and the sections |
+| `Editing/` | Views to write the list and put it in order, for the iPhone and the Mac: the item row and the order |
 | `Grailkauf/` | The iPhone app |
 | `GrailkaufWatch/` | The Watch app |
-| `GrailkaufMac/` | The Mac app: write the list, the order and the sections |
+| `GrailkaufMac/` | The Mac app: write the list, sort the items and sections, correct the order |
 | `GrailkaufWidgets/`, `Activity/` | The Lock Screen Live Activity |
 | `GrailkaufShare/` | The share extension: "Grailkauf" in the share sheet |
 | `Strings/` | The texts in English and German |

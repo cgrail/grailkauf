@@ -235,9 +235,9 @@
 			fileSystemSynchronizedGroups = (
 				AA0000000000000000000010 /* Grailkauf */,
 				AA0000000000000000000013 /* Shared */,
-				AA0000000000000000000019 /* Editing */,
 				AA0000000000000000000014 /* Activity */,
 				AA0000000000000000000015 /* Strings */,
+				AA0000000000000000000019 /* Editing */,
 			);
 			name = Grailkauf;
 			packageProductDependencies = (
@@ -334,10 +334,10 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AA0000000000000000000018 /* GrailkaufMac */,
 				AA0000000000000000000013 /* Shared */,
-				AA0000000000000000000019 /* Editing */,
 				AA0000000000000000000015 /* Strings */,
+				AA0000000000000000000018 /* GrailkaufMac */,
+				AA0000000000000000000019 /* Editing */,
 			);
 			name = GrailkaufMac;
 			packageProductDependencies = (
