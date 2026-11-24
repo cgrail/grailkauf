@@ -39,6 +39,8 @@ struct MenuView: View {
             }
         }
         .listStyle(.plain)
+        // A plain list is white only behind its rows. A short history then shows the list mode through the rest of the menu.
+        .background(.background)
         // Pinned to the bottom, as in a chat app: a long history does not push the actions out of reach.
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 0) {
