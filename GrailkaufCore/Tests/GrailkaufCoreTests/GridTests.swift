@@ -42,9 +42,12 @@ import Testing
 
     @Test func savedSectionOrderComesFirstAndKeepsEverySection() {
         let order = Category.ordered(["dairy", "unknown", "produce", "dairy"])
-        #expect(Array(order.prefix(3)) == [.dairy, .produce, .spices])
+        #expect(Array(order.prefix(3)) == [.dairy, .produce, .tins])
         #expect(Set(order) == Set(Category.allCases) && order.count == Category.allCases.count)
-        #expect(Category.ordered(nil) == Category.allCases)
+        #expect(Category.ordered(nil) == [
+            .produce, .tins, .spices, .baking, .bakery, .breakfast, .pasta, .sweets, .cheese, .dairy, .fish, .meat,
+            .toiletries, .baby, .pets, .household, .alcohol, .softDrinks, .frozen, .other,
+        ])
     }
 
     @Test func shopWalksTheSectionOrderThatTheUserSet() {

@@ -2,6 +2,7 @@
 
 ## 1.0 (current)
 
+- The sections follow a new default route: fruit and vegetables, tins, spices, baking, bread, breakfast, pasta, sweets, cheese, dairy, fish, meat, care, baby, pet food, household, drinks with alcohol, water and juices, frozen food, other. If you set your own order, it stays.
 - A Mac app lets you write the list on the computer. Type items, change them, delete them and drag them by their handle into a new place. "Sections" shows the items as tiles by supermarket section, as on the iPhone: drag a tile to a new place or into another section. "Order" and "Section order" put the items and the supermarket sections in the order of your shop, as in Settings on the iPhone. Drag a row by its handle. "Section order" numbers the sections. iCloud brings the changes to the iPhone and the Watch.
 - You write the shopping list like a chat: type an item, press Enter, type the next item.
 - The app suggests items that you added before, and items that are due again.

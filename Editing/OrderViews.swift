@@ -22,6 +22,7 @@ struct OrderView: View {
                         DragHandle()
                         if index < order.count {
                             Text("\(index + 1)").monospacedDigit().foregroundStyle(.secondary)
+                                .frame(minWidth: 28, alignment: .trailing)
                         } else {
                             Image(systemName: "sparkles").foregroundStyle(.secondary).accessibilityLabel("New")
                         }
@@ -64,6 +65,7 @@ struct SectionOrderView: View {
                     HStack {
                         DragHandle()
                         Text("\(index + 1)").monospacedDigit().foregroundStyle(.secondary)
+                            .frame(minWidth: 20, alignment: .trailing)
                         Label { Text(section.title) } icon: { Text(section.emoji) }
                     }
                 }

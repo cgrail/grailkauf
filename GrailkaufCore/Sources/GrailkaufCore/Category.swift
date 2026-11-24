@@ -3,8 +3,8 @@ import Foundation
 /// Supermarket sections. They place an item that the learned order does not know yet, and group the grid view.
 /// The cases follow the route through a typical supermarket. The screens show the sections in this order, until the user sets one.
 public enum Category: String, CaseIterable, Sendable {
-    case produce, spices, tins, household, toiletries, baby, sweets, meat, fish, breakfast, bakery, frozen
-    case baking, pasta, cheese, dairy, pets, softDrinks, alcohol, other
+    case produce, tins, spices, baking, bakery, breakfast, pasta, sweets, cheese, dairy, fish, meat
+    case toiletries, baby, pets, household, alcohol, softDrinks, frozen, other
 
     /// `saved` first, then the sections that it lacks, in the order of the cases. Unknown names are skipped.
     public static func ordered(_ saved: [String]?) -> [Category] {
