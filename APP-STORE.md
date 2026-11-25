@@ -15,7 +15,7 @@ What goes into App Store Connect, in English and German. Each text field is plai
 ## App Review notes
 
 ```
-Grailkauf needs no account. To try it: type an item in the text field and press Enter, or hold the microphone button next to the text field and say several items. Tap the cart button to switch to shop mode and tick items. The order of shop mode comes from the order of the ticks of earlier trips. Splitting entries into single products and guessing the position of new items need an iPhone with Apple Intelligence; on other iPhones the entry stays as typed and new items go to the New group. Invite in Settings shares the list with another iCloud account. The Apple Watch app shows the shop mode of the paired iPhone.
+Grailkauf needs no account. To try it: type an item in the text field and press Enter, or hold the microphone button next to the text field and say several items. Tap the cart button to switch to shop mode and tick items. The order of shop mode comes from the order of the ticks of earlier trips. Splitting entries into single products and guessing the position of new items need an iPhone with Apple Intelligence; on other iPhones the entry stays as typed and new items go to the New group. Invite in Settings shares the list with another iCloud account. The Apple Watch app shows the shop mode of the paired iPhone. The Mac app writes the list and puts it in order; sign in to the same iCloud account as on the iPhone to see the same list.
 ```
 
 ## English
@@ -52,6 +52,9 @@ Shop mode sorts the list in the order in which you pick up your items. Grailkauf
 ON YOUR WRIST AND LOCK SCREEN
 The Apple Watch shows the current item, then the rest of the list by supermarket section. Tick with a tap or with Double Tap, or move an item to the end with Later. iPhone and watch talk over Bluetooth, so this works in a store with no signal. While you shop, the Lock Screen shows your progress and the next items.
 
+WRITE IT ON YOUR MAC
+The Mac app lets you write the list at your desk. Type items, change them and drag them into a new place. See them as tiles by section, and put the items and the sections in the order of your shop. iCloud brings every change to your iPhone and your watch.
+
 ONE LIST FOR THE HOUSEHOLD
 Invite your partner or your family, and everyone writes on the same list through iCloud. Share a note from another app to Grailkauf, and each line becomes an item.
 
@@ -61,13 +64,13 @@ The menu lists your past shopping trips and shows the items that are not on your
 YOUR DATA IS YOURS
 No account, no sign-up, no ads, no analytics and no server of ours. Your list lives on your devices and in iCloud under your Apple ID.
 
-Grailkauf runs on iPhone and Apple Watch, in English and German.
+Grailkauf runs on iPhone, Apple Watch and Mac, in English and German.
 ```
 
 ### Keywords
 
 ```
-shopping list,grocery,groceries,supermarket,shared,family,household,dictation,watch,todo,food
+shopping list,grocery,groceries,supermarket,shared,family,household,dictation,watch,mac,todo,food
 ```
 
 ## Deutsch
@@ -104,6 +107,9 @@ Der Einkaufsmodus sortiert die Liste in der Reihenfolge, in der du deine Artikel
 AM HANDGELENK UND AUF DEM SPERRBILDSCHIRM
 Die Apple Watch zeigt den aktuellen Artikel, darunter den Rest der Liste nach Supermarktbereich. Hak mit einem Tipp oder mit Doppeltippen ab, oder schieb einen Artikel mit Später ans Ende. iPhone und Watch sprechen per Bluetooth miteinander, also klappt das auch im Laden ohne Empfang. Beim Einkaufen zeigt der Sperrbildschirm deinen Fortschritt und die nächsten Artikel.
 
+AUF DEM MAC SCHREIBEN
+Mit der Mac-App schreibst du die Liste am Schreibtisch. Tipp Artikel ein, ändere sie und zieh sie an einen neuen Platz. Sieh sie als Kacheln nach Abteilung, und bring die Artikel und die Abteilungen in die Reihenfolge deines Ladens. iCloud bringt jede Änderung auf dein iPhone und deine Watch.
+
 EINE LISTE FÜR DEN HAUSHALT
 Lade deinen Partner oder deine Familie ein, und alle schreiben über iCloud auf dieselbe Liste. Teile eine Notiz aus einer anderen App mit Grailkauf, und jede Zeile wird ein Artikel.
 
@@ -113,11 +119,11 @@ Das Menü zeigt deine letzten Einkäufe und die Artikel daraus, die gerade nicht
 DEINE DATEN GEHÖREN DIR
 Kein Konto, keine Anmeldung, keine Werbung, keine Analyse und kein Server von uns. Deine Liste liegt auf deinen Geräten und in iCloud unter deiner Apple-ID.
 
-Grailkauf läuft auf iPhone und Apple Watch, auf Deutsch und Englisch.
+Grailkauf läuft auf iPhone, Apple Watch und Mac, auf Deutsch und Englisch.
 ```
 
 ### Schlüsselwörter
 
 ```
-einkaufsliste,einkaufen,supermarkt,lebensmittel,liste,familie,haushalt,teilen,diktieren,watch
+einkaufsliste,einkaufen,supermarkt,lebensmittel,liste,familie,haushalt,teilen,diktieren,watch,mac
 ```
